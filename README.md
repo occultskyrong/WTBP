@@ -26,6 +26,18 @@ WTBP 是一个面向软件研发的最佳实践知识库与可复用 Skill 仓�
 make validate
 ```
 
+启用提交门禁（每个克隆仓库只需一次）：
+
+```bash
+make install-hooks
+```
+
+提交前 Hook 会对暂存内容按类型审查；CI 会在 PR 与推送时复跑同一检查。也可在提交前手动运行：
+
+```bash
+make review-staged
+```
+
 ## 设计边界
 
 - `AGENTS.md` 等项目规则只保存本地事实、约束和 WTBP 入口；不要复制整个知识库。

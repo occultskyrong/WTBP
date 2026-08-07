@@ -1,0 +1,17 @@
+name: WTBP Repository Check
+
+on:
+  pull_request:
+  push:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate repository structure
+        run: make validate
+      - name: Review committed content
+        run: |
+          git add --all
+          make review-staged
