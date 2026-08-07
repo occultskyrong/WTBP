@@ -1,0 +1,10 @@
+version: 1
+description: WTBP 的规范化目录。所有可发现对象先在这里登记。
+practices: []
+skills:
+  - id: practice-search
+    path: skills/practice-search
+    status: active
+    domains: [all]
+implementations: []
+evals: []

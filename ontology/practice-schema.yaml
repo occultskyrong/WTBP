@@ -1,0 +1,21 @@
+version: 1
+artifact: PRACTICE.md
+required_frontmatter:
+  - id
+  - title
+  - domain
+  - status
+  - maturity
+  - last_verified
+  - tags
+required_sections:
+  - 问题定义
+  - 适用场景
+  - 决策变量
+  - 候选方案
+  - 场景化推荐规则
+  - 反模式
+  - 验证方法
+  - 证据与来源
+status_values: [draft, candidate, approved, stale, deprecated]
+maturity_values: [experimental, emerging, established]

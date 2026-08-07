@@ -1,0 +1,11 @@
+version: 1
+node_types: [practice, skill, implementation, evidence, decision_record, eval]
+edge_types:
+  - applies_when
+  - supported_by
+  - implemented_by
+  - executed_by
+  - validated_by
+  - supersedes
+  - conflicts_with
+  - related_to

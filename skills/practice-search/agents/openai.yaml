@@ -1,0 +1,4 @@
+interface:
+  display_name: "Practice Search"
+  short_description: "Find and apply relevant best practices."
+  default_prompt: "Use $practice-search to find the best practices for this task."

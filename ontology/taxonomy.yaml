@@ -1,0 +1,18 @@
+version: 1
+domains:
+  - id: database
+    name: 数据库
+  - id: backend
+    name: 后端
+  - id: frontend
+    name: 前端
+  - id: architecture
+    name: 架构
+  - id: security
+    name: 安全
+  - id: testing
+    name: 测试与质量
+  - id: delivery
+    name: 交付与运维
+  - id: product
+    name: 产品与体验

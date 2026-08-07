@@ -1,0 +1,5 @@
+.DS_Store
+.wtbp/
+reports/
+coverage/
+.claude/*.local.md

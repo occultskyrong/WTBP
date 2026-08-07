@@ -1,0 +1,24 @@
+version: 1
+description: 生成建议前必须明确的场景变量。Practice 可声明其需要的变量子集。
+dimensions:
+  - id: problem_type
+    required: true
+    description: 要解决的业务或工程问题。
+  - id: business_criticality
+    values: [low, medium, high, critical]
+  - id: scale
+    description: 用户量、请求量、数据量或文件规模。
+  - id: latency_or_throughput_target
+    description: 性能目标；无明确目标时必须说明。
+  - id: consistency_and_recovery
+    description: 一致性、可恢复性与容错要求。
+  - id: security_and_compliance
+    description: 数据分类、权限、审计、地域或监管要求。
+  - id: existing_stack
+    description: 已有语言、框架、云服务和基础设施约束。
+  - id: team_capability
+    description: 团队维护能力、交付周期和运维资源。
+  - id: cost_constraint
+    description: 成本上限或成本优先级。
+  - id: reversibility
+    description: 方案是否可低成本回滚或替换。

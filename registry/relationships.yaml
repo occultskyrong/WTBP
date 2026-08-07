@@ -1,0 +1,3 @@
+version: 1
+description: 对象之间的关系；关系类型由 ontology/relationship-schema.yaml 约束。
+relationships: []
