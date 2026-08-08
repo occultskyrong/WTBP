@@ -1,5 +1,7 @@
 # 贡献指南
 
+提交分支、提交消息和提交前检查见 [`docs/commit-conventions.md`](docs/commit-conventions.md)。
+
 ## 新增 Practice
 
 1. 在 `practices/<domain>/<topic>/` 从 [`templates/practice-template.md`](templates/practice-template.md) 创建 `PRACTICE.md`。

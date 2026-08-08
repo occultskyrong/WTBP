@@ -1,0 +1,33 @@
+name: Evidence correction
+description: Report stale, incorrect, insufficient, or contradictory Practice evidence.
+title: "[evidence] "
+body:
+  - type: input
+    id: practice_id
+    attributes:
+      label: Affected Practice ID or path
+    validations:
+      required: true
+  - type: dropdown
+    id: issue_type
+    attributes:
+      label: Evidence issue
+      options:
+        - Source is outdated
+        - Source contradicts the recommendation
+        - Reference implementation no longer works
+        - Recommendation lacks a material boundary
+        - Other factual correction
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: Evidence and impact
+      description: Provide the source link, version or access date, and explain which recommendation may need to change.
+    validations:
+      required: true
+  - type: textarea
+    id: suggested_resolution
+    attributes:
+      label: Suggested correction or verification

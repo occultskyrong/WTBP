@@ -1,0 +1,57 @@
+name: Practice proposal
+description: Propose a new, updated, or deprecated best practice.
+title: "[practice] "
+body:
+  - type: markdown
+    attributes:
+      value: "Describe the decision context, not only the preferred solution."
+  - type: dropdown
+    id: change_type
+    attributes:
+      label: Change type
+      options:
+        - New practice
+        - Update an existing practice
+        - Deprecate or supersede a practice
+    validations:
+      required: true
+  - type: input
+    id: practice_id
+    attributes:
+      label: Proposed Practice ID
+      placeholder: database.schema-design
+  - type: textarea
+    id: problem_and_context
+    attributes:
+      label: Problem and applicable context
+      description: Include scale, constraints, existing stack, security/compliance, cost, and reversibility when relevant.
+    validations:
+      required: true
+  - type: textarea
+    id: options
+    attributes:
+      label: Candidate options and trade-offs
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence and reference implementations
+      description: Link official documentation, benchmarks, incidents, or runnable examples. State version or access date.
+    validations:
+      required: true
+  - type: textarea
+    id: validation
+    attributes:
+      label: Proposed validation method
+    validations:
+      required: true
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Contributor checklist
+      options:
+        - label: I have described the conditions in which this recommendation should not be used.
+          required: true
+        - label: I have checked whether an existing Practice already covers this decision.
+          required: true

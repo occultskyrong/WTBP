@@ -5,6 +5,16 @@ repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 required_paths=(
   "README.md"
   "CONTRIBUTING.md"
+  ".editorconfig"
+  ".gitattributes"
+  ".githooks/commit-msg"
+  ".github/ISSUE_TEMPLATE/config.yml"
+  ".github/ISSUE_TEMPLATE/practice-proposal.yml"
+  ".github/ISSUE_TEMPLATE/evidence-correction.yml"
+  ".github/ISSUE_TEMPLATE/repository-bug.yml"
+  ".github/PULL_REQUEST_TEMPLATE.md"
+  ".github/dependabot.yml"
+  "docs/commit-conventions.md"
   "ontology/taxonomy.yaml"
   "ontology/context-schema.yaml"
   "ontology/practice-schema.yaml"
@@ -23,6 +33,31 @@ for path in "${required_paths[@]}"; do
     exit 1
   fi
 done
+
+bash -n "$repo_root/.githooks/commit-msg"
+
+for issue_form in "$repo_root"/.github/ISSUE_TEMPLATE/*.yml; do
+  [[ "${issue_form##*/}" == "config.yml" ]] && continue
+  if ! rg -q '^name: .+' "$issue_form" || ! rg -q '^description: .+' "$issue_form" || ! rg -q '^body:' "$issue_form"; then
+    printf 'Invalid issue form: %s\n' "${issue_form#$repo_root/}" >&2
+    exit 1
+  fi
+done
+
+if ! rg -q '^blank_issues_enabled: false$' "$repo_root/.github/ISSUE_TEMPLATE/config.yml"; then
+  printf 'Issue chooser must disable blank issues.\n' >&2
+  exit 1
+fi
+
+if ! rg -q '^  - package-ecosystem: github-actions$' "$repo_root/.github/dependabot.yml"; then
+  printf 'Dependabot must monitor GitHub Actions.\n' >&2
+  exit 1
+fi
+
+if ! rg -U -q '^permissions:\n  contents: read$' "$repo_root/.github/workflows/repository-check.yml"; then
+  printf 'Repository workflow must use read-only contents permission.\n' >&2
+  exit 1
+fi
 
 while IFS= read -r skill_file; do
   if ! rg -q '^---$' "$skill_file" || ! rg -q '^name: [a-z0-9-]+$' "$skill_file" || ! rg -q '^description: .+' "$skill_file"; then

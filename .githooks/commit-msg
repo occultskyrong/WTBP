@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+message_file="${1:?commit message file is required}"
+subject="$(sed -n '1p' "$message_file")"
+
+case "$subject" in
+  Merge\ *|Revert\ *)
+    exit 0
+    ;;
+esac
+
+if [[ -z "$subject" ]]; then
+  printf 'Commit subject must not be empty.\n' >&2
+  exit 1
+fi
+
+if [[ "$(printf '%s' "$subject" | wc -m | tr -d ' ')" -gt 72 ]]; then
+  printf 'Commit subject must be 72 characters or fewer.\n' >&2
+  exit 1
+fi
+
+pattern='^(feat|fix|docs|refactor|test|chore|ci|build|perf)(\([a-z0-9][a-z0-9._/-]*\))?!?: [^[:space:]].*$'
+if ! printf '%s\n' "$subject" | LC_ALL=C grep -Eq "$pattern"; then
+  cat >&2 <<'EOF'
+Invalid commit subject. Use Conventional Commits:
+  <type>(<optional-scope>): <summary>
+
+Examples:
+  feat(practice): add schema-design guidance
+  ci: enforce commit message validation
+  docs!: revise the contribution contract
+EOF
+  exit 1
+fi
