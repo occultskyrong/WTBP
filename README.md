@@ -45,4 +45,4 @@ make review-staged
 - 参考实现必须说明适用场景、版本和验证方式；代码片段本身不是证据。
 - Registry 是唯一人工维护的索引来源；面向网站或不同 Agent 的索引应由工具生成。
 
-详见 [`docs/concepts.md`](docs/concepts.md)、[`docs/how-to-use.md`](docs/how-to-use.md) 和 [`docs/governance.md`](docs/governance.md)。
+详见 [`docs/concepts.md`](docs/concepts.md)、[`docs/how-to-use.md`](docs/how-to-use.md)、[`docs/governance.md`](docs/governance.md) 和 [`docs/github-governance.md`](docs/github-governance.md)。

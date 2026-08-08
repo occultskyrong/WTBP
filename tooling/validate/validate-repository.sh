@@ -4,6 +4,7 @@ set -euo pipefail
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 required_paths=(
   "README.md"
+  "AGENTS.md"
   "CONTRIBUTING.md"
   ".editorconfig"
   ".gitattributes"
@@ -15,6 +16,8 @@ required_paths=(
   ".github/PULL_REQUEST_TEMPLATE.md"
   ".github/dependabot.yml"
   "docs/commit-conventions.md"
+  "docs/github-governance.md"
+  "docs/governance.md"
   "ontology/taxonomy.yaml"
   "ontology/context-schema.yaml"
   "ontology/practice-schema.yaml"
@@ -25,6 +28,8 @@ required_paths=(
   "templates/practice-template.md"
   "templates/skill-template/SKILL.md"
   "skills/practice-search/SKILL.md"
+  "tooling/review/review-staged.sh"
+  "tooling/validate/validate-repository.sh"
 )
 
 for path in "${required_paths[@]}"; do
@@ -34,7 +39,10 @@ for path in "${required_paths[@]}"; do
   fi
 done
 
+bash -n "$repo_root/.githooks/pre-commit"
 bash -n "$repo_root/.githooks/commit-msg"
+bash -n "$repo_root/tooling/review/review-staged.sh"
+bash -n "$repo_root/tooling/validate/validate-repository.sh"
 
 for issue_form in "$repo_root"/.github/ISSUE_TEMPLATE/*.yml; do
   [[ "${issue_form##*/}" == "config.yml" ]] && continue
