@@ -29,3 +29,9 @@ ci: enforce commit message validation
 2. 运行 `make validate` 和 `make review-staged`。
 3. 不使用 `--no-verify` 绕过 Hook。
 4. 提交后通过 PR 审查和 CI，再合并到 `master`。
+
+## CI 审查范围
+
+本地 Hook 审查暂存内容。CI 不依赖空工作区中的暂存区，而是比较 PR
+base 与待合并提交，或比较 push 前后提交；因此同一套审查会覆盖实际进入
+`master` 的 Practice、Skill、参考实现、目录和删除操作。

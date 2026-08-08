@@ -11,10 +11,19 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Install validation runtime
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes ripgrep
       - name: Validate repository structure
         run: make validate
       - name: Review committed content
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.sha }}
         run: |
-          git add --all
-          make review-staged
+          if [ "$BASE_SHA" = "0000000000000000000000000000000000000000" ]; then
+            BASE_SHA="$(git hash-object -t tree /dev/null)"
+          fi
+          make review-range BASE_SHA="$BASE_SHA" HEAD_SHA="$HEAD_SHA"
