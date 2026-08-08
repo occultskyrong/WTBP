@@ -1,36 +1,36 @@
-name: Repository bug
-description: Report a problem with WTBP tooling, validation, hooks, CI, or templates.
-title: "[repo] "
+name: 仓库问题
+description: 报告 WTBP 工具、校验、Hook、CI 或模板的问题。
+title: "[仓库] "
 body:
   - type: dropdown
     id: component
     attributes:
-      label: Component
+      label: 组件
       options:
-        - Repository validation
-        - Commit hook
+        - 仓库校验
+        - 提交 Hook
         - GitHub Actions
-        - Skill packaging
-        - Registry or schema
-        - Issue or pull request template
-        - Other
+        - Skill 打包
+        - Registry 或模式
+        - Issue 或 PR 模板
+        - 其他
     validations:
       required: true
   - type: textarea
     id: steps
     attributes:
-      label: Reproduction steps
+      label: 复现步骤
     validations:
       required: true
   - type: textarea
     id: expected
     attributes:
-      label: Expected behavior
+      label: 预期行为
     validations:
       required: true
   - type: textarea
     id: actual
     attributes:
-      label: Actual behavior and relevant logs
+      label: 实际行为与相关日志
     validations:
       required: true

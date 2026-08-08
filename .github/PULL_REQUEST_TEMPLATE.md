@@ -1,25 +1,25 @@
-## Summary
+## 变更摘要
 
-## Change category
+## 变更类别
 
-- [ ] Practice
-- [ ] Skill
-- [ ] Reference implementation
-- [ ] Registry or schema
-- [ ] Tooling, CI, or repository governance
-- [ ] Documentation only
+- [ ] 实践（Practice）
+- [ ] 技能（Skill）
+- [ ] 参考实现
+- [ ] 目录或模式
+- [ ] 工具、CI 或仓库治理
+- [ ] 仅文档
 
-## WTBP impact
+## 对 WTBP 的影响
 
-- Related Issue: Closes #
-- Affected Practice or Skill IDs:
-- New, changed, or deprecated decision boundaries:
-- Evidence or reference implementation:
+- 关联 Issue：Closes #
+- 受影响的 Practice 或 Skill ID：
+- 新增、变更或废弃的决策边界：
+- 证据或参考实现：
 
-## Verification
+## 验证
 
-- [ ] Ran `make validate`.
-- [ ] Ran `make review-staged` before committing.
-- [ ] Added or updated Eval cases when behavior changed.
-- [ ] Checked that Registry and relationships match the changed artifacts.
-- [ ] Confirmed no secrets, generated reports, or unrelated changes are included.
+- [ ] 已运行 `make validate`。
+- [ ] 已在提交前运行 `make review-staged`。
+- [ ] 行为变更时已新增或更新 Eval 用例。
+- [ ] 已确认 Registry 和关系与变更对象一致。
+- [ ] 已确认不含密钥、生成报告或无关变更。

@@ -2,6 +2,13 @@
 
 提交分支、提交消息和提交前检查见 [`docs/commit-conventions.md`](docs/commit-conventions.md)。
 
+## 语言
+
+面向贡献者、使用者和评审者的文档、Issue、PR 说明、模板与校验提示默认使用中文。
+为保持工具兼容性，文件路径、YAML 字段、Practice/Skill ID、Conventional Commit 的
+`type` 和 GitHub 自动识别关键字（如 `Closes #123`）保留原格式；提交标题的说明文字
+应使用简明中文。
+
 ## 新增 Practice
 
 1. 在 `practices/<domain>/<topic>/` 从 [`templates/practice-template.md`](templates/practice-template.md) 创建 `PRACTICE.md`。

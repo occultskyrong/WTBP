@@ -1,4 +1,4 @@
-name: WTBP Repository Check
+name: WTBP 仓库检查
 
 on:
   pull_request:
@@ -9,18 +9,19 @@ permissions:
 
 jobs:
   validate:
+    name: 仓库验证
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
-      - name: Install validation runtime
+      - name: 安装校验运行环境
         run: |
           sudo apt-get update
           sudo apt-get install --yes ripgrep
-      - name: Validate repository structure
+      - name: 校验仓库结构
         run: make validate
-      - name: Review committed content
+      - name: 审查已提交内容
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
           HEAD_SHA: ${{ github.sha }}

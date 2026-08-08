@@ -1,9 +1,9 @@
 ---
 name: practice-search
-description: Find, compare, and apply WTBP best practices to a software or product decision. Use whenever an agent needs a reusable implementation pattern, must choose among technical approaches, lacks an internal precedent, or needs to ground a recommendation in documented evidence and reference implementations.
+description: 为软件或产品决策检索、比较并应用 WTBP 最佳实践。需要复用实现模式、比较技术方案、缺少内部先例，或必须以文档证据和参考实现支撑建议时使用。
 ---
 
-# Practice Search
+# 实践检索
 
 用此 Skill 把模糊问题转为有边界的场景化建议。它不替代项目事实、架构设计或人工评审。
 

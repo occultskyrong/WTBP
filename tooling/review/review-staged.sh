@@ -6,13 +6,13 @@ git -C "$repo_root" rev-parse --show-toplevel >/dev/null
 cd "$repo_root"
 
 fail() {
-  printf 'REVIEW FAILED: %s\n' "$1" >&2
+  printf '审查失败：%s\n' "$1" >&2
   exit 1
 }
 
 usage() {
   cat >&2 <<'EOF'
-Usage:
+用法：
   review-staged.sh
   review-staged.sh --range <base-tree-or-commit> <head-commit>
 EOF
@@ -171,8 +171,8 @@ check_practice() {
   maturity="$(source_field_value "$file" maturity)"
   [[ "$practice_id" == "${domain}."* ]] || fail "$file 的 id 必须以领域 ${domain}. 开头"
   taxonomy_contains_domain "$domain" || fail "$file 的 domain 未在 ontology/taxonomy.yaml 中定义: $domain"
-  practice_schema_contains status_values "$status" || fail "$file 的 status 未被 Practice schema 允许: $status"
-  practice_schema_contains maturity_values "$maturity" || fail "$file 的 maturity 未被 Practice schema 允许: $maturity"
+  practice_schema_contains status_values "$status" || fail "$file 的 status 未被 Practice 模式允许: $status"
+  practice_schema_contains maturity_values "$maturity" || fail "$file 的 maturity 未被 Practice 模式允许: $maturity"
   catalog_contains "$practice_id" "${file%/PRACTICE.md}" || fail "$file 未在 registry/catalog.yaml 中登记正确路径"
 
   if [[ "$status" == "approved" ]]; then
@@ -272,7 +272,7 @@ check_registry_and_contracts() {
 
   local field
   for field in id title domain status maturity last_verified tags; do
-    source_file templates/practice-template.md | rg -q "^${field}:" || fail "Practice 模板缺少字段: $field"
+    source_file templates/practice-template.md | rg -q "^${field}:" || fail "Practice 模板缺少字段：$field"
   done
   for field in 问题定义 适用场景 不适用场景 决策变量 候选方案 场景化推荐规则 反模式 验证方法 证据与来源; do
     source_file templates/practice-template.md | rg -q "^## ${field}$" || fail "Practice 模板缺少章节: $field"
@@ -290,7 +290,7 @@ while IFS= read -r file; do
 done < <(changed_file_names)
 
 if [[ ${#changed_files[@]} -eq 0 ]]; then
-  printf 'WTBP review: SKIPPED (no changed files)\n'
+  printf 'WTBP 审查：跳过（没有变更文件）\n'
   exit 0
 fi
 
@@ -325,4 +325,4 @@ if [[ ${#implementation_roots[@]} -gt 0 ]]; then
 fi
 
 check_registry_and_contracts
-printf 'WTBP review: PASS (%s files reviewed, mode=%s)\n' "${#changed_files[@]}" "$mode"
+printf 'WTBP 审查：通过（已审查 %s 个文件，模式=%s）\n' "${#changed_files[@]}" "$mode"

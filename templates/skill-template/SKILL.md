@@ -1,9 +1,9 @@
 ---
 name: example-skill
-description: Describe the repeatable task and the concrete situations in which an agent must use this skill.
+description: 描述可重复执行的任务，以及智能体必须使用该技能的具体场景。
 ---
 
-# Example Skill
+# 示例技能
 
 1. 收集执行任务所需的场景变量。
 2. 读取关联 Practice 及其证据，而不是复制其中的知识。

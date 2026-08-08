@@ -1,33 +1,33 @@
-name: Evidence correction
-description: Report stale, incorrect, insufficient, or contradictory Practice evidence.
-title: "[evidence] "
+name: 证据修正
+description: 报告 Practice 证据过期、不正确、不充分或相互矛盾的问题。
+title: "[证据] "
 body:
   - type: input
     id: practice_id
     attributes:
-      label: Affected Practice ID or path
+      label: 受影响的 Practice ID 或路径
     validations:
       required: true
   - type: dropdown
     id: issue_type
     attributes:
-      label: Evidence issue
+      label: 证据问题
       options:
-        - Source is outdated
-        - Source contradicts the recommendation
-        - Reference implementation no longer works
-        - Recommendation lacks a material boundary
-        - Other factual correction
+        - 来源已过期
+        - 来源与推荐结论相矛盾
+        - 参考实现已无法工作
+        - 推荐缺少关键适用边界
+        - 其他事实修正
     validations:
       required: true
   - type: textarea
     id: details
     attributes:
-      label: Evidence and impact
-      description: Provide the source link, version or access date, and explain which recommendation may need to change.
+      label: 证据与影响
+      description: 请提供来源链接、版本或访问日期，并说明可能需要调整的推荐结论。
     validations:
       required: true
   - type: textarea
     id: suggested_resolution
     attributes:
-      label: Suggested correction or verification
+      label: 建议的修正或验证方式

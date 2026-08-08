@@ -5,6 +5,7 @@ repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 required_paths=(
   "README.md"
   "AGENTS.md"
+  "CLAUDE.md"
   "CONTRIBUTING.md"
   ".editorconfig"
   ".gitattributes"
@@ -34,7 +35,7 @@ required_paths=(
 
 for path in "${required_paths[@]}"; do
   if [[ ! -f "$repo_root/$path" ]]; then
-    printf 'Missing required file: %s\n' "$path" >&2
+    printf '缺少必需文件：%s\n' "$path" >&2
     exit 1
   fi
 done
@@ -47,29 +48,29 @@ bash -n "$repo_root/tooling/validate/validate-repository.sh"
 for issue_form in "$repo_root"/.github/ISSUE_TEMPLATE/*.yml; do
   [[ "${issue_form##*/}" == "config.yml" ]] && continue
   if ! rg -q '^name: .+' "$issue_form" || ! rg -q '^description: .+' "$issue_form" || ! rg -q '^body:' "$issue_form"; then
-    printf 'Invalid issue form: %s\n' "${issue_form#$repo_root/}" >&2
+    printf 'Issue 表单无效：%s\n' "${issue_form#$repo_root/}" >&2
     exit 1
   fi
 done
 
 if ! rg -q '^blank_issues_enabled: false$' "$repo_root/.github/ISSUE_TEMPLATE/config.yml"; then
-  printf 'Issue chooser must disable blank issues.\n' >&2
+  printf 'Issue 选择器必须禁用空白 Issue。\n' >&2
   exit 1
 fi
 
 if ! rg -q '^  - package-ecosystem: github-actions$' "$repo_root/.github/dependabot.yml"; then
-  printf 'Dependabot must monitor GitHub Actions.\n' >&2
+  printf 'Dependabot 必须监控 GitHub Actions。\n' >&2
   exit 1
 fi
 
 if ! rg -U -q '^permissions:\n  contents: read$' "$repo_root/.github/workflows/repository-check.yml"; then
-  printf 'Repository workflow must use read-only contents permission.\n' >&2
+  printf '仓库工作流必须使用只读的 contents 权限。\n' >&2
   exit 1
 fi
 
 while IFS= read -r skill_file; do
   if ! rg -q '^---$' "$skill_file" || ! rg -q '^name: [a-z0-9-]+$' "$skill_file" || ! rg -q '^description: .+' "$skill_file"; then
-    printf 'Invalid Skill metadata: %s\n' "${skill_file#$repo_root/}" >&2
+    printf 'Skill 元数据无效：%s\n' "${skill_file#$repo_root/}" >&2
     exit 1
   fi
 done < <(rg --files "$repo_root/skills" -g 'SKILL.md')
@@ -77,10 +78,10 @@ done < <(rg --files "$repo_root/skills" -g 'SKILL.md')
 while IFS= read -r practice_file; do
   for field in id title domain status maturity last_verified tags; do
     if ! rg -q "^${field}:" "$practice_file"; then
-      printf 'Missing %s in %s\n' "$field" "${practice_file#$repo_root/}" >&2
+      printf '%s 缺少字段：%s\n' "${practice_file#$repo_root/}" "$field" >&2
       exit 1
     fi
   done
 done < <(rg --files "$repo_root/practices" -g 'PRACTICE.md')
 
-printf 'WTBP repository structure: PASS\n'
+printf 'WTBP 仓库结构校验：通过\n'

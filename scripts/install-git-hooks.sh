@@ -3,4 +3,4 @@ set -euo pipefail
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 git -C "$repo_root" config core.hooksPath .githooks
-printf 'WTBP Git hooks enabled from .githooks/\n'
+printf '已启用 WTBP Git Hook：.githooks/\n'
