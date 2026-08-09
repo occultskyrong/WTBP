@@ -39,3 +39,5 @@ body:
     attributes:
       label: 建议的修正或验证方式
       description: 说明建议修改的内容，或给出可以复现、验证该问题的最小步骤。
+    validations:
+      required: true
