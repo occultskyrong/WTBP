@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 required_paths=(
   "README.md"
   "AGENTS.md"
@@ -19,18 +19,19 @@ required_paths=(
   "docs/commit-conventions.md"
   "docs/github-governance.md"
   "docs/governance.md"
-  "ontology/taxonomy.yaml"
-  "ontology/context-schema.yaml"
-  "ontology/practice-schema.yaml"
-  "ontology/relationship-schema.yaml"
-  "registry/catalog.yaml"
-  "registry/relationships.yaml"
-  "registry/external-sources.yaml"
-  "templates/practice-template.md"
-  "templates/skill-template/SKILL.md"
+  "knowledge/schemas/taxonomy.yaml"
+  "knowledge/schemas/context-schema.yaml"
+  "knowledge/schemas/practice-schema.yaml"
+  "knowledge/schemas/relationship-schema.yaml"
+  "knowledge/catalog.yaml"
+  "knowledge/relationships.yaml"
+  "knowledge/external-sources.yaml"
+  "knowledge/templates/practice-template.md"
+  "knowledge/templates/skill-template/SKILL.md"
   "skills/practice-search/SKILL.md"
-  "tooling/review/review-staged.sh"
-  "tooling/validate/validate-repository.sh"
+  "tooling/install-git-hooks.sh"
+  "tooling/review-staged.sh"
+  "tooling/validate-repository.sh"
 )
 
 for path in "${required_paths[@]}"; do
@@ -42,8 +43,8 @@ done
 
 bash -n "$repo_root/.githooks/pre-commit"
 bash -n "$repo_root/.githooks/commit-msg"
-bash -n "$repo_root/tooling/review/review-staged.sh"
-bash -n "$repo_root/tooling/validate/validate-repository.sh"
+bash -n "$repo_root/tooling/review-staged.sh"
+bash -n "$repo_root/tooling/validate-repository.sh"
 
 for issue_form in "$repo_root"/.github/ISSUE_TEMPLATE/*.yml; do
   [[ "${issue_form##*/}" == "config.yml" ]] && continue
@@ -75,13 +76,15 @@ while IFS= read -r skill_file; do
   fi
 done < <(rg --files "$repo_root/skills" -g 'SKILL.md')
 
-while IFS= read -r practice_file; do
-  for field in id title domain status maturity last_verified tags; do
-    if ! rg -q "^${field}:" "$practice_file"; then
-      printf '%s 缺少字段：%s\n' "${practice_file#$repo_root/}" "$field" >&2
-      exit 1
-    fi
-  done
-done < <(rg --files "$repo_root/practices" -g 'PRACTICE.md')
+if [[ -d "$repo_root/knowledge/practices" ]]; then
+  while IFS= read -r practice_file; do
+    for field in id title domain status maturity last_verified tags; do
+      if ! rg -q "^${field}:" "$practice_file"; then
+        printf '%s 缺少字段：%s\n' "${practice_file#$repo_root/}" "$field" >&2
+        exit 1
+      fi
+    done
+  done < <(rg --files "$repo_root/knowledge/practices" -g 'PRACTICE.md')
+fi
 
 printf 'WTBP 仓库结构校验：通过\n'

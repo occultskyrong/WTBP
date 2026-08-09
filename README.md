@@ -15,8 +15,8 @@ WTBP 是一个面向软件研发的最佳实践知识库与可复用技能（Ski
 
 ## 快速开始
 
-1. 先在 [`ontology/context-schema.yaml`](ontology/context-schema.yaml) 中描述问题的关键场景变量。
-2. 通过 [`registry/catalog.yaml`](registry/catalog.yaml) 找到候选实践条目（Practice），或调用 [`skills/practice-search`](skills/practice-search/SKILL.md)。
+1. 先描述问题的关键场景变量；需要查看字段定义时，再打开 [`knowledge/schemas/context-schema.yaml`](knowledge/schemas/context-schema.yaml)。
+2. 通过 [`knowledge/catalog.yaml`](knowledge/catalog.yaml) 找到候选实践条目（Practice），或调用 [`skills/practice-search`](skills/practice-search/SKILL.md)。
 3. 阅读 Practice 的推荐规则、证据和参考实现，再形成项目自己的决策记录（Decision Record）。
 4. 如需重复执行，再由关联 Skill 产出方案、代码或检查结果。
 
@@ -46,6 +46,28 @@ make review-staged
 - [`CLAUDE.md`](CLAUDE.md)：Claude Code 的专用入口，说明阅读顺序、验证和交付要求。
 - [`CONTRIBUTING.md`](CONTRIBUTING.md)：人工与自动化贡献流程、中文约定和审查要求。
 
+## 仓库导航
+
+日常使用只需记住三个入口：
+
+- `docs/`：理解 WTBP 的概念、使用方式和治理规则。
+- `skills/`：调用可执行的检索、分析和校验流程。
+- `knowledge/`：维护 Practice、目录、模式和贡献模板；其中的 `schemas/`、`catalog.yaml` 等属于知识库内部模型，通常不需要在首次阅读时展开。
+
+`.github/`、`.githooks/` 和 `tooling/` 属于仓库维护基础设施，只有贡献或排查自动化问题时才需要进入。
+
+## AI 最小读取顺序
+
+为快速建立全局认知，智能体按以下顺序读取即可：
+
+1. `AGENTS.md`、`CLAUDE.md`：协作边界、输出契约和提交规则。
+2. `README.md`、[`docs/how-to-use.md`](docs/how-to-use.md)：仓库目的、对象关系和使用路径。
+3. [`knowledge/catalog.yaml`](knowledge/catalog.yaml)：可发现的 Practice、Skill、参考实现和 Eval。
+4. 仅按目录条目加载目标对象及其关联证据；不要一次性展开全部模式和模板。
+5. 需要执行流程时，再读取目标 Skill 的 `SKILL.md` 及其按需引用的 `references/`、`scripts/` 或 `assets/`。
+
+该顺序把“规则—概念—索引—按需内容—执行流程”分开，既支持人类浏览，也避免智能体把尚未使用的内部契约当成业务结论。
+
 ## 提交、推送与 PR
 
 1. 从最新 `master` 创建主题分支，建议命名为 `<type>/YYMMDD_简短说明`；不要直接向 `master` 提交。
@@ -60,6 +82,6 @@ make review-staged
 - `AGENTS.md` 等项目规则只保存本地事实、约束和 WTBP 入口；不要复制整个知识库。
 - Practice 负责“如何判断”，Skill 负责“如何稳定执行”，两者不重复维护同一份知识。
 - 参考实现必须说明适用场景、版本和验证方式；代码片段本身不是证据。
-- Registry 是唯一人工维护的索引来源；面向网站或不同 Agent 的索引应由工具生成。
+- `knowledge/catalog.yaml` 是唯一人工维护的索引来源；面向网站或不同 Agent 的索引应由工具生成。
 
 延伸阅读：[概念与关系](docs/concepts.md)、[使用方式](docs/how-to-use.md)、[贡献指南](CONTRIBUTING.md)、[提交规范](docs/commit-conventions.md)、[治理说明](docs/governance.md)、[GitHub 治理](docs/github-governance.md)。

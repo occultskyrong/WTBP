@@ -8,7 +8,7 @@ WTBP 沉淀的是与场景绑定的软件与产品决策知识，不是通用答
 
 面对技术、成本、安全、合规或可逆性取舍显著的决策时，先使用
 `skills/practice-search/SKILL.md`，再给出建议。应从
-`registry/catalog.yaml` 开始，只按需加载相关 Practice、证据和参考实现。
+`knowledge/catalog.yaml` 开始，只按需加载相关 Practice、证据和参考实现。
 
 ## 必须输出
 

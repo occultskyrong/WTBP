@@ -8,7 +8,7 @@ YAML 字段、Practice/Skill ID、Conventional Commit 的 `type` 与 GitHub 关�
 WTBP 是场景化最佳实践知识库。任何推荐都必须基于明确场景、Practice、证据、参考实现
 和验证方法，而非将模型生成的结论视为唯一依据。
 
-开始高影响决策前，读取 `skills/practice-search/SKILL.md` 与 `registry/catalog.yaml`；只
+开始高影响决策前，读取 `skills/practice-search/SKILL.md` 与 `knowledge/catalog.yaml`；只
 按需加载相关对象。输出应说明场景、缺失变量、使用的 Practice ID、方案取舍、建议、
 证据、风险和验证方法。
 
