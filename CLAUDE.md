@@ -1,58 +1,67 @@
 # WTBP 的 Claude 协作指引
 
-本文件供 Claude Code 在本仓库工作时使用。所有说明以中文呈现；机器标识、文件路径、
-YAML 字段、Practice/Skill ID、Conventional Commit 的 `type` 与 GitHub 关键字保留原样。
+本文件是 Claude Code 的执行路由，和 [`AGENTS.md`](AGENTS.md) 共同构成自动化入口。
+`AGENTS.md` 的常驻边界优先；本文件只补充 Claude 的渐进读取、执行和交付方式。
+所有说明使用中文；机器标识、路径、YAML 字段、Practice/Skill ID、Conventional Commit
+的 `type` 与 GitHub 关键字保留原样。
 
-## 仓库定位
+## 第 0 层：开始任何任务
 
-WTBP 是场景化最佳实践知识库。任何推荐都必须基于明确场景、Practice、证据、参考实现
-和验证方法，而非将模型生成的结论视为唯一依据。
+按以下顺序完成最小上下文建立：
 
-开始高影响决策前，读取 `skills/practice-search/SKILL.md` 与 `knowledge/catalog.yaml`；只
-按需加载相关对象。输出应说明场景、缺失变量、使用的 Practice ID、方案取舍、建议、
-证据、风险和验证方法。
+1. 读取 `AGENTS.md`，接受其授权边界和输出契约。
+2. 运行 `git status --short --branch`，确认分支、未提交改动和上游关系。
+3. 阅读 `README.md` 的“仓库导航”和“AI 最小读取顺序”。
+4. 根据任务类型选择下一层内容；不要默认读取整个 `knowledge/` 或全部 Skill 引用。
 
-## 工作前检查
+## 第 1 层：任务路由
 
-1. 阅读本文件、`AGENTS.md`、`CONTRIBUTING.md` 与任务关联的 Practice/Skill。
-2. 运行 `git status --short --branch`，确认当前分支、未提交改动和上游关系。
-3. 保护无关改动：不恢复、不删除、不覆盖、不暂存无关文件；分歧或目标不明确时先报告。
+| 任务信号 | 必读入口 | 目标输出 |
+|---|---|---|
+| 需要比较方案、存在技术/成本/安全/合规取舍 | `skills/practice-search/SKILL.md` | 场景化建议与证据边界 |
+| 要新增或修改知识条目 | `CONTRIBUTING.md` | Practice/Skill/Eval 贡献或审查结果 |
+| 要调整目录、规则或自动化 | `README.md`、相关 `docs/` | 结构决策、影响面和验证结果 |
+| 要提交、推送或创建 PR | `docs/commit-conventions.md` | 符合规范的提交或 PR 交付 |
+| 要排查校验、Hook 或 CI | `Makefile`、相关 `tooling/` | 可复现的问题定位和修复验证 |
 
-## 提交规范
+高影响决策再从 `knowledge/catalog.yaml` 开始，按目录条目加载目标 Practice、关联证据、
+参考实现或 Skill；优先使用 `approved` 且较新的内容，不把 `stale` 或 `deprecated` 当作默认建议。
 
-提交、推送、创建 PR 与合并 PR 必须视为独立授权。用户未明确要求时，只完成其已授权
-阶段，不隐式提交、推送、创建或合并 PR。
+## 第 2 层：渐进执行流程
 
-1. 不直接在 `master` 提交。使用 `<type>/YYMMDD_short-description` 分支，例如
-   `docs/260809_chinese-templates`。
-2. 使用精确文件列表暂存；禁止 `git add .`、`git add -A` 与 `--no-verify`。
-3. 提交前运行 `make validate` 和 `make review-staged`；按变更风险补充 YAML、Shell、
-   范围审查或业务验证。
-4. 提交标题使用 `<type>(<optional-scope>): 中文说明`，例如：
+### 发现
 
-   ```text
-   docs: 统一中文贡献模板
-   ci: 补齐 PR 审查历史
-   feat(practice): 增加数据库建模实践
-   ```
+先确认事实、调用方、约束、风险和未决变量。仓库存在 `.codegraph/` 时，代码或结构探索
+优先使用 `codegraph files`、`codegraph explore`、`codegraph node`；文档问题再使用 `rg` 和定向阅读。
 
-   允许的 `type` 是 `feat`、`fix`、`docs`、`refactor`、`test`、`chore`、`ci`、
-   `build`、`perf`；标题不超过 72 个字符。
+### 聚焦
 
-## 推送与 Pull Request
+只加载与当前任务直接相关的文件。Practice 任务通常是“目录条目 → Practice → 证据/参考实现”；
+Skill 任务通常是“Skill → 关联 Practice → 按需 references/scripts/assets”。
 
-1. 推送前再次确认远端、分支和工作区；只推送用户授权的单一分支，不使用 `--all` 或
-   无范围的 tag 推送。
-2. PR 的目标分支为 `master`。标题、摘要、变更影响和验证说明使用中文，并完整填写
-   `.github/PULL_REQUEST_TEMPLATE.md`。
-3. PR 只有在当前提交的 `WTBP 仓库检查 / 仓库验证` 成功时才可合并。不得把其他分支、
-   旧提交或单独 push 的成功误认为当前 PR 已通过。
-4. 不自动合并。合并方式、解决冲突、关闭 PR、重新触发 Dependabot 或变更保护规则，都
-   需要用户再次明确授权。
+### 输出
 
-## 质量与安全边界
+决策类输出必须包含：场景、缺失变量、Practice ID、候选方案及取舍、建议、证据、剩余风险和验证方法。
+改动类输出必须额外包含：改动范围、验证命令及结果、未验证项和下一步授权。
 
-- Practice、Skill、参考实现和目录必须保持一致；对新增、修改或删除的对象运行仓库门禁。
-- 面向贡献者的文档、PR、Issue、模板和校验提示使用中文；保留机器兼容字段。
-- 不提交密钥、访问令牌、生成报告、缓存或无关文件。
-- 本地验证、CI 通过、PR 合并和远端运行状态是不同证据，不得互相替代。
+### 交付
+
+修改、暂存、提交、推送、创建 PR 和合并是独立动作。只执行用户明确授权的阶段；
+发现无关脏改动、未知提交或远端分歧时先报告，不自动恢复、覆盖、rebase、stash 或强制推送。
+
+## 第 3 层：提交与 PR 细节
+
+需要进入 Git 交付时才读取 [`docs/commit-conventions.md`](docs/commit-conventions.md) 和
+[`docs/github-governance.md`](docs/github-governance.md)，并遵守以下摘要：
+
+1. 不直接在 `master` 提交，使用 `<type>/YYMMDD_short-description` 分支。
+2. 精确暂存文件，运行 `make validate`、`make review-staged` 和适用的专项验证。
+3. 使用 `<type>(<optional-scope>): 中文说明`，标题不超过 72 个字符；禁止 `git add .`、
+   `git add -A`、`--no-verify`、强制推送和无范围 tag 推送。
+4. PR 以 `master` 为目标，填写中文模板；只有当前 PR 的
+   `WTBP 仓库检查 / 仓库验证` 成功后才可称为可合并。
+
+## 第 4 层：完成检查
+
+结束前形成证据摘要：工作区和分支、实际改动、验证命令及结果、未验证边界、是否提交/推送/创建 PR，
+以及仍需用户授权的下一步。不要把本地验证、CI 通过、PR 合并或远端运行状态相互替代。

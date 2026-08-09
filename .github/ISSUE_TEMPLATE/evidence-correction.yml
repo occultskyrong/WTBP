@@ -6,12 +6,15 @@ body:
     id: practice_id
     attributes:
       label: 受影响的 Practice ID 或路径
+      description: 填写完整 Practice ID（例如 database.schema-design）或仓库内文件路径，方便快速定位。
+      placeholder: database.schema-design
     validations:
       required: true
   - type: dropdown
     id: issue_type
     attributes:
       label: 证据问题
+      description: 选择最接近的问题类型；如果有多个问题，优先选择影响推荐结论最大的一项。
       options:
         - 来源已过期
         - 来源与推荐结论相矛盾
@@ -24,10 +27,15 @@ body:
     id: details
     attributes:
       label: 证据与影响
-      description: 请提供来源链接、版本或访问日期，并说明可能需要调整的推荐结论。
+      description: 请提供可核查的来源链接、版本或访问日期，并说明它与当前结论的关系及可能影响。
+      placeholder: |
+        来源：
+        版本或访问日期：
+        对当前推荐结论的影响：
     validations:
       required: true
   - type: textarea
     id: suggested_resolution
     attributes:
       label: 建议的修正或验证方式
+      description: 说明建议修改的内容，或给出可以复现、验证该问题的最小步骤。

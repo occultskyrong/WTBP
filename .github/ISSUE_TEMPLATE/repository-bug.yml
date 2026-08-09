@@ -6,6 +6,7 @@ body:
     id: component
     attributes:
       label: 组件
+      description: 选择出现问题的仓库组件；如果无法判断，请选择“其他”并在后续说明。
       options:
         - 仓库校验
         - 提交 Hook
@@ -20,17 +21,35 @@ body:
     id: steps
     attributes:
       label: 复现步骤
+      description: 按实际执行顺序列出命令、页面操作或输入；提供最小可复现步骤，不要只描述现象。
+      placeholder: |
+        1.
+        2.
+        3.
     validations:
       required: true
   - type: textarea
     id: expected
     attributes:
       label: 预期行为
+      description: 说明按照文档或正常逻辑应当发生什么。
     validations:
       required: true
   - type: textarea
     id: actual
     attributes:
       label: 实际行为与相关日志
+      description: 说明实际结果；如有错误信息、CI 链接或日志，请粘贴脱敏后的关键片段。
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: 环境与复现信息
+      description: 请填写分支或提交、操作系统、工具版本及其他影响复现的条件。
+      placeholder: |
+        分支或提交：
+        操作系统：
+        工具或运行时版本：
     validations:
       required: true
