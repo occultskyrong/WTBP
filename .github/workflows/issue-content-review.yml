@@ -1,0 +1,20 @@
+name: WTBP Issue 内容审查
+
+on:
+  issues:
+    types: [opened, edited]
+
+permissions:
+  contents: read
+
+jobs:
+  review:
+    name: Issue 内容验证
+    runs-on: ubuntu-latest
+    steps:
+      - name: 获取仓库内容
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: 审查 Issue 内容
+        env:
+          ISSUE_EVENT_PATH: ${{ github.event_path }}
+        run: make review-issue ISSUE_EVENT_PATH="$ISSUE_EVENT_PATH"

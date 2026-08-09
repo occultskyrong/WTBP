@@ -21,6 +21,18 @@ Hook 视为远端保护的替代品。
 工作流仅授予所需的最小权限，并将第三方 Action 固定到完整提交 SHA。保留
 Dependabot 对 GitHub Actions 的版本更新；更新 PR 必须通过同一套校验后才可合并。
 
+## Issue 内容审查
+
+Issue 新建或编辑时，`WTBP Issue 内容审查 / Issue 内容验证` 会根据标题前缀识别模板，
+检查必要章节、Practice ID、实践提案清单和仓库问题环境信息。审查失败只产生失败检查，
+不会自动评论、加标签或修改 Issue。
+
+本地可以使用事件 JSON 重放同一检查：
+
+```bash
+make review-issue ISSUE_EVENT_PATH=/path/to/event.json
+```
+
 ## 安全与公开协作
 
 在 `Settings → Advanced Security` 开启依赖关系图、Dependabot 告警和 Dependabot

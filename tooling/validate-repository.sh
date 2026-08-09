@@ -15,6 +15,7 @@ required_paths=(
   ".github/ISSUE_TEMPLATE/evidence-correction.yml"
   ".github/ISSUE_TEMPLATE/repository-bug.yml"
   ".github/PULL_REQUEST_TEMPLATE.md"
+  ".github/workflows/issue-content-review.yml"
   ".github/dependabot.yml"
   "docs/commit-conventions.md"
   "docs/github-governance.md"
@@ -31,6 +32,7 @@ required_paths=(
   "skills/practice-search/SKILL.md"
   "tooling/install-git-hooks.sh"
   "tooling/review-staged.sh"
+  "tooling/review-issue-body.sh"
   "tooling/validate-repository.sh"
 )
 
@@ -44,6 +46,7 @@ done
 bash -n "$repo_root/.githooks/pre-commit"
 bash -n "$repo_root/.githooks/commit-msg"
 bash -n "$repo_root/tooling/review-staged.sh"
+bash -n "$repo_root/tooling/review-issue-body.sh"
 bash -n "$repo_root/tooling/validate-repository.sh"
 
 for issue_form in "$repo_root"/.github/ISSUE_TEMPLATE/*.yml; do

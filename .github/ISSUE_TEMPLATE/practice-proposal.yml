@@ -4,7 +4,7 @@ title: "[实践] "
 body:
   - type: markdown
     attributes:
-      value: "请描述决策场景，而不仅是偏好的方案。"
+      value: "请先描述决策场景和约束，再讨论方案；不要只提交个人偏好的工具或结论。"
   - type: dropdown
     id: change_type
     attributes:
@@ -19,6 +19,7 @@ body:
     id: practice_id
     attributes:
       label: 建议的 Practice ID
+      description: 如果是新增实践，请使用“领域.主题”的小写标识；更新或废弃时填写现有 ID。
       placeholder: database.schema-design
   - type: textarea
     id: problem_and_context
@@ -31,6 +32,7 @@ body:
     id: options
     attributes:
       label: 候选方案与取舍
+      description: 至少比较两个可行方案，并说明性能、成本、安全、复杂度、可逆性等关键取舍。
     validations:
       required: true
   - type: textarea
@@ -44,6 +46,7 @@ body:
     id: validation
     attributes:
       label: 建议的验证方法
+      description: 说明如何验证推荐规则在适用场景下有效，以及如何识别不适用或失败的情况。
     validations:
       required: true
   - type: checkboxes
