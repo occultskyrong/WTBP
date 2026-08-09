@@ -1,16 +1,16 @@
 ---
 name: practice-search
-description: Find, compare, and apply WTBP best practices to a software or product decision. Use whenever an agent needs a reusable implementation pattern, must choose among technical approaches, lacks an internal precedent, or needs to ground a recommendation in documented evidence and reference implementations.
+description: 为软件或产品决策检索、比较并应用 WTBP 最佳实践。需要复用实现模式、比较技术方案、缺少内部先例，或必须以文档证据和参考实现支撑建议时使用。
 ---
 
-# Practice Search
+# 实践检索
 
 用此 Skill 把模糊问题转为有边界的场景化建议。它不替代项目事实、架构设计或人工评审。
 
 ## 工作流
 
 1. 提取问题、已有技术栈、规模、性能、安全合规、成本、团队能力和可逆性；缺少会影响选择的变量时先说明缺口。
-2. 阅读 `registry/catalog.yaml`，按领域、标签和状态寻找候选 Practice。
+2. 阅读 `knowledge/catalog.yaml`，按领域、标签和状态寻找候选 Practice。
 3. 先读候选 Practice 的元数据、适用场景和场景化推荐规则；只在需要支撑判断时加载证据、参考实现或关联 Skill。
 4. 比较候选方案与当前约束，明确采用、调整或拒绝的原因。不要把 `stale` 或 `deprecated` 内容作为默认建议。
 5. 输出验证方法；如果建议进入不可逆、高成本、安全或合规决策，要求人工确认。

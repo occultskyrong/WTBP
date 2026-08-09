@@ -12,13 +12,13 @@
 <type>(<optional-scope>): <summary>
 ```
 
-允许的 `type`：`feat`、`fix`、`docs`、`refactor`、`test`、`chore`、`ci`、`build`、`perf`。标题不超过 72 个字符；破坏性变更使用 `!`。
+允许的 `type`：`feat`、`fix`、`docs`、`refactor`、`test`、`chore`、`ci`、`build`、`perf`。`type` 和可选 `scope` 保持英文以兼容工具；说明文字使用中文。标题不超过 72 个字符；破坏性变更使用 `!`。
 
 ```text
-feat(practice): add schema-design guidance
-fix(search): reject deprecated practices by default
-docs!: revise the contribution contract
-ci: enforce commit message validation
+feat(practice): 增加数据库建模实践
+fix(search): 默认排除已废弃实践
+docs!: 调整贡献约定
+ci: 校验提交标题格式
 ```
 
 一次提交只表达一个可审查的意图。若需要补充背景、取舍或风险，在正文说明；关联 Issue 时使用 `Closes #123`。

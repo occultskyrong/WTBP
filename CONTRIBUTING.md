@@ -2,11 +2,18 @@
 
 提交分支、提交消息和提交前检查见 [`docs/commit-conventions.md`](docs/commit-conventions.md)。
 
+## 语言
+
+面向贡献者、使用者和评审者的文档、Issue、PR 说明、模板与校验提示默认使用中文。
+为保持工具兼容性，文件路径、YAML 字段、Practice/Skill ID、Conventional Commit 的
+`type` 和 GitHub 自动识别关键字（如 `Closes #123`）保留原格式；提交标题的说明文字
+应使用简明中文。
+
 ## 新增 Practice
 
-1. 在 `practices/<domain>/<topic>/` 从 [`templates/practice-template.md`](templates/practice-template.md) 创建 `PRACTICE.md`。
+1. 在 `knowledge/practices/<domain>/<topic>/` 从 [`knowledge/templates/practice-template.md`](knowledge/templates/practice-template.md) 创建 `PRACTICE.md`。
 2. 补全场景、约束、方案对比、推荐规则、反模式和验证方法；没有证据或适用范围的内容不进入 `approved` 状态。
-3. 在 `registry/catalog.yaml` 登记 Practice，并在 `registry/relationships.yaml` 关联证据、Skill 和参考实现。
+3. 在 `knowledge/catalog.yaml` 登记 Practice，并在 `knowledge/relationships.yaml` 关联证据、Skill 和参考实现。
 4. 运行 `make validate`；提交前运行 `make review-staged`。
 
 ## 新增 Skill
@@ -14,7 +21,7 @@
 1. 使用 Agent Skills 兼容结构：`SKILL.md` 加按需加载的 `references/`、`scripts/` 或 `assets/`。
 2. Skill 必须引用其使用的 Practice ID，不复制整篇 Practice。
 3. 为关键行为提供正向、反向或边界 Eval。
-4. 在 `registry/catalog.yaml` 登记后运行校验。
+4. 在 `knowledge/catalog.yaml` 登记后运行校验。
 
 ## 评审原则
 

@@ -1,4 +1,4 @@
 interface:
-  display_name: "Practice Search"
-  short_description: "Find and apply relevant best practices."
-  default_prompt: "Use $practice-search to find the best practices for this task."
+  display_name: "实践检索"
+  short_description: "检索并应用与当前任务相关的最佳实践。"
+  default_prompt: "使用 $practice-search 为当前任务检索最佳实践。"

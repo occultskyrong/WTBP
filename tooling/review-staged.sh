@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 git -C "$repo_root" rev-parse --show-toplevel >/dev/null
 cd "$repo_root"
 
 fail() {
-  printf 'REVIEW FAILED: %s\n' "$1" >&2
+  printf '审查失败：%s\n' "$1" >&2
   exit 1
 }
 
 usage() {
   cat >&2 <<'EOF'
-Usage:
+用法：
   review-staged.sh
   review-staged.sh --range <base-tree-or-commit> <head-commit>
 EOF
@@ -118,7 +118,7 @@ source_field_value() {
 catalog_contains() {
   local id="$1"
   local path="$2"
-  source_file registry/catalog.yaml | awk -v id="$id" -v path="$path" '
+  source_file knowledge/catalog.yaml | awk -v id="$id" -v path="$path" '
     $0 == "  - id: " id { candidate = 1; next }
     candidate && $0 == "    path: " path { found = 1 }
     candidate && /^  - id: / { candidate = 0 }
@@ -140,13 +140,13 @@ implementation_root() {
 
 taxonomy_contains_domain() {
   local domain="$1"
-  source_file ontology/taxonomy.yaml | rg -q "^  - id: ${domain}$"
+  source_file knowledge/schemas/taxonomy.yaml | rg -q "^  - id: ${domain}$"
 }
 
 practice_schema_contains() {
   local field="$1"
   local value="$2"
-  source_file ontology/practice-schema.yaml | awk -v field="$field" '$1 == field ":" { print; exit }' | rg -Fq "$value"
+  source_file knowledge/schemas/practice-schema.yaml | awk -v field="$field" '$1 == field ":" { print; exit }' | rg -Fq "$value"
 }
 
 check_practice() {
@@ -170,10 +170,10 @@ check_practice() {
   status="$(source_field_value "$file" status)"
   maturity="$(source_field_value "$file" maturity)"
   [[ "$practice_id" == "${domain}."* ]] || fail "$file 的 id 必须以领域 ${domain}. 开头"
-  taxonomy_contains_domain "$domain" || fail "$file 的 domain 未在 ontology/taxonomy.yaml 中定义: $domain"
-  practice_schema_contains status_values "$status" || fail "$file 的 status 未被 Practice schema 允许: $status"
-  practice_schema_contains maturity_values "$maturity" || fail "$file 的 maturity 未被 Practice schema 允许: $maturity"
-  catalog_contains "$practice_id" "${file%/PRACTICE.md}" || fail "$file 未在 registry/catalog.yaml 中登记正确路径"
+  taxonomy_contains_domain "$domain" || fail "$file 的 domain 未在 knowledge/schemas/taxonomy.yaml 中定义: $domain"
+  practice_schema_contains status_values "$status" || fail "$file 的 status 未被 Practice 模式允许: $status"
+  practice_schema_contains maturity_values "$maturity" || fail "$file 的 maturity 未被 Practice 模式允许: $maturity"
+  catalog_contains "$practice_id" "${file%/PRACTICE.md}" || fail "$file 未在 knowledge/catalog.yaml 中登记正确路径"
 
   if [[ "$status" == "approved" ]]; then
     require_nonempty_source_section "$file" '证据与来源'
@@ -195,7 +195,7 @@ check_skill() {
   skill_name="$(skill_name_from_file "$file")"
   skill_dir="${file%/SKILL.md}"
   [[ "${skill_dir##*/}" == "$skill_name" ]] || fail "$file 的目录名必须与 name 一致"
-  catalog_contains "$skill_name" "$skill_dir" || fail "$file 未在 registry/catalog.yaml 中登记正确路径"
+  catalog_contains "$skill_name" "$skill_dir" || fail "$file 未在 knowledge/catalog.yaml 中登记正确路径"
 }
 
 check_implementation() {
@@ -213,7 +213,7 @@ check_implementation() {
 }
 
 catalog_entries() {
-  source_file registry/catalog.yaml | awk '
+  source_file knowledge/catalog.yaml | awk '
     /^(practices|skills|implementations|evals):/ { section = substr($1, 1, length($1) - 1); id = ""; next }
     /^  - id: / { id = $3; next }
     /^    path: / && section != "" && id != "" { print section "\t" id "\t" $2 }
@@ -227,15 +227,15 @@ check_catalog_entry_targets() {
   local expected_file
 
   while IFS=$'\t' read -r section id path; do
-    [[ -n "$section" && -n "$id" && -n "$path" ]] || fail 'registry/catalog.yaml 中的对象必须具有 id 和 path'
+    [[ -n "$section" && -n "$id" && -n "$path" ]] || fail 'knowledge/catalog.yaml 中的对象必须具有 id 和 path'
     case "$section" in
       practices) expected_file="${path}/PRACTICE.md" ;;
       skills) expected_file="${path}/SKILL.md" ;;
       implementations) expected_file="${path}/IMPLEMENTATION.md" ;;
       evals) expected_file="${path}/EVAL.md" ;;
-      *) fail "registry/catalog.yaml 包含未知对象分类: $section" ;;
+      *) fail "knowledge/catalog.yaml 包含未知对象分类: $section" ;;
     esac
-    source_exists "$expected_file" || fail "registry/catalog.yaml 指向不存在的对象: $expected_file"
+    source_exists "$expected_file" || fail "knowledge/catalog.yaml 指向不存在的对象: $expected_file"
   done < <(catalog_entries)
 }
 
@@ -246,36 +246,36 @@ check_all_artifacts_cataloged() {
   while IFS= read -r file; do
     [[ -n "$file" ]] || continue
     id="$(practice_id_from_file "$file")"
-    catalog_contains "$id" "${file%/PRACTICE.md}" || fail "$file 未在 registry/catalog.yaml 中登记正确路径"
-  done < <(source_files | rg '^practices/.+/PRACTICE\.md$' || true)
+    catalog_contains "$id" "${file%/PRACTICE.md}" || fail "$file 未在 knowledge/catalog.yaml 中登记正确路径"
+  done < <(source_files | rg '^knowledge/practices/.+/PRACTICE\.md$' || true)
 
   while IFS= read -r file; do
     [[ -n "$file" ]] || continue
     id="$(skill_name_from_file "$file")"
-    catalog_contains "$id" "${file%/SKILL.md}" || fail "$file 未在 registry/catalog.yaml 中登记正确路径"
+    catalog_contains "$id" "${file%/SKILL.md}" || fail "$file 未在 knowledge/catalog.yaml 中登记正确路径"
   done < <(source_files | rg '^skills/.+/SKILL\.md$' || true)
 
   while IFS= read -r file; do
     [[ -n "$file" ]] || continue
     id="$(source_field_value "$file" id)"
-    catalog_contains "$id" "${file%/IMPLEMENTATION.md}" || fail "$file 未在 registry/catalog.yaml 中登记正确路径"
-  done < <(source_files | rg '^implementations/.+/IMPLEMENTATION\.md$' || true)
+    catalog_contains "$id" "${file%/IMPLEMENTATION.md}" || fail "$file 未在 knowledge/catalog.yaml 中登记正确路径"
+  done < <(source_files | rg '^knowledge/implementations/.+/IMPLEMENTATION\.md$' || true)
 }
 
 check_registry_and_contracts() {
-  source_exists registry/catalog.yaml || fail '缺少 registry/catalog.yaml'
-  source_file registry/catalog.yaml | rg -q 'TODO|TBD|待补充|待确认' && fail 'registry/catalog.yaml 不能包含未完成占位符'
+  source_exists knowledge/catalog.yaml || fail '缺少 knowledge/catalog.yaml'
+  source_file knowledge/catalog.yaml | rg -q 'TODO|TBD|待补充|待确认' && fail 'knowledge/catalog.yaml 不能包含未完成占位符'
 
   local duplicates
-  duplicates="$(source_file registry/catalog.yaml | awk -F': ' '/^  - id: / { print $2 }' | sort | uniq -d)"
-  [[ -z "$duplicates" ]] || fail "registry/catalog.yaml 存在重复 ID: $duplicates"
+  duplicates="$(source_file knowledge/catalog.yaml | awk -F': ' '/^  - id: / { print $2 }' | sort | uniq -d)"
+  [[ -z "$duplicates" ]] || fail "knowledge/catalog.yaml 存在重复 ID: $duplicates"
 
   local field
   for field in id title domain status maturity last_verified tags; do
-    source_file templates/practice-template.md | rg -q "^${field}:" || fail "Practice 模板缺少字段: $field"
+    source_file knowledge/templates/practice-template.md | rg -q "^${field}:" || fail "Practice 模板缺少字段：$field"
   done
   for field in 问题定义 适用场景 不适用场景 决策变量 候选方案 场景化推荐规则 反模式 验证方法 证据与来源; do
-    source_file templates/practice-template.md | rg -q "^## ${field}$" || fail "Practice 模板缺少章节: $field"
+    source_file knowledge/templates/practice-template.md | rg -q "^## ${field}$" || fail "Practice 模板缺少章节: $field"
   done
 
   check_catalog_entry_targets
@@ -290,7 +290,7 @@ while IFS= read -r file; do
 done < <(changed_file_names)
 
 if [[ ${#changed_files[@]} -eq 0 ]]; then
-  printf 'WTBP review: SKIPPED (no changed files)\n'
+  printf 'WTBP 审查：跳过（没有变更文件）\n'
   exit 0
 fi
 
@@ -299,7 +299,7 @@ for file in "${changed_files[@]}"; do
     .DS_Store|reports/*|coverage/*)
       fail "不允许提交生成产物: $file"
       ;;
-    practices/*/PRACTICE.md)
+    knowledge/practices/*/*/PRACTICE.md)
       source_exists "$file" && check_practice "$file"
       ;;
     skills/*/SKILL.md)
@@ -311,7 +311,7 @@ done
 implementation_roots=()
 for file in "${changed_files[@]}"; do
   case "$file" in
-    implementations/*/*/*)
+    knowledge/implementations/*/*/*)
       root="$(implementation_root "$file")"
       [[ -n "$root" ]] && implementation_roots+=("$root")
       ;;
@@ -325,4 +325,4 @@ if [[ ${#implementation_roots[@]} -gt 0 ]]; then
 fi
 
 check_registry_and_contracts
-printf 'WTBP review: PASS (%s files reviewed, mode=%s)\n' "${#changed_files[@]}" "$mode"
+printf 'WTBP 审查：通过（已审查 %s 个文件，模式=%s）\n' "${#changed_files[@]}" "$mode"

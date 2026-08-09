@@ -1,57 +1,57 @@
-name: Practice proposal
-description: Propose a new, updated, or deprecated best practice.
-title: "[practice] "
+name: 实践提案
+description: 提出新增、更新、废弃或替代一项最佳实践的建议。
+title: "[实践] "
 body:
   - type: markdown
     attributes:
-      value: "Describe the decision context, not only the preferred solution."
+      value: "请描述决策场景，而不仅是偏好的方案。"
   - type: dropdown
     id: change_type
     attributes:
-      label: Change type
+      label: 变更类型
       options:
-        - New practice
-        - Update an existing practice
-        - Deprecate or supersede a practice
+        - 新增实践
+        - 更新现有实践
+        - 废弃或替代实践
     validations:
       required: true
   - type: input
     id: practice_id
     attributes:
-      label: Proposed Practice ID
+      label: 建议的 Practice ID
       placeholder: database.schema-design
   - type: textarea
     id: problem_and_context
     attributes:
-      label: Problem and applicable context
-      description: Include scale, constraints, existing stack, security/compliance, cost, and reversibility when relevant.
+      label: 问题与适用场景
+      description: 请在适用时说明规模、约束、现有技术栈、安全或合规、成本和可逆性。
     validations:
       required: true
   - type: textarea
     id: options
     attributes:
-      label: Candidate options and trade-offs
+      label: 候选方案与取舍
     validations:
       required: true
   - type: textarea
     id: evidence
     attributes:
-      label: Evidence and reference implementations
-      description: Link official documentation, benchmarks, incidents, or runnable examples. State version or access date.
+      label: 证据与参考实现
+      description: 请提供官方文档、基准测试、事故复盘或可运行示例，并注明版本或访问日期。
     validations:
       required: true
   - type: textarea
     id: validation
     attributes:
-      label: Proposed validation method
+      label: 建议的验证方法
     validations:
       required: true
   - type: checkboxes
     id: checklist
     attributes:
-      label: Contributor checklist
+      label: 贡献检查清单
       options:
-        - label: I have described the conditions in which this recommendation should not be used.
+        - label: 我已说明该建议不应使用的条件。
           required: true
-        - label: I have checked whether an existing Practice already covers this decision.
+        - label: 我已确认现有 Practice 是否已经覆盖该决策。
           required: true

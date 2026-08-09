@@ -11,25 +11,25 @@ case "$subject" in
 esac
 
 if [[ -z "$subject" ]]; then
-  printf 'Commit subject must not be empty.\n' >&2
+  printf '提交标题不能为空。\n' >&2
   exit 1
 fi
 
 if [[ "$(printf '%s' "$subject" | wc -m | tr -d ' ')" -gt 72 ]]; then
-  printf 'Commit subject must be 72 characters or fewer.\n' >&2
+  printf '提交标题不得超过 72 个字符。\n' >&2
   exit 1
 fi
 
 pattern='^(feat|fix|docs|refactor|test|chore|ci|build|perf)(\([a-z0-9][a-z0-9._/-]*\))?!?: [^[:space:]].*$'
 if ! printf '%s\n' "$subject" | LC_ALL=C grep -Eq "$pattern"; then
   cat >&2 <<'EOF'
-Invalid commit subject. Use Conventional Commits:
+提交标题格式不正确。请使用 Conventional Commits：
   <type>(<optional-scope>): <summary>
 
-Examples:
-  feat(practice): add schema-design guidance
-  ci: enforce commit message validation
-  docs!: revise the contribution contract
+示例：
+  feat(practice): 增加数据库建模实践
+  ci: 校验提交标题格式
+  docs!: 调整贡献约定
 EOF
   exit 1
 fi
