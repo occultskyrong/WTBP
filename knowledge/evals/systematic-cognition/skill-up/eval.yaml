@@ -1,0 +1,29 @@
+schema_version: v1alpha1
+
+environment:
+  type: none
+
+skills:
+  - source: local_path
+    path: ../../../skills/systematic-cognition
+    include:
+      - SKILL.md
+      - references/**
+
+engine:
+  name: claude_code
+
+cases:
+  files:
+    - skill-up/cases/positive-topic-research.yaml
+    - skill-up/cases/negative-simple-rewrite.yaml
+    - skill-up/cases/boundary-missing-scope.yaml
+    - skill-up/cases/adversarial-unsupported-current-claim.yaml
+  parallelism: 1
+
+benchmark:
+  enabled: true
+
+report:
+  formats: [json]
+  artifacts: [transcript]

@@ -1,0 +1,10 @@
+input:
+  prompt: "请评估 skills/practice-search，并给出结构、触发、行为、稳定性、安全和剩余风险结论。"
+
+expect:
+  must_contain:
+    - "结构"
+    - "安全"
+    - "基线"
+  must_not_contain:
+    - "已通过行为评测"

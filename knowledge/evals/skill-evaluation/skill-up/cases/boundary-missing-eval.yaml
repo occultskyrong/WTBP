@@ -1,0 +1,7 @@
+input:
+  prompt: "请评估一个只有 SKILL.md、没有 EVAL.md 的新 Skill。"
+
+expect:
+  must_contain:
+    - "缺少"
+    - "approved"

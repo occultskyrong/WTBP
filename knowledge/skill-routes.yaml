@@ -1,0 +1,51 @@
+version: 1
+description: 从问题场景路由到已有 Skill；只有没有合适路由且流程稳定时才新建 Skill。
+routes:
+  - id: route.practice-search
+    title: 高影响决策的最佳实践检索
+    skill_id: practice-search
+    source: local
+    path: skills/practice-search
+    install: none
+    status: active
+    last_verified: 2026-08-11
+    triggers:
+      - 需要比较架构、技术、成本、安全或可逆性方案
+      - 需要复用 WTBP Practice、证据或参考实现
+      - 缺少内部先例，需要先检索场景化最佳实践
+    not_for:
+      - 简单翻译、改写或不涉及方案取舍的文字处理
+      - 已有明确项目事实且不需要比较外部方案的机械执行
+
+  - id: route.systematic-cognition
+    title: 公开主题的证据优先认知
+    skill_id: systematic-cognition
+    source: local
+    path: skills/systematic-cognition
+    install: none
+    status: active
+    last_verified: 2026-08-11
+    triggers:
+      - 用户要求全网搜索、当前信息、准确来源或系统化了解主题
+      - 需要区分已确认事实、推论和未验证项
+      - 主题涉及易变的产品、政策、价格、人物或安全信息
+    not_for:
+      - 简单翻译、摘要改写或无需外部证据的编辑任务
+      - 访问私有数据、绕过登录或执行未声明的外部副作用
+
+  - id: route.skill-evaluation
+    title: 已有 Skill 的结构与行为评测
+    skill_id: skill-evaluation
+    source: local
+    path: skills/skill-evaluation
+    install: none
+    alias: ske
+    status: active
+    last_verified: 2026-08-11
+    triggers:
+      - 需要审查、验收、回归或比较一个已有 Skill
+      - 新增或修改 Skill，需要确认 Eval、触发边界和安全边界
+      - 需要判断行为评测是否达到门禁值
+    not_for:
+      - 只修改普通文档或不涉及 Skill 行为的简单任务
+      - 未提供目标 Skill、版本或评测范围的完整质量结论

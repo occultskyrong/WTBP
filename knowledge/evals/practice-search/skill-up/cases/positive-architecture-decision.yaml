@@ -1,0 +1,12 @@
+input:
+  prompt: >
+    我们要为一个高并发、涉及成本和可逆性取舍的新服务选择架构方案。请先识别缺失的
+    场景变量，再检索 WTBP Practice，比较候选方案并给出验证方法。
+
+expect:
+  must_contain:
+    - "缺失"
+    - "候选方案"
+    - "验证方法"
+  must_not_contain:
+    - "我无法"

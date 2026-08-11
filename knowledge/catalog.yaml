@@ -1,10 +1,40 @@
 version: 1
 description: WTBP 的规范化目录。所有可发现对象先在这里登记。
-practices: []
+practices:
+  - id: product.evidence-first-cognition
+    path: knowledge/practices/product/evidence-first-cognition
+    status: draft
+    domains: [product]
 skills:
   - id: practice-search
     path: skills/practice-search
     status: active
     domains: [all]
+  - id: skill-evaluation
+    path: skills/skill-evaluation
+    status: active
+    domains: [governance, quality]
+  - id: systematic-cognition
+    path: skills/systematic-cognition
+    status: candidate
+    domains: [product]
 implementations: []
-evals: []
+evals:
+  - id: eval.practice-search
+    path: knowledge/evals/practice-search
+    skill: practice-search
+    status: candidate
+    runner: skill-up
+    last_verified: 2026-08-09
+  - id: eval.skill-evaluation
+    path: knowledge/evals/skill-evaluation
+    skill: skill-evaluation
+    status: candidate
+    runner: skill-up
+    last_verified: 2026-08-09
+  - id: eval.systematic-cognition
+    path: knowledge/evals/systematic-cognition
+    skill: systematic-cognition
+    status: candidate
+    runner: skill-up
+    last_verified: 2026-08-09

@@ -1,0 +1,8 @@
+input:
+  prompt: "请把‘部署已经完成’翻译成英文。"
+
+expect:
+  must_contain:
+    - "deployment"
+  must_not_contain:
+    - "Practice ID"

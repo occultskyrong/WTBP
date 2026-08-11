@@ -1,3 +1,15 @@
 version: 1
 description: 对象之间的关系；关系类型由 knowledge/schemas/relationship-schema.yaml 约束。
-relationships: []
+relationships:
+  - from: practice-search
+    type: validated_by
+    to: eval.practice-search
+  - from: skill-evaluation
+    type: validated_by
+    to: eval.skill-evaluation
+  - from: systematic-cognition
+    type: related_to
+    to: product.evidence-first-cognition
+  - from: systematic-cognition
+    type: validated_by
+    to: eval.systematic-cognition
