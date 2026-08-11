@@ -39,6 +39,8 @@
 
 - [ ] 已运行 `make validate`。
 - [ ] 已在提交前运行 `make review-staged`。
+- [ ] 已运行 `make commit-checklist`，并通过质量门禁与 `VERSION` 检查。
+- [ ] 新增或修改 Skill 时已执行对应的 `ske` 契约评测；若未完成真实行为评测，已明确标注 dry-run 边界。
 - [ ] 行为变更时已新增或更新评测（Eval）用例。
 - [ ] 已确认目录索引（Registry）和关系记录与变更对象一致。
 - [ ] 已确认不含密钥、生成报告或无关变更。

@@ -1,5 +1,7 @@
 .DS_Store
 .wtbp/
+.wtbp-evals/
+.caliper/
 reports/
 coverage/
 .claude/*.local.md

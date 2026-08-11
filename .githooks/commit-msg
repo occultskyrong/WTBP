@@ -33,3 +33,20 @@ if ! printf '%s\n' "$subject" | LC_ALL=C grep -Eq "$pattern"; then
 EOF
   exit 1
 fi
+
+current_version="$(git show :VERSION 2>/dev/null | tr -d '[:space:]' || true)"
+base_version="$(git show HEAD:VERSION 2>/dev/null | tr -d '[:space:]' || printf '0.0.0')"
+if [[ "$current_version" =~ ^([0-9]+)\.([0-9]+)\.[0-9]+$ ]]; then
+  current_major="${BASH_REMATCH[1]}"
+  if [[ "$base_version" =~ ^([0-9]+)\.([0-9]+)\.[0-9]+$ ]]; then
+    base_major="${BASH_REMATCH[1]}"
+  else
+    base_major=0
+  fi
+  if [[ "$current_major" -gt "$base_major" ]]; then
+    if ! printf '%s\n' "$subject" | rg -q '^[a-z]+(\([a-z0-9][a-z0-9._/-]*\))?!:' && ! rg -q '^BREAKING CHANGE:' "$message_file"; then
+      printf 'MAJOR 版本升级必须使用 Conventional Commit 的 ! 或在正文声明 BREAKING CHANGE。\n' >&2
+      exit 1
+    fi
+  fi
+fi

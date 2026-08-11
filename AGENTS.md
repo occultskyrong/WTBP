@@ -1,46 +1,60 @@
-# WTBP Agent 使用指引
+# WTBP Agent Guide
 
-WTBP 沉淀的是与场景绑定的软件与产品决策知识，不是通用答案或提示词片段的集合。
-本文件是所有智能体的常驻最小规则；详细流程按任务路由按需加载。
+Chinese companion: [AGENTS.zh-CN.md](AGENTS.zh-CN.md). This English file is the canonical AI-readable source.
 
-## 第一层：始终遵守
+WTBP stores reusable software and product decision knowledge bound to real scenarios. It is not a collection of
+generic answers or prompt fragments. This file contains the minimum standing rules; load detailed workflows only
+when the task requires them.
 
-- 先确认任务场景、目标、约束和所需证据；不要把模型生成内容当作唯一依据。
-- 项目专有事实留在使用方项目；只有具备适用范围、反例、可追溯证据和验证方法的知识才贡献到 WTBP。
-- `stale` 或 `deprecated` 内容不得作为默认建议。
-- 修改、暂存、提交、推送、创建 PR、合并 PR 是独立授权动作；未获明确授权时停在当前阶段。
-- 保护无关改动、未知提交和远端分歧；不使用强制推送、自动 rebase、自动 stash、`git reset --hard` 或 `--no-verify`。
-- 不提交密钥、令牌、生成报告、缓存或无关文件。
+## Language policy
 
-## 第二层：按任务路由读取
+- Human-facing documentation is Chinese by default: `README.md`, `docs/`, contribution guidance, Issue and PR text.
+- AI entrypoints, executable instructions, and their loaded references are English: `AGENTS.md`, `CLAUDE.md`,
+  `skills/**/SKILL.md`, and `skills/**/references/*.md`.
+- Every AI-readable document has a Chinese companion named `<name>.zh-CN.md`; update both in the same change.
+- Paths, IDs, YAML keys, commands, and user-facing test prompts keep their required language and format.
+- Read [docs/document-language-policy.md](docs/document-language-policy.md) before adding a document or translation.
 
-| 任务 | 先读 | 再按需加载 |
+## Always follow
+
+- Establish the scenario, goal, constraints, and required evidence first. Never treat generated text as the only evidence.
+- Keep project-specific facts in the consuming project. Contribute only reusable knowledge with scope, counterexamples,
+  traceable evidence, and verification methods.
+- Do not use `stale` or `deprecated` content as a default recommendation.
+- Modify, stage, commit, push, create a PR, and merge a PR are separate authorizations.
+- Protect unrelated changes, unknown commits, and remote divergence. Do not force-push, auto-rebase, auto-stash,
+  use `git reset --hard`, or use `--no-verify`.
+- Never commit secrets, tokens, generated reports, caches, or unrelated files.
+
+## Remote access hard boundary
+
+Never run SSH or SSH-based remote access on the user's behalf, including `ssh`, `scp`, `sftp`, `rsync`, `mosh`,
+`autossh`, `sshpass`, `ssh-keyscan`, Git SSH remotes, Docker SSH contexts, or wrappers. This includes read-only
+inspection and diagnostics. Provide commands for the user to run and continue only from sanitized output they return.
+
+## Task routing
+
+| Task | Read first | Load only if needed |
 |---|---|---|
-| 了解仓库 | `README.md` | `docs/how-to-use.md`、`docs/concepts.md` |
-| 高影响技术或产品决策 | `skills/practice-search/SKILL.md` | `knowledge/catalog.yaml`、`knowledge/schemas/context-schema.yaml`、目标 Practice 及关联证据 |
-| 新增或修改 Practice | `CONTRIBUTING.md` | `knowledge/templates/practice-template.md`、`knowledge/catalog.yaml`、`knowledge/relationships.yaml` |
-| 新增或修改 Skill | `CONTRIBUTING.md` | `knowledge/templates/skill-template/SKILL.md`、关联 Practice、Eval |
-| 提交、推送或 PR | `docs/commit-conventions.md` | `docs/github-governance.md`、`.github/PULL_REQUEST_TEMPLATE.md` |
-| 校验、Hook 或 CI 问题 | `Makefile` | `tooling/validate-repository.sh`、`tooling/review-staged.sh`、`.github/workflows/repository-check.yml` |
+| Understand the repository | `README.md` | `docs/how-to-use.md`, `docs/concepts.md` |
+| High-impact technical or product decision | `skills/practice-search/SKILL.md` | `knowledge/catalog.yaml`, context schema, target Practice and evidence |
+| Add or change a Practice | `CONTRIBUTING.md` | Practice template, catalog, relationships |
+| Use, install, add, or change a Skill | `knowledge/skill-routes.yaml`, `docs/skill-routing.md` | Target Skill, Practice, Eval, contribution guidance |
+| Commit, push, or create a PR | `docs/commit-conventions.md` | GitHub governance and PR template |
+| Validation, hook, or CI issue | `Makefile` | Validation scripts and repository workflow |
 
-不要因为看到目录就一次性读取全部模式、模板、证据或 Skill 引用；先用目录索引确定目标，再展开最小相关范围。
+Use the catalog or route index before expanding files. Do not load all templates, evidence, or Skill references merely
+because their directories exist.
 
-## 第三层：工具与探索顺序
+## Exploration and implementation
 
-仓库存在 `.codegraph/` 时，探索代码或结构优先使用 `codegraph files`、`codegraph explore`、
-`codegraph node`；没有索引或问题仅涉及文档时，再使用 `rg` 和定向文件阅读。
+- When `.codegraph/` exists, use `codegraph files`, `codegraph explore`, or `codegraph node` before text search for
+  code or repository-structure questions. Use `rg` for documentation-only questions or when no index exists.
+- For non-trivial coding, refactoring, debugging, or review, apply `karpathy-guidelines`: state assumptions, make the
+  smallest change that solves the task, and verify concrete success criteria.
+- Before delivery, report the scope, validation results, unverified boundaries, and the next authorization required.
 
-## 输出契约
+## Commit gate
 
-涉及决策时必须说明：当前场景、缺失变量、Practice ID、候选方案及取舍、建议、证据、
-剩余风险和验证方法。涉及改动时还要说明：改动范围、验证结果、未验证项和下一步授权。
-
-## 执行顺序
-
-1. `git status --short --branch`，确认工作区和分支。
-2. 按上表选择最小读取集合，明确不在本次范围内的内容。
-3. 先设计和验证，再实施；验证命令与变更风险匹配。
-4. 只执行用户明确授权的交付动作；完成后留下可复核的证据摘要。
-
-详细贡献、提交和 GitHub 规则分别见 [`CONTRIBUTING.md`](CONTRIBUTING.md)、
-[`docs/commit-conventions.md`](docs/commit-conventions.md) 和 [`docs/github-governance.md`](docs/github-governance.md)。
+Before a commit, run `make commit-checklist`. It runs `make validate`, staged-content review, `ske` contract evaluation
+for changed Skills, quality gates, and the `VERSION` check. See [docs/commit-checklist.md](docs/commit-checklist.md).
