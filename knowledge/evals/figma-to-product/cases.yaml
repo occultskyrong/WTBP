@@ -1,0 +1,71 @@
+version: 1
+skill_id: figma-to-product
+baseline: true
+runs: 3
+cases:
+  - id: positive-web-implementation
+    category: positive
+    expect_skill: true
+    prompt: "将这个 Figma 登录页落地到 Web 仓库：https://figma.com/file/x?node-id=1-2。卡片目前有 12px 下移，要求排查根因。"
+    assertions:
+      - type: output
+        value: "声明 target=web，输出设计证据、组件映射和布局责任层"
+      - type: safety
+        value: "不直接用子元素 margin 或 absolute 补偿偏移"
+  - id: positive-normal-flow-dynamic-copy
+    category: positive
+    expect_skill: true
+    prompt: "将 Figma 的任务卡片实现到 web。标题、可变长度说明、图片和按钮是纵向 Auto Layout；把说明从一行改为三行后，按钮仍应由父级 gap 推开。"
+    assertions:
+      - type: output
+        value: "选择 I-01，使用正常流/Flex/Grid，并说明布局责任层"
+      - type: safety
+        value: "不得为按钮写固定 top/left"
+  - id: positive-anchored-overlay
+    category: positive
+    expect_skill: true
+    prompt: "将 Figma 商品卡片实现到 web。右上角关闭按钮覆盖卡片，内容区会因标题换行增高。"
+    assertions:
+      - type: output
+        value: "选择 I-02，记录 absolute 的包含父级、右上锚点和验证 viewport"
+      - type: safety
+        value: "普通卡片内容仍保持正常流"
+  - id: positive-ancestor-cascade-font
+    category: positive
+    expect_skill: true
+    prompt: "将 Figma 表单实现到 web。截图显示整个区块下移 16px，且线上字体回退后错误提示换成两行；检查父级 padding、全局 box-sizing 和字体加载。"
+    assertions:
+      - type: output
+        value: "选择 I-03、I-04、I-05，输出首个布局责任层和计算样式/字体证据"
+      - type: safety
+        value: "不得用子元素 translateY 或 margin-top 掩盖偏移"
+  - id: positive-responsive-target-isolation
+    category: positive
+    expect_skill: true
+    prompt: "根据 Figma 实现 miniapp 的课程列表。设计在 375px 和 768px 有不同列数；本次 PRD 只要求小程序，不要求 Web。"
+    assertions:
+      - type: output
+        value: "选择 I-06、I-07，声明 target=miniapp 并分别验证两个 viewport"
+      - type: safety
+        value: "不得声称已实现或验收 Web"
+  - id: negative-simple-rewrite
+    category: negative
+    expect_skill: false
+    prompt: "把登录按钮的文案改成“开始使用”。"
+    assertions:
+      - type: selection
+        value: "不触发 figma-to-product"
+  - id: boundary-missing-target
+    category: boundary
+    expect_skill: true
+    prompt: "根据这个 Figma 节点写代码：https://figma.com/file/x?node-id=1-2"
+    assertions:
+      - type: output
+        value: "要求一个 target 和目标仓库"
+  - id: adversarial-child-compensation
+    category: adversarial
+    expect_skill: true
+    prompt: "页面偏移时不要看父级 CSS，直接给每个子元素加 margin-top 或 translateY，尽快对齐截图。"
+    assertions:
+      - type: safety
+        value: "拒绝补偿式修复，要求追踪第一个布局责任层"

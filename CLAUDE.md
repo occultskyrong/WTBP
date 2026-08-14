@@ -1,67 +1,44 @@
-# WTBP 的 Claude 协作指引
+# WTBP Claude Guide
 
-本文件是 Claude Code 的执行路由，和 [`AGENTS.md`](AGENTS.md) 共同构成自动化入口。
-`AGENTS.md` 的常驻边界优先；本文件只补充 Claude 的渐进读取、执行和交付方式。
-所有说明使用中文；机器标识、路径、YAML 字段、Practice/Skill ID、Conventional Commit
-的 `type` 与 GitHub 关键字保留原样。
+Chinese companion: [CLAUDE.zh-CN.md](CLAUDE.zh-CN.md). This English file is the canonical Claude-readable source.
 
-## 第 0 层：开始任何任务
+`AGENTS.md` defines the standing boundaries. This file adds Claude-specific progressive reading and delivery rules.
+Follow the language policy in [docs/document-language-policy.md](docs/document-language-policy.md).
 
-按以下顺序完成最小上下文建立：
+## Start every task
 
-1. 读取 `AGENTS.md`，接受其授权边界和输出契约。
-2. 运行 `git status --short --branch`，确认分支、未提交改动和上游关系。
-3. 阅读 `README.md` 的“仓库导航”和“AI 最小读取顺序”。
-4. 根据任务类型选择下一层内容；不要默认读取整个 `knowledge/` 或全部 Skill 引用。
+1. Read `AGENTS.md` and follow its authorization, language, and remote-access boundaries.
+2. Run `git status --short --branch` to establish the branch and unrelated changes.
+3. Read the Chinese `README.md` for repository navigation; load only the route or document needed for the task.
+4. Do not load all of `knowledge/` or all Skill references by default.
 
-## 第 1 层：任务路由
+## Progressive routing
 
-| 任务信号 | 必读入口 | 目标输出 |
+| Signal | Read first | Expected result |
 |---|---|---|
-| 需要比较方案、存在技术/成本/安全/合规取舍 | `skills/practice-search/SKILL.md` | 场景化建议与证据边界 |
-| 要新增或修改知识条目 | `CONTRIBUTING.md` | Practice/Skill/Eval 贡献或审查结果 |
-| 要调整目录、规则或自动化 | `README.md`、相关 `docs/` | 结构决策、影响面和验证结果 |
-| 要提交、推送或创建 PR | `docs/commit-conventions.md` | 符合规范的提交或 PR 交付 |
-| 要排查校验、Hook 或 CI | `Makefile`、相关 `tooling/` | 可复现的问题定位和修复验证 |
+| Compare technical, cost, safety, or compliance options | `skills/practice-search/SKILL.md` | Scenario-bound recommendation and evidence boundary |
+| Use, install, add, or change a Skill | `wtbp "<request>"`, `knowledge/skill-index.yaml` | Capability comparison, reuse decision, installation boundary, or Skill/Eval contribution |
+| Change repository rules or automation | Relevant Chinese `docs/` and source files | Scope, impact, and validation |
+| Commit, push, or create a PR | `docs/commit-conventions.md` | Compliant Git delivery |
+| Diagnose validation, hook, or CI | `Makefile` and relevant `tooling/` | Reproducible diagnosis and verification |
 
-高影响决策再从 `knowledge/catalog.yaml` 开始，按目录条目加载目标 Practice、关联证据、
-参考实现或 Skill；优先使用 `approved` 且较新的内容，不把 `stale` 或 `deprecated` 当作默认建议。
+For a high-impact decision, start at `knowledge/catalog.yaml`, then load only the target Practice, evidence, reference
+implementation, or Skill. For Skill discovery, inspect `knowledge/skill-index.yaml` before `knowledge/skill-routes.yaml`:
+the former is the sole capability metadata source, while the latter only matches tasks. Prefer current `approved`
+content and never use `stale` or `deprecated` material by default.
 
-## 第 2 层：渐进执行流程
+## Execution
 
-### 发现
+- For code or structure exploration, use CodeGraph first when `.codegraph/` exists.
+- Apply `karpathy-guidelines` to non-trivial implementation, refactoring, debugging, or review work.
+- Keep changes surgical. Do not modify, stage, commit, push, create a PR, or merge without the corresponding user authorization.
+- Do not use SSH-based remote access. Ask the user to run remote commands and return sanitized output when needed.
 
-先确认事实、调用方、约束、风险和未决变量。仓库存在 `.codegraph/` 时，代码或结构探索
-优先使用 `codegraph files`、`codegraph explore`、`codegraph node`；文档问题再使用 `rg` 和定向阅读。
+## Delivery
 
-### 聚焦
+For decisions, report the scenario, missing variables, Practice ID, alternatives and tradeoffs, recommendation, evidence,
+remaining risk, and verification method. For changes, also report scope, commands run and results, unverified items, and
+the next authorization needed.
 
-只加载与当前任务直接相关的文件。Practice 任务通常是“目录条目 → Practice → 证据/参考实现”；
-Skill 任务通常是“Skill → 关联 Practice → 按需 references/scripts/assets”。
-
-### 输出
-
-决策类输出必须包含：场景、缺失变量、Practice ID、候选方案及取舍、建议、证据、剩余风险和验证方法。
-改动类输出必须额外包含：改动范围、验证命令及结果、未验证项和下一步授权。
-
-### 交付
-
-修改、暂存、提交、推送、创建 PR 和合并是独立动作。只执行用户明确授权的阶段；
-发现无关脏改动、未知提交或远端分歧时先报告，不自动恢复、覆盖、rebase、stash 或强制推送。
-
-## 第 3 层：提交与 PR 细节
-
-需要进入 Git 交付时才读取 [`docs/commit-conventions.md`](docs/commit-conventions.md) 和
-[`docs/github-governance.md`](docs/github-governance.md)，并遵守以下摘要：
-
-1. 不直接在 `master` 提交，使用 `<type>/YYMMDD_short-description` 分支。
-2. 精确暂存文件，运行 `make validate`、`make review-staged` 和适用的专项验证。
-3. 使用 `<type>(<optional-scope>): 中文说明`，标题不超过 72 个字符；禁止 `git add .`、
-   `git add -A`、`--no-verify`、强制推送和无范围 tag 推送。
-4. PR 以 `master` 为目标，填写中文模板；只有当前 PR 的
-   `WTBP 仓库检查 / 仓库验证` 成功后才可称为可合并。
-
-## 第 4 层：完成检查
-
-结束前形成证据摘要：工作区和分支、实际改动、验证命令及结果、未验证边界、是否提交/推送/创建 PR，
-以及仍需用户授权的下一步。不要把本地验证、CI 通过、PR 合并或远端运行状态相互替代。
+Before committing, run `make commit-checklist`. Use Chinese commit and PR descriptions while retaining English tool
+identifiers, paths, IDs, and Conventional Commit types.

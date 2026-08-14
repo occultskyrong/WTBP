@@ -1,0 +1,4 @@
+interface:
+  display_name: "Figma to Product"
+  short_description: "将 Figma 节点高保真落地到指定终端的可维护实现"
+  default_prompt: "使用 $figma-to-product 将这个 Figma 节点落地到指定 Web、小程序或 App 代码仓库。"

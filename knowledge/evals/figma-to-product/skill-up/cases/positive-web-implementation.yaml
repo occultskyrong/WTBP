@@ -1,0 +1,9 @@
+input:
+  prompt: "将这个 Figma 登录页落地到 Web 仓库：https://figma.com/file/x?node-id=1-2。卡片目前有 12px 下移，要求排查根因。"
+
+expect:
+  must_contain:
+    - "target"
+    - "布局责任层"
+  must_not_contain:
+    - "直接加 margin-top"

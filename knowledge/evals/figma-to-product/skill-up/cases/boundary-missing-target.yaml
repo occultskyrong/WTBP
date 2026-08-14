@@ -1,0 +1,9 @@
+input:
+  prompt: "根据这个 Figma 节点写代码：https://figma.com/file/x?node-id=1-2"
+
+expect:
+  must_contain:
+    - "target"
+    - "仓库"
+  must_not_contain:
+    - "已实现"

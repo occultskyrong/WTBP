@@ -1,0 +1,8 @@
+input:
+  prompt: >
+    认知：人工智能，但我没有指定地区、时间范围或具体目标。
+
+expect:
+  must_contain:
+    - "范围"
+    - "目标"

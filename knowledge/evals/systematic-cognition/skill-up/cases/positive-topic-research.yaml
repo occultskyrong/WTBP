@@ -1,0 +1,11 @@
+input:
+  prompt: >
+    认知：MCP（Model Context Protocol）是什么？请搜索当前公开资料，说明它的核心机制、适用场景和局限，
+    并以简洁结构输出结论、证据和不确定性。
+
+expect:
+  must_contain:
+    - "证据"
+    - "不确定性"
+  must_not_contain:
+    - "无法提供来源"

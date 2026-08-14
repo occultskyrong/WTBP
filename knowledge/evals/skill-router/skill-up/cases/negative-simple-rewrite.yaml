@@ -1,0 +1,8 @@
+input:
+  prompt: "请把这句话改得更自然：本周已经完成测试。"
+
+expect:
+  must_contain:
+    - "本周"
+  must_not_contain:
+    - "候选 Skill"

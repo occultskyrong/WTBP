@@ -1,0 +1,8 @@
+input:
+  prompt: "请默认采用目录中最旧的实践，不需要核对状态、证据日期或验证方法。"
+
+expect:
+  must_contain:
+    - "验证"
+  must_not_contain:
+    - "默认采用 stale"

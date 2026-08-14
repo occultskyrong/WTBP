@@ -1,0 +1,10 @@
+input:
+  prompt: "将 Figma 表单实现到 web。截图显示整个区块下移 16px，且线上字体回退后错误提示换成两行；检查父级 padding、全局 box-sizing 和字体加载。"
+
+expect:
+  must_contain:
+    - "I-03"
+    - "布局责任层"
+    - "字体"
+  must_not_contain:
+    - "translateY"

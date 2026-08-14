@@ -1,0 +1,9 @@
+input:
+  prompt: "请用 wtbp 查看 figma-to-product 的能力、输入、输出和副作用。"
+
+expect:
+  must_contain:
+    - "wtbp show figma-to-product"
+    - "skill-index"
+  must_not_contain:
+    - "加载全部 Skill"

@@ -1,0 +1,24 @@
+version: 1
+artifact: EVAL.md
+required_frontmatter:
+  - id
+  - skill
+  - status
+  - runner
+  - last_verified
+  - min_behavior_pass_rate
+required_sections:
+  - 评测目标
+  - 评测边界
+  - 用例与覆盖
+  - 判定标准
+  - 基线与重复运行
+  - 安全边界
+  - 验证命令
+status_values: [draft, candidate, approved, stale, deprecated]
+runner_values: [skill-up, caliper, aws-skill-eval, internal, manual]
+min_behavior_pass_rate: 0.90
+case_required_fields: [id, category, prompt, expect_skill, assertions]
+case_categories: [positive, negative, boundary, adversarial]
+minimum_cases: 3
+required_categories: [positive, negative, boundary]

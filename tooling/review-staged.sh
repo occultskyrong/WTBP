@@ -134,6 +134,14 @@ skill_name_from_file() {
   source_field_value "$1" name
 }
 
+eval_id_from_file() {
+  source_field_value "$1" id
+}
+
+eval_skill_from_file() {
+  source_field_value "$1" skill
+}
+
 implementation_root() {
   printf '%s\n' "$1" | awk -F/ 'NF >= 4 { print $1 "/" $2 "/" $3 }'
 }
@@ -198,6 +206,80 @@ check_skill() {
   catalog_contains "$skill_name" "$skill_dir" || fail "$file 未在 knowledge/catalog.yaml 中登记正确路径"
 }
 
+count_source_indented_field() {
+  local file="$1"
+  local field="$2"
+  source_file "$file" | awk -v field="$field" 'index($0, "    " field ":") == 1 { count++ } END { print count + 0 }'
+}
+
+check_eval_cases() {
+  local file="$1"
+  local skill_name="$2"
+  local case_count
+  local field_count
+  local category
+  local duplicate_ids
+
+  source_exists "$file" || fail "缺少评测用例文件: $file"
+  source_file "$file" | rg -q '^version: 1$' || fail "$file 必须声明 version: 1"
+  source_file "$file" | rg -q "^skill_id: ${skill_name}$" || fail "$file 的 skill_id 必须为 ${skill_name}"
+  source_file "$file" | rg -q '^baseline: (true|false)$' || fail "$file 必须声明 baseline"
+  source_file "$file" | rg -q '^runs: [3-9][0-9]*$' || fail "$file 的 runs 至少为 3"
+
+  case_count="$(source_file "$file" | awk '/^  - id: / { count++ } END { print count + 0 }')"
+  [[ "$case_count" -ge 3 ]] || fail "$file 至少需要 3 个评测用例"
+  for category in positive negative boundary; do
+    source_file "$file" | rg -q "^    category: ${category}$" || fail "$file 缺少 ${category} 用例"
+  done
+  for field in category prompt expect_skill assertions; do
+    field_count="$(count_source_indented_field "$file" "$field")"
+    [[ "$field_count" -ge "$case_count" ]] || fail "$file 每个用例都必须包含 ${field}"
+  done
+  if source_file "$file" | awk '/^    expect_skill:/ { if ($2 != "true" && $2 != "false") bad = 1 } END { exit(bad ? 0 : 1) }'; then
+    fail "$file 的 expect_skill 只能是 true 或 false"
+  fi
+  duplicate_ids="$(source_file "$file" | awk '/^  - id: / { print $3 }' | sort | uniq -d)"
+  [[ -z "$duplicate_ids" ]] || fail "$file 存在重复用例 ID: $duplicate_ids"
+}
+
+check_eval() {
+  local file="$1"
+  local eval_dir="${file%/EVAL.md}"
+  local eval_id
+  local skill_name
+  local status
+  local runner
+  local last_verified
+  local field
+
+  for field in id skill status runner last_verified min_behavior_pass_rate; do
+    require_source_field "$file" "$field"
+  done
+  source_file "$file" | rg -q '^---$' || fail "$file 缺少 YAML frontmatter 分隔符"
+  eval_id="$(eval_id_from_file "$file")"
+  skill_name="$(eval_skill_from_file "$file")"
+  status="$(source_field_value "$file" status)"
+  runner="$(source_field_value "$file" runner)"
+  last_verified="$(source_field_value "$file" last_verified)"
+  [[ "$eval_id" == "eval.${skill_name}" ]] || fail "$file 的 id 必须为 eval.${skill_name}"
+  [[ "$eval_dir" == "knowledge/evals/${skill_name}" ]] || fail "$file 路径必须与 skill 对应"
+  source_exists "skills/${skill_name}/SKILL.md" || fail "$file 指向不存在的 Skill: ${skill_name}"
+  [[ "$status" =~ ^(draft|candidate|approved|stale|deprecated)$ ]] || fail "$file 的 status 无效: $status"
+  [[ "$runner" =~ ^(skill-up|caliper|aws-skill-eval|internal|manual)$ ]] || fail "$file 的 runner 无效: $runner"
+  [[ "$last_verified" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]] || fail "$file 的 last_verified 必须为日期"
+  minimum_pass_rate="$(source_field_value "$file" min_behavior_pass_rate)"
+  awk -v value="$minimum_pass_rate" 'BEGIN { exit(value >= 0 && value <= 1 ? 0 : 1) }' || fail "$file 的 min_behavior_pass_rate 必须在 0 到 1 之间"
+  if [[ "$runner" == "skill-up" ]]; then
+    source_exists "${eval_dir}/skill-up/eval.yaml" || fail "$file 声明 skill-up，但缺少 ${eval_dir}/skill-up/eval.yaml"
+  fi
+  for field in 评测目标 评测边界 用例与覆盖 判定标准 基线与重复运行 安全边界 验证命令; do
+    require_source_section "$file" "$field"
+  done
+  source_file "$file" | rg -q 'TODO|TBD|待补充|待确认' && fail "$file 不能包含未完成占位符"
+  catalog_contains "$eval_id" "$eval_dir" || fail "$file 未在 knowledge/catalog.yaml 中登记正确路径"
+  check_eval_cases "${eval_dir}/cases.yaml" "$skill_name"
+}
+
 check_implementation() {
   local root="$1"
   local manifest="${root}/IMPLEMENTATION.md"
@@ -260,6 +342,12 @@ check_all_artifacts_cataloged() {
     id="$(source_field_value "$file" id)"
     catalog_contains "$id" "${file%/IMPLEMENTATION.md}" || fail "$file 未在 knowledge/catalog.yaml 中登记正确路径"
   done < <(source_files | rg '^knowledge/implementations/.+/IMPLEMENTATION\.md$' || true)
+
+  while IFS= read -r file; do
+    [[ -n "$file" ]] || continue
+    eval_id="$(eval_id_from_file "$file")"
+    catalog_contains "$eval_id" "${file%/EVAL.md}" || fail "$file 未在 knowledge/catalog.yaml 中登记正确路径"
+  done < <(source_files | rg '^knowledge/evals/[^/]+/EVAL\.md$' || true)
 }
 
 check_registry_and_contracts() {
@@ -280,6 +368,69 @@ check_registry_and_contracts() {
 
   check_catalog_entry_targets
   check_all_artifacts_cataloged
+}
+
+check_changed_skill_eval_pairs() {
+  local file
+  local skill_name
+  local eval_file
+  local eval_changed
+  local changed
+
+  for file in "${changed_files[@]}"; do
+    case "$file" in
+      skills/*/SKILL.md)
+        source_exists "$file" || continue
+        skill_name="$(skill_name_from_file "$file")"
+        eval_file="knowledge/evals/${skill_name}/EVAL.md"
+        source_exists "$eval_file" || fail "$file 必须配套 $eval_file"
+        eval_changed=0
+        for changed in "${changed_files[@]}"; do
+          if [[ "$changed" == "knowledge/evals/${skill_name}"/* ]]; then
+            eval_changed=1
+            break
+          fi
+        done
+        [[ "$eval_changed" -eq 1 ]] || fail "$file 修改时必须同步修改其 Eval"
+        ;;
+    esac
+  done
+}
+
+changed_file_exists() {
+  local expected="$1"
+  local file
+
+  for file in "${changed_files[@]}"; do
+    [[ "$file" == "$expected" ]] && return 0
+  done
+  return 1
+}
+
+check_changed_ai_document_pairs() {
+  local file
+  local companion_file
+  local canonical_file
+
+  for file in "${changed_files[@]}"; do
+    case "$file" in
+      AGENTS.md|CLAUDE.md|knowledge/templates/skill-template/SKILL.md|skills/*/SKILL.md|skills/*/references/*.md)
+        [[ "$file" == *.zh-CN.md ]] && continue
+        companion_file="${file%.md}.zh-CN.md"
+        changed_file_exists "$companion_file" || fail "$file 修改时必须同步修改中文对照：$companion_file"
+        if source_exists "$file"; then
+          source_exists "$companion_file" || fail "$file 的中文对照不存在：$companion_file"
+        fi
+        ;;
+      AGENTS.zh-CN.md|CLAUDE.zh-CN.md|knowledge/templates/skill-template/SKILL.zh-CN.md|skills/*/SKILL.zh-CN.md|skills/*/references/*.zh-CN.md)
+        canonical_file="${file%.zh-CN.md}.md"
+        changed_file_exists "$canonical_file" || fail "$file 修改时必须同步修改英文规范源：$canonical_file"
+        if source_exists "$file"; then
+          source_exists "$canonical_file" || fail "$file 的英文规范源不存在：$canonical_file"
+        fi
+        ;;
+    esac
+  done
 }
 
 check_patch_format
@@ -305,6 +456,14 @@ for file in "${changed_files[@]}"; do
     skills/*/SKILL.md)
       source_exists "$file" && check_skill "$file"
       ;;
+    knowledge/evals/*/EVAL.md)
+      source_exists "$file" && check_eval "$file"
+      ;;
+    knowledge/evals/*/skill-up/eval.yaml)
+      eval_file="${file%/skill-up/eval.yaml}/EVAL.md"
+      source_exists "$eval_file" || fail "$file 必须配套 $eval_file"
+      check_eval "$eval_file"
+      ;;
   esac
 done
 
@@ -325,4 +484,6 @@ if [[ ${#implementation_roots[@]} -gt 0 ]]; then
 fi
 
 check_registry_and_contracts
+check_changed_skill_eval_pairs
+check_changed_ai_document_pairs
 printf 'WTBP 审查：通过（已审查 %s 个文件，模式=%s）\n' "${#changed_files[@]}" "$mode"

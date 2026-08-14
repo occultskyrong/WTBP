@@ -1,0 +1,9 @@
+input:
+  prompt: "将 Figma 的任务卡片实现到 web。标题、可变长度说明、图片和按钮是纵向 Auto Layout；把说明从一行改为三行后，按钮仍应由父级 gap 推开。"
+
+expect:
+  must_contain:
+    - "I-01"
+    - "正常流"
+  must_not_contain:
+    - "固定 top"

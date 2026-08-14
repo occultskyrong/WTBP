@@ -1,0 +1,10 @@
+input:
+  prompt: "验收 Figma 登录表单与 web。整个表单比设计下移 16px，局部样式看起来正确；怀疑页面容器 padding、全局 box-sizing 或 transform。"
+
+expect:
+  must_contain:
+    - "V-02"
+    - "布局责任层"
+    - "计算样式"
+  must_not_contain:
+    - "子元素上补 margin"

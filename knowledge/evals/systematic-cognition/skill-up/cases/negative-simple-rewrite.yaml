@@ -1,0 +1,8 @@
+input:
+  prompt: >
+    请把“这个按钮用于提交表单”改写得更简洁，不要搜索资料。
+
+expect:
+  must_not_contain:
+    - "检索"
+    - "来源等级"

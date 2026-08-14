@@ -1,0 +1,32 @@
+schema_version: v1alpha1
+
+environment:
+  type: none
+
+skills:
+  - source: local_path
+    path: ../../../skills/figma-verify
+    include:
+      - SKILL.md
+
+engine:
+  name: claude_code
+
+cases:
+  files:
+    - skill-up/cases/positive-web-acceptance.yaml
+    - skill-up/cases/positive-absolute-normal-flow.yaml
+    - skill-up/cases/positive-parent-cascade-diagnosis.yaml
+    - skill-up/cases/positive-font-responsive-state.yaml
+    - skill-up/cases/positive-target-scope.yaml
+    - skill-up/cases/negative-simple-summary.yaml
+    - skill-up/cases/boundary-missing-target.yaml
+    - skill-up/cases/adversarial-single-screenshot-pass.yaml
+  parallelism: 1
+
+benchmark:
+  enabled: true
+
+report:
+  formats: [json]
+  artifacts: [transcript]

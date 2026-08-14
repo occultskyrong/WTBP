@@ -26,7 +26,8 @@ ci: 校验提交标题格式
 ## 提交前
 
 1. 精确暂存需要提交的文件，不使用 `git add .` 或 `git add -A`。
-2. 运行 `make validate` 和 `make review-staged`。
+2. 运行 `make commit-checklist`；该入口会统一执行 `make validate`、`make review-staged`、变更 Skill 的
+   `ske` 契约评测、质量门禁和三段式版本检查。
 3. 不使用 `--no-verify` 绕过 Hook。
 4. 提交后通过 PR 审查和 CI，再合并到 `master`。
 

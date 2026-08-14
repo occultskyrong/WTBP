@@ -2,5 +2,4 @@
 set -euo pipefail
 
 repo_root="$(git rev-parse --show-toplevel)"
-"$repo_root/tooling/validate-repository.sh"
-exec "$repo_root/tooling/review-staged.sh"
+exec "$repo_root/tooling/commit-checklist.sh"

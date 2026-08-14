@@ -1,0 +1,29 @@
+schema_version: v1alpha1
+
+environment:
+  type: none
+
+skills:
+  - source: local_path
+    path: ../../../skills/practice-search
+    include:
+      - SKILL.md
+      - references/**
+
+engine:
+  name: claude_code
+
+cases:
+  files:
+    - skill-up/cases/positive-architecture-decision.yaml
+    - skill-up/cases/negative-translation.yaml
+    - skill-up/cases/boundary-missing-context.yaml
+    - skill-up/cases/adversarial-stale-practice.yaml
+  parallelism: 1
+
+benchmark:
+  enabled: true
+
+report:
+  formats: [json]
+  artifacts: [transcript]

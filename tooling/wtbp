@@ -1,0 +1,199 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+script_path="${BASH_SOURCE[0]}"
+while [[ -L "$script_path" ]]; do
+  script_dir="$(cd "$(dirname "$script_path")" && pwd)"
+  link_target="$(readlink "$script_path")"
+  if [[ "$link_target" == /* ]]; then
+    script_path="$link_target"
+  else
+    script_path="$script_dir/$link_target"
+  fi
+done
+repo_root="$(cd "$(dirname "$script_path")/.." && pwd)"
+route_file="$repo_root/knowledge/skill-routes.yaml"
+index_file="$repo_root/knowledge/skill-index.yaml"
+
+fail() {
+  printf 'WTBP 路由失败：%s\n' "$1" >&2
+  exit 2
+}
+
+usage() {
+  cat <<'EOF'
+用法：
+  wtbp                              # 列出可用 Skill
+  wtbp list --domain <domain>        # 按领域浏览 Skill
+  wtbp show <skill-id>               # 查看 Skill 能力卡
+  wtbp "<问题或任务>"                # 查找候选 Skill
+  wtbp install <skill-id>            # 安装已登记的外部 Skill
+
+只有唯一命中的、受控登记的外部 Skill 才会自动安装；不会自动执行任何 Skill。
+EOF
+}
+
+[[ -f "$route_file" ]] || fail '缺少 knowledge/skill-routes.yaml'
+[[ -f "$index_file" ]] || fail '缺少 knowledge/skill-index.yaml'
+
+list_skills() {
+  local domain="${1:-}"
+
+  awk -F': ' -v domain="$domain" '
+    function clean(value) { sub(/^\[/, "", value); sub(/\]$/, "", value); return value }
+    function has_domain(value, expected) { value = clean(value); gsub(/[[:space:]]/, "", value); return expected == "" || ("," value ",") ~ ("," expected ",") }
+    function emit() { if (id != "" && has_domain(domains, domain)) print id "\t" title "\t" summary "\t" domains "\t" stages "\t" status }
+    /^  - id: / { emit(); id = $2; title = summary = domains = stages = status = ""; next }
+    /^    title: / { title = $2 }
+    /^    summary: / { summary = $2 }
+    /^    domains: / { domains = $2 }
+    /^    stages: / { stages = $2 }
+    /^    status: / { status = $2 }
+    END { emit() }
+  ' "$index_file" | while IFS=$'\t' read -r skill_id title summary domains stages status; do
+    domains="${domains#[}"; domains="${domains%]}"; domains="${domains//, /、}"
+    stages="${stages#[}"; stages="${stages%]}"; stages="${stages//, /、}"
+    printf '%s\n' "- ${skill_id}（${status}）"
+    printf '  %s｜领域：%s｜阶段：%s\n' "$title" "$domains" "$stages"
+    printf '  %s\n' "$summary"
+  done
+}
+
+show_skill() {
+  local requested_id="$1"
+  local skill_path
+
+  skill_path="$(awk -v skill_id="$requested_id" '
+    $0 == "  - id: " skill_id { found = 1; next }
+    found && /^    path: / { print $2; exit }
+    found && /^  - id: / { exit }
+  ' "$repo_root/knowledge/catalog.yaml")"
+  awk -F': ' -v requested_id="$requested_id" '
+    function emit() {
+      if (id != requested_id) return
+      print "# " title " (`" id "`)"
+      print ""
+      print summary
+      print ""
+      print "- 状态：" status
+      print "- 领域：" domains
+      print "- 阶段：" stages
+      print "- 核心能力：" capabilities
+      print "- 输入：" inputs
+      print "- 输出：" outputs
+      print "- 副作用：" side_effects
+      print "- 安装：" install
+      print "- 别名：" aliases
+      print "- 关联路由：" route_ids
+      found = 1
+    }
+    /^  - id: / { emit(); id = $2; title = summary = domains = capabilities = stages = inputs = outputs = side_effects = status = install = aliases = route_ids = ""; next }
+    /^    title: / { title = $2 }
+    /^    summary: / { summary = $2 }
+    /^    domains: / { domains = $2 }
+    /^    capabilities: / { capabilities = $2 }
+    /^    stages: / { stages = $2 }
+    /^    inputs: / { inputs = $2 }
+    /^    outputs: / { outputs = $2 }
+    /^    side_effects: / { side_effects = $2 }
+    /^    status: / { status = $2 }
+    /^    install: / { install = $2 }
+    /^    aliases: / { aliases = $2 }
+    /^    route_ids: / { route_ids = $2 }
+    END { emit(); exit(found ? 0 : 1) }
+  ' "$index_file" || fail "未找到 Skill：$requested_id"
+  [[ -n "$skill_path" ]] && printf '%s\n' "- 规范文件：$skill_path/SKILL.md"
+}
+
+resolve_routes() {
+  local query="$1"
+  local matches
+
+  matches="$(awk -v query="$query" '
+    function emit() {
+      if (id == "" || (status != "active" && status != "candidate")) return
+      score = 0
+      matched = ""
+      count = split(keywords, values, ",")
+      for (i = 1; i <= count; i++) {
+        keyword = values[i]
+        gsub(/^[[:space:]]+|[[:space:]]+$/, "", keyword)
+        if (keyword != "" && index(query, keyword) > 0) {
+          score++
+          matched = matched (matched == "" ? "" : ", ") keyword
+        }
+      }
+      if (score > 0) print score "\t" id "\t" title "\t" skill "\t" source "\t" path "\t" status "\t" install "\t" auto_install "\t" matched
+    }
+    /^  - id: / { emit(); id = $3; title = skill = source = path = status = install = keywords = ""; auto_install = "false"; next }
+    /^    title: / { title = substr($0, length("    title: ") + 1) }
+    /^    skill_id: / { skill = $2 }
+    /^    source: / { source = $2 }
+    /^    path: / { path = $2 }
+    /^    status: / { status = $2 }
+    /^    install: / { install = substr($0, length("    install: ") + 1) }
+    /^    auto_install: / { auto_install = $2 }
+    /^    keywords: \[/ { keywords = substr($0, length("    keywords: [") + 1); sub(/]$/, "", keywords) }
+    END { emit() }
+  ' "$route_file" | sort -rn -k1,1 -k4,4)"
+
+  if [[ -z "$matches" ]]; then
+    printf '未命中已登记的 Skill。请补充目标、约束或所需证据；不要据此自动新建或安装 Skill。\n'
+    return 0
+  fi
+
+  local match_count
+  match_count="$(printf '%s\n' "$matches" | awk 'END { print NR }')"
+  if [[ "$match_count" -eq 1 ]]; then
+    IFS=$'\t' read -r score route_id title skill_id source path status install auto_install matched <<< "$matches"
+    if [[ "$source" == external && "$status" == active && "$auto_install" == true ]]; then
+      printf '唯一命中受控外部 Skill：%s；正在安装。\n' "$skill_id"
+      bash "$repo_root/tooling/install-skill.sh" "$skill_id"
+    fi
+  fi
+
+  printf '候选 Skill（按关键词匹配度排序）：\n'
+  while IFS=$'\t' read -r score route_id title skill_id source path status install auto_install matched; do
+    printf '%s\n' "- ${skill_id}（匹配 ${score}，${status}）"
+    printf '  场景：%s\n' "$title"
+    printf '  命中关键词：%s\n' "$matched"
+    if [[ "$source" == local ]]; then
+      printf '  下一步：读取 %s/SKILL.md；该命令不会替你执行 Skill。\n' "$path"
+    elif [[ "$auto_install" == true && "$status" == active ]]; then
+      printf '  安装：已按受控登记处理；下一步：读取已安装的 %s Skill。\n' "$skill_id"
+    else
+      printf '  下一步：核对来源、版本、权限和安装方式：%s；未经确认不得安装。\n' "$install"
+    fi
+  done <<< "$matches"
+}
+
+case "${1:-}" in
+  list|'')
+    if [[ $# -eq 0 || $# -eq 1 && "${1:-}" == list ]]; then
+      list_skills
+    elif [[ $# -eq 3 && "$2" == --domain ]]; then
+      list_skills "$3"
+    else
+      usage >&2
+      exit 2
+    fi
+    ;;
+  show)
+    [[ $# -eq 2 && -n "$2" ]] || { usage >&2; exit 2; }
+    show_skill "$2"
+    ;;
+  resolve)
+    [[ $# -eq 2 && -n "$2" ]] || { usage >&2; exit 2; }
+    resolve_routes "$2"
+    ;;
+  install)
+    [[ $# -eq 2 && -n "$2" ]] || { usage >&2; exit 2; }
+    bash "$repo_root/tooling/install-skill.sh" "$2"
+    ;;
+  -h|--help|help)
+    usage
+    ;;
+  *)
+    resolve_routes "$*"
+    ;;
+esac

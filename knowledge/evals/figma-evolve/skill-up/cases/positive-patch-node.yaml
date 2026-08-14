@@ -1,0 +1,9 @@
+input:
+  prompt: "修改这个 Figma 节点中的预约按钮文案和 disabled Variant，不改变其他页面：https://figma.com/file/x?node-id=1-2"
+
+expect:
+  must_contain:
+    - "patch"
+    - "节点"
+  must_not_contain:
+    - "覆盖整个文件"

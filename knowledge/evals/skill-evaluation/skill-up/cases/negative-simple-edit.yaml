@@ -1,0 +1,8 @@
+input:
+  prompt: "请把这句话改得更通顺：今天完成了部署。"
+
+expect:
+  must_contain:
+    - "部署"
+  must_not_contain:
+    - "Skill 评测报告"

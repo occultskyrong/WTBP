@@ -1,0 +1,4 @@
+interface:
+  display_name: "Figma Verify"
+  short_description: "按目标终端验证 Figma 与实际产品的布局和视觉一致性"
+  default_prompt: "使用 $figma-verify 对比这个 Figma 节点与指定终端实现，定位并报告布局偏移。"

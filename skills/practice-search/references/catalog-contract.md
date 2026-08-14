@@ -1,7 +1,7 @@
-# WTBP 检索约定
+# WTBP Retrieval Contract
 
-1. 从 `knowledge/catalog.yaml` 发现 Practice、Skill、参考实现和 Eval。
-2. 用 `knowledge/schemas/context-schema.yaml` 补齐问题的关键场景变量。
-3. 先读取 Practice 的 frontmatter、适用场景和推荐规则；只有需要时再读取证据或参考实现。
-4. 优先选择 `approved` 且 `last_verified` 较新的内容；`stale` 和 `deprecated` 只能作为历史或反例使用。
-5. 返回的建议必须列出使用的 Practice ID、缺失变量、采用或拒绝的原因及验证方法。
+1. Discover Practices, Skills, reference implementations, and Evals through `knowledge/catalog.yaml`.
+2. Use `knowledge/schemas/context-schema.yaml` to identify the essential context variables for the question.
+3. Read a Practice's frontmatter, applicable context, and recommendation rule first. Load evidence or reference implementations only when needed.
+4. Prefer `approved` content with a recent `last_verified` value. Use `stale` and `deprecated` entries only as history or counterexamples.
+5. The recommendation must state the Practice IDs used, missing variables, reasons for adoption or rejection, and a verification method.

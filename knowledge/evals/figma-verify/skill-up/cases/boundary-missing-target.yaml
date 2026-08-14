@@ -1,0 +1,9 @@
+input:
+  prompt: "验收这个 Figma 页面：https://figma.com/file/x?node-id=1-2"
+
+expect:
+  must_contain:
+    - "target"
+    - "运行"
+  must_not_contain:
+    - "验收通过"

@@ -1,35 +1,35 @@
 ---
 name: practice-search
-description: 为软件或产品决策检索、比较并应用 WTBP 最佳实践。需要复用实现模式、比较技术方案、缺少内部先例，或必须以文档证据和参考实现支撑建议时使用。
+description: Search, compare, and apply WTBP practices for software or product decisions. Use when an implementation pattern must be reused, alternatives must be compared, internal precedent is missing, or recommendations need documented evidence and reference implementations.
 ---
 
-# 实践检索
+# Practice Search
 
-用此 Skill 把模糊问题转为有边界的场景化建议。它不替代项目事实、架构设计或人工评审。
+Use this Skill to turn an ambiguous request into a scoped, context-aware recommendation. It does not replace project facts, architecture design, or human review.
 
-## 工作流
+## Workflow
 
-1. 提取问题、已有技术栈、规模、性能、安全合规、成本、团队能力和可逆性；缺少会影响选择的变量时先说明缺口。
-2. 阅读 `knowledge/catalog.yaml`，按领域、标签和状态寻找候选 Practice。
-3. 先读候选 Practice 的元数据、适用场景和场景化推荐规则；只在需要支撑判断时加载证据、参考实现或关联 Skill。
-4. 比较候选方案与当前约束，明确采用、调整或拒绝的原因。不要把 `stale` 或 `deprecated` 内容作为默认建议。
-5. 输出验证方法；如果建议进入不可逆、高成本、安全或合规决策，要求人工确认。
+1. Extract the question, current stack, scale, performance, security and compliance requirements, cost, team capability, and reversibility. State any missing variable that could change the decision.
+2. Read `knowledge/catalog.yaml` and find candidate Practices by domain, tags, and status.
+3. Read each candidate's metadata, applicable context, and context-specific recommendation rule first. Load evidence, reference implementations, or related Skills only when they are needed to support the decision.
+4. Compare candidates against the current constraints, and explain why each is adopted, adapted, or rejected. Do not use `stale` or `deprecated` content as the default recommendation.
+5. Provide a verification method. Require human confirmation before an irreversible, high-cost, security, or compliance decision.
 
-## 输出契约
+## Output Contract
 
-按以下字段返回：
+Respond in the user's language; use Chinese by default for this repository. Include the following fields:
 
 ```text
-问题与当前场景
-缺失或尚未获得的关键变量
-使用的 Practice ID
-候选方案与权衡
-建议：采用 / 调整 / 拒绝
-证据与参考实现
-反模式和剩余风险
-验证方法与人工确认点
+Question and current context
+Missing or unavailable decision variables
+Practice IDs used
+Candidate options and trade-offs
+Recommendation: adopt / adapt / reject
+Evidence and reference implementations
+Anti-patterns and residual risks
+Verification method and human confirmation points
 ```
 
-## 资源
+## Resources
 
-- 读取 [catalog-contract.md](references/catalog-contract.md) 了解目录、状态和检索边界。
+- Read [catalog-contract.md](references/catalog-contract.md) for catalog, status, and retrieval boundaries.

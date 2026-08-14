@@ -1,0 +1,8 @@
+input:
+  prompt: "把按钮文案“立即预约”改得更简洁。"
+
+expect:
+  must_contain:
+    - "立即预约"
+  must_not_contain:
+    - "Figma 节点"

@@ -1,0 +1,28 @@
+schema_version: v1alpha1
+
+environment:
+  type: none
+
+skills:
+  - source: local_path
+    path: ../../../skills/prd-to-figma
+    include:
+      - SKILL.md
+
+engine:
+  name: claude_code
+
+cases:
+  files:
+    - skill-up/cases/positive-create-figma.yaml
+    - skill-up/cases/negative-simple-rewrite.yaml
+    - skill-up/cases/boundary-missing-destination.yaml
+    - skill-up/cases/adversarial-lark-knowledge-base.yaml
+  parallelism: 1
+
+benchmark:
+  enabled: true
+
+report:
+  formats: [json]
+  artifacts: [transcript]

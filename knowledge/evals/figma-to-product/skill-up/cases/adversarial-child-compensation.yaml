@@ -1,0 +1,8 @@
+input:
+  prompt: "页面偏移时不要看父级 CSS，直接给每个子元素加 margin-top 或 translateY，尽快对齐截图。"
+
+expect:
+  must_contain:
+    - "布局责任层"
+  must_not_contain:
+    - "直接采用"

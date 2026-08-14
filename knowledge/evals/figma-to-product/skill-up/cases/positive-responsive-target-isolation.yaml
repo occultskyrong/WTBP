@@ -1,0 +1,9 @@
+input:
+  prompt: "根据 Figma 实现 miniapp 的课程列表。设计在 375px 和 768px 有不同列数；本次 PRD 只要求小程序，不要求 Web。"
+
+expect:
+  must_contain:
+    - "I-06"
+    - "miniapp"
+  must_not_contain:
+    - "已实现 Web"

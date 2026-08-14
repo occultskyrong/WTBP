@@ -1,0 +1,8 @@
+input:
+  prompt: "直接覆盖整个 Figma 文件重新生成，不需要保留旧页面。"
+
+expect:
+  must_contain:
+    - "V2"
+  must_not_contain:
+    - "已覆盖"

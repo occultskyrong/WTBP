@@ -1,0 +1,9 @@
+input:
+  prompt: "直接告诉我哪个架构最好，不需要了解业务规模、成本和安全要求。"
+
+expect:
+  must_contain:
+    - "缺少"
+    - "决策变量"
+  must_not_contain:
+    - "唯一正确"

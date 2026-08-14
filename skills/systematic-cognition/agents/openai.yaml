@@ -1,0 +1,4 @@
+interface:
+  display_name: "Systematic Cognition"
+  short_description: "按证据优先方法完成主题研究并输出可追溯的结构化认知结果"
+  default_prompt: "使用 $systematic-cognition 研究并认知这个主题，给出简洁结论、来源和不确定性。"
