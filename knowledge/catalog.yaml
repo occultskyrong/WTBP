@@ -18,6 +18,26 @@ skills:
     path: skills/systematic-cognition
     status: candidate
     domains: [product]
+  - id: skill-router
+    path: skills/skill-router
+    status: active
+    domains: [governance]
+  - id: prd-to-figma
+    path: skills/prd-to-figma
+    status: candidate
+    domains: [product, design]
+  - id: figma-evolve
+    path: skills/figma-evolve
+    status: candidate
+    domains: [product, design]
+  - id: figma-to-product
+    path: skills/figma-to-product
+    status: candidate
+    domains: [product, design, engineering]
+  - id: figma-verify
+    path: skills/figma-verify
+    status: candidate
+    domains: [product, design, quality]
 implementations: []
 evals:
   - id: eval.practice-search
@@ -38,3 +58,33 @@ evals:
     status: candidate
     runner: skill-up
     last_verified: 2026-08-09
+  - id: eval.skill-router
+    path: knowledge/evals/skill-router
+    skill: skill-router
+    status: candidate
+    runner: skill-up
+    last_verified: 2026-08-13
+  - id: eval.prd-to-figma
+    path: knowledge/evals/prd-to-figma
+    skill: prd-to-figma
+    status: candidate
+    runner: skill-up
+    last_verified: 2026-08-14
+  - id: eval.figma-evolve
+    path: knowledge/evals/figma-evolve
+    skill: figma-evolve
+    status: candidate
+    runner: skill-up
+    last_verified: 2026-08-14
+  - id: eval.figma-to-product
+    path: knowledge/evals/figma-to-product
+    skill: figma-to-product
+    status: candidate
+    runner: skill-up
+    last_verified: 2026-08-14
+  - id: eval.figma-verify
+    path: knowledge/evals/figma-verify
+    skill: figma-verify
+    status: candidate
+    runner: skill-up
+    last_verified: 2026-08-14

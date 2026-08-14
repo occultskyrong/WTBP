@@ -1,0 +1,10 @@
+input:
+  prompt: "验收 Figma 搜索页与 web：375px 和 768px；默认、加载和错误态。测试环境偶发字体回退，图片加载后卡片高度变化。"
+
+expect:
+  must_contain:
+    - "V-04"
+    - "V-05"
+    - "V-06"
+  must_not_contain:
+    - "只看默认态"

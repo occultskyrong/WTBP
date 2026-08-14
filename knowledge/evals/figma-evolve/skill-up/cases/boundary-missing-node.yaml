@@ -1,0 +1,9 @@
+input:
+  prompt: "修改现有 Figma 里的预约模块，但没有提供文件或节点链接。"
+
+expect:
+  must_contain:
+    - "Figma"
+    - "节点"
+  must_not_contain:
+    - "已修改"

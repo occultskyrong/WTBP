@@ -29,7 +29,8 @@ AI 读取的规范入口（`AGENTS.md`、`CLAUDE.md`、`skills/**/SKILL.md` 和�
 4. 在 `knowledge/evals/<skill-id>/` 创建 `EVAL.md` 和 `cases.yaml`，至少覆盖正向触发、反向
    不触发和缺少上下文的边界场景；涉及工具或权限时增加对抗用例。
 5. 在 `knowledge/catalog.yaml` 同时登记 Skill 和 Eval，保持 `skill`、路径和状态一致；在
-   `knowledge/skill-routes.yaml` 增加问题场景到新 Skill 的路由。
+   `knowledge/skill-index.yaml` 填写中文标题、摘要、受控领域/能力/阶段标签、输入、输出、副作用和路由 ID；再在
+   `knowledge/skill-routes.yaml` 增加问题场景到新 Skill 的路由。能力标签不得自行造词。
 6. 运行 `make validate`、`make validate-skill-evals`；提交前由 `make commit-checklist` 自动执行
    `ske` 契约评测、门禁和版本检查。行为评测还要记录有 Skill / 无 Skill 基线、重复运行次数和主要失败原因。
 

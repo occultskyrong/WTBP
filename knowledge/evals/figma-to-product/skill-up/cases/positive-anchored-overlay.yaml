@@ -1,0 +1,9 @@
+input:
+  prompt: "将 Figma 商品卡片实现到 web。右上角关闭按钮覆盖卡片，内容区会因标题换行增高。"
+
+expect:
+  must_contain:
+    - "I-02"
+    - "包含父级"
+  must_not_contain:
+    - "所有内容 absolute"

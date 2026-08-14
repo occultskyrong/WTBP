@@ -1,0 +1,9 @@
+input:
+  prompt: "wtbp：我要比较两个架构方案的成本、安全和可逆性，并给出验证方法。"
+
+expect:
+  must_contain:
+    - "practice-search"
+    - "skills/practice-search/SKILL.md"
+  must_not_contain:
+    - "已自动执行"

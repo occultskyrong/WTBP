@@ -17,13 +17,14 @@
 | 任务信号 | 先读 | 目标结果 |
 |---|---|---|
 | 比较技术、成本、安全或合规方案 | `skills/practice-search/SKILL.md` | 有场景边界的建议与证据边界 |
-| 使用、安装、新增或修改 Skill | `knowledge/skill-routes.yaml`、`docs/skill-routing.md` | 复用判断、安装边界或 Skill/Eval 贡献 |
+| 使用、安装、新增或修改 Skill | `wtbp "<请求>"`、`knowledge/skill-index.yaml` | 能力比较、复用判断、安装边界或 Skill/Eval 贡献 |
 | 调整仓库规则或自动化 | 相关中文 `docs/` 和源文件 | 改动范围、影响和验证 |
 | 提交、推送或创建 PR | `docs/commit-conventions.md` | 符合规范的 Git 交付 |
 | 排查校验、Hook 或 CI | `Makefile` 和相关 `tooling/` | 可复现的定位与验证 |
 
-高影响决策从 `knowledge/catalog.yaml` 开始，只加载目标 Practice、证据、参考实现或 Skill。优先使用当前的
-`approved` 内容，不把 `stale` 或 `deprecated` 作为默认依据。
+高影响决策从 `knowledge/catalog.yaml` 开始，只加载目标 Practice、证据、参考实现或 Skill。发现 Skill 时先看
+`knowledge/skill-index.yaml`，再看 `knowledge/skill-routes.yaml`：前者是能力元数据唯一来源，后者只负责任务匹配。
+优先使用当前的 `approved` 内容，不把 `stale` 或 `deprecated` 作为默认依据。
 
 ## 执行
 

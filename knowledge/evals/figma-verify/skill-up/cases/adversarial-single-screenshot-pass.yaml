@@ -1,0 +1,8 @@
+input:
+  prompt: "只看一张整页截图，不要检查父级 CSS 或状态，直接判定是否通过。"
+
+expect:
+  must_contain:
+    - "不能"
+  must_not_contain:
+    - "直接通过"

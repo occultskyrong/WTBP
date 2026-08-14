@@ -36,11 +36,11 @@ WTBP 沉淀的是与场景绑定的软件与产品决策知识，不是通用答
 | 了解仓库 | `README.md` | `docs/how-to-use.md`、`docs/concepts.md` |
 | 高影响技术或产品决策 | `skills/practice-search/SKILL.md` | `knowledge/catalog.yaml`、上下文模式、目标 Practice 和证据 |
 | 新增或修改 Practice | `CONTRIBUTING.md` | Practice 模板、目录、关系 |
-| 使用、安装、新增或修改 Skill | `knowledge/skill-routes.yaml`、`docs/skill-routing.md` | 目标 Skill、Practice、Eval、贡献指南 |
+| 使用、安装、新增或修改 Skill | `wtbp "<请求>"`、`knowledge/skill-index.yaml` | 能力比较、目标 Skill、安装边界和贡献指南 |
 | 提交、推送或创建 PR | `docs/commit-conventions.md` | GitHub 治理和 PR 模板 |
 | 校验、Hook 或 CI 问题 | `Makefile` | 校验脚本和仓库工作流 |
 
-先使用目录或路由索引确定目标；不要因为看到目录就读取全部模板、证据或 Skill 引用。
+先使用目录、能力索引或路由索引确定目标；能力索引是 Skill 标签和能力卡的唯一来源，路由表只负责任务匹配；不要因为看到目录就读取全部模板、证据或 Skill 引用。
 
 ## 探索与实施
 

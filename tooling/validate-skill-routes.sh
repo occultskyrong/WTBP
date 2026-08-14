@@ -24,7 +24,8 @@ catalog_has_skill() {
 
 route_count=0
 route_ids=()
-while IFS=$'\t' read -r route_id skill_id source path status last_verified install source_url version permissions verify; do
+separator=$'\034'
+while IFS="$separator" read -r route_id skill_id source path status last_verified install source_url version commit skill_path permissions verify auto_install; do
   [[ -n "$route_id" ]] || continue
   route_count=$((route_count + 1))
   route_ids+=("$route_id")
@@ -42,12 +43,20 @@ while IFS=$'\t' read -r route_id skill_id source path status last_verified insta
   else
     [[ -n "$source_url" ]] || fail "外部路由 $route_id 缺少 source_url"
     [[ -n "$version" ]] || fail "外部路由 $route_id 缺少 version"
+    [[ "$commit" =~ ^[0-9a-f]{40}$ ]] || fail "外部路由 $route_id 必须登记固定 40 位 commit"
+    [[ "$skill_path" =~ ^[A-Za-z0-9._/-]+$ && "$skill_path" != /* && "$skill_path" != *..* ]] || fail "外部路由 $route_id 的 skill_path 必须是仓库内相对路径"
     [[ -n "$permissions" ]] || fail "外部路由 $route_id 缺少 permissions"
     [[ -n "$verify" ]] || fail "外部路由 $route_id 缺少 verify"
+    [[ "$auto_install" =~ ^(true|false)$ ]] || fail "外部路由 $route_id 的 auto_install 必须是 true 或 false"
+    if [[ "$auto_install" == true ]]; then
+      [[ "$status" == active ]] || fail "自动安装路由 $route_id 必须为 active"
+      [[ "$source_url" =~ ^https://github\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+(\.git)?$ ]] || fail "自动安装路由 $route_id 只允许 GitHub HTTPS 地址"
+    fi
   fi
 
 done < <(awk -F': ' '
-  /^  - id: / { if (id != "") print id "\t" skill "\t" source "\t" path "\t" status "\t" last_verified "\t" install "\t" source_url "\t" version "\t" permissions "\t" verify; id = $2; skill = source = path = status = last_verified = install = source_url = version = permissions = verify = ""; next }
+  function emit() { if (id != "") print id sep skill sep source sep path sep status sep last_verified sep install sep source_url sep version sep commit sep skill_path sep permissions sep verify sep auto_install }
+  /^  - id: / { emit(); id = $2; skill = source = path = status = last_verified = install = source_url = version = commit = skill_path = permissions = verify = auto_install = ""; next }
   /^    skill_id: / { skill = $2 }
   /^    source: / { source = $2 }
   /^    path: / { path = $2 }
@@ -56,9 +65,21 @@ done < <(awk -F': ' '
   /^    install: / { install = $2 }
   /^    source_url: / { source_url = $2 }
   /^    version: / { version = $2 }
+  /^    commit: / { commit = $2 }
+  /^    skill_path: / { skill_path = $2 }
   /^    permissions: / { permissions = $2 }
   /^    verify: / { verify = $2 }
-  END { if (id != "") print id "\t" skill "\t" source "\t" path "\t" status "\t" last_verified "\t" install "\t" source_url "\t" version "\t" permissions "\t" verify }
+  /^    auto_install: / { auto_install = $2 }
+  END { emit() }
+' sep="$separator" "$route_file")
+
+while IFS=$'\t' read -r route_id keywords; do
+  [[ -n "$route_id" ]] || continue
+  [[ "$keywords" == \[*\] && "$keywords" != '[]' ]] || fail "路由 $route_id 的 keywords 必须是非空单行列表"
+done < <(awk -F': ' '
+  /^  - id: / { if (id != "") print id "\t" keywords; id = $2; keywords = ""; next }
+  /^    keywords: / { keywords = $2 }
+  END { if (id != "") print id "\t" keywords }
 ' "$route_file")
 
 [[ "$route_count" -gt 0 ]] || fail 'skill-routes.yaml 至少需要一条路由'

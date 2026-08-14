@@ -6,8 +6,9 @@
 
 ## 作为智能体上下文
 
-项目规则文件只应链接到 WTBP 和项目事实。智能体应先读取 [`knowledge/skill-routes.yaml`](../knowledge/skill-routes.yaml)，
-将问题路由到已有 Skill，再按需加载目标 `SKILL.md`。遇到高影响、缺少内部模式或需要比较替代方案的问题时，
+项目规则文件只应链接到 WTBP 和项目事实。智能体先读取 [`knowledge/skill-index.yaml`](../knowledge/skill-index.yaml) 了解
+能力、输入输出和副作用，再读取 [`knowledge/skill-routes.yaml`](../knowledge/skill-routes.yaml) 将问题路由到已有 Skill，
+然后按需加载目标 `SKILL.md`。遇到高影响、缺少内部模式或需要比较替代方案的问题时，
 调用 `practice-search`；需要全网搜索和来源核验时，调用 `systematic-cognition`。不要因为问题不同就自动新建 Skill。
 
 ## 作为自动化能力
@@ -17,7 +18,7 @@
 
 ## 作为跨模型适配基线
 
-规范源集中在 `knowledge/`、`skills/` 和 `knowledge/catalog.yaml`；不同 Agent 的规则文件只
+规范源集中在 `knowledge/`、`skills/`、`knowledge/skill-index.yaml` 和 `knowledge/catalog.yaml`；不同 Agent 的规则文件只
 保留项目事实、硬约束和 WTBP 入口，不手工复制知识。需要适配时，应由工具根据规范源生成
 对应的 `AGENTS.md`、Skill 入口或其他工具专有规则。
 

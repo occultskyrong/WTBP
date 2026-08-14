@@ -1,0 +1,4 @@
+interface:
+  display_name: "Figma Evolve"
+  short_description: "基于现有 Figma 节点进行受范围约束的设计演进"
+  default_prompt: "使用 $figma-evolve 修改这个 Figma 节点，保留现有设计并返回变更节点链接。"

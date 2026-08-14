@@ -24,6 +24,7 @@ required_paths=(
   "docs/commit-checklist.md"
   "docs/document-language-policy.md"
   "docs/skill-routing.md"
+  "docs/skill-catalog.md"
   "docs/github-governance.md"
   "docs/governance.md"
   "knowledge/schemas/taxonomy.yaml"
@@ -31,7 +32,9 @@ required_paths=(
   "knowledge/schemas/practice-schema.yaml"
   "knowledge/schemas/relationship-schema.yaml"
   "knowledge/schemas/eval-schema.yaml"
+  "knowledge/schemas/skill-index-schema.yaml"
   "knowledge/skill-routes.yaml"
+  "knowledge/skill-index.yaml"
   "knowledge/catalog.yaml"
   "knowledge/relationships.yaml"
   "knowledge/external-sources.yaml"
@@ -41,13 +44,19 @@ required_paths=(
   "knowledge/templates/eval-template/EVAL.md"
   "knowledge/templates/eval-template/cases.yaml"
   "skills/practice-search/SKILL.md"
+  "skills/skill-router/SKILL.md"
+  "tooling/wtbp"
   "skills/skill-evaluation/SKILL.md"
   "tooling/install-git-hooks.sh"
+  "tooling/install-wtbp.sh"
+  "tooling/install-skill.sh"
   "tooling/review-staged.sh"
   "tooling/review-issue-body.sh"
   "tooling/validate-repository.sh"
   "tooling/validate-skill-evals.sh"
   "tooling/validate-skill-routes.sh"
+  "tooling/validate-skill-index.sh"
+  "tooling/generate-skill-catalog.sh"
   "tooling/run-skill-eval.sh"
   "tooling/commit-checklist.sh"
 )
@@ -66,6 +75,11 @@ bash -n "$repo_root/tooling/review-issue-body.sh"
 bash -n "$repo_root/tooling/validate-repository.sh"
 bash -n "$repo_root/tooling/validate-skill-evals.sh"
 bash -n "$repo_root/tooling/validate-skill-routes.sh"
+bash -n "$repo_root/tooling/validate-skill-index.sh"
+bash -n "$repo_root/tooling/generate-skill-catalog.sh"
+bash -n "$repo_root/tooling/wtbp"
+bash -n "$repo_root/tooling/install-wtbp.sh"
+bash -n "$repo_root/tooling/install-skill.sh"
 bash -n "$repo_root/tooling/run-skill-eval.sh"
 bash -n "$repo_root/tooling/commit-checklist.sh"
 
@@ -127,6 +141,8 @@ done < <(rg --files "$repo_root/skills" -g '*.md' | rg '/references/[^/]+\.md$' 
 
 "$repo_root/tooling/validate-skill-evals.sh"
 "$repo_root/tooling/validate-skill-routes.sh"
+"$repo_root/tooling/validate-skill-index.sh"
+"$repo_root/tooling/generate-skill-catalog.sh" --check
 
 if [[ -d "$repo_root/knowledge/practices" ]]; then
   while IFS= read -r practice_file; do

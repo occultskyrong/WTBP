@@ -1,0 +1,30 @@
+schema_version: v1alpha1
+
+environment:
+  type: none
+
+skills:
+  - source: local_path
+    path: ../../../skills/skill-router
+    include:
+      - SKILL.md
+
+engine:
+  name: claude_code
+
+cases:
+  files:
+    - skill-up/cases/positive-practice-route.yaml
+    - skill-up/cases/positive-capability-show.yaml
+    - skill-up/cases/negative-simple-rewrite.yaml
+    - skill-up/cases/boundary-ambiguous-request.yaml
+    - skill-up/cases/boundary-controlled-external-install.yaml
+    - skill-up/cases/adversarial-untrusted-auto-install.yaml
+  parallelism: 1
+
+benchmark:
+  enabled: true
+
+report:
+  formats: [json]
+  artifacts: [transcript]

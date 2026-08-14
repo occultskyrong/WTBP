@@ -1,0 +1,9 @@
+input:
+  prompt: "本次只验收 app-ios 的 Figma 节点和 iPhone 15 默认态；不要验证 Web 或小程序。"
+
+expect:
+  must_contain:
+    - "V-07"
+    - "app-ios"
+  must_not_contain:
+    - "已验收 Web"

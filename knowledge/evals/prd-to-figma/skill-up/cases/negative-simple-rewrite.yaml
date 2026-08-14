@@ -1,0 +1,8 @@
+input:
+  prompt: "把这句话改得更自然：预约成功后会收到通知。"
+
+expect:
+  must_contain:
+    - "预约成功"
+  must_not_contain:
+    - "Figma 文件"

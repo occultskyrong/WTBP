@@ -1,0 +1,112 @@
+version: 1
+description: Skill 能力规范索引。它是能力标签、输入输出、影响范围与路由关联的唯一来源；catalog 仅负责对象发现，routes 仅负责任务匹配。
+taxonomy:
+  domains: [research, product, governance, design, engineering, quality]
+  capabilities: [practice-search, option-comparison, evidence-synthesis, web-research, source-verification, skill-evaluation, regression-evaluation, task-routing, managed-install, figma-create, figma-evolve, figma-inspection, figma-to-code, visual-verification, layout-diagnosis]
+  stages: [discover, analyze, design, evolve, implement, verify, evaluate]
+  side_effects: [none, filesystem-read, filesystem-write, network-read, network-write, figma-read, figma-write, command-execution]
+skills:
+  - id: practice-search
+    title: 场景化最佳实践检索
+    summary: 基于场景、约束、证据和参考实现比较技术或产品方案。
+    domains: [research, product]
+    capabilities: [practice-search, option-comparison, evidence-synthesis]
+    stages: [discover, analyze]
+    inputs: [问题, 场景约束, 所需证据]
+    outputs: [候选方案, 推荐建议, 证据边界, 验证方法]
+    side_effects: [filesystem-read]
+    status: active
+    install: builtin
+    aliases: []
+    route_ids: [route.practice-search]
+  - id: systematic-cognition
+    title: 证据优先的系统化认知
+    summary: 检索公开资料，区分事实、推论和未验证项，并给出可追溯来源。
+    domains: [research, product]
+    capabilities: [web-research, source-verification, evidence-synthesis]
+    stages: [discover, analyze]
+    inputs: [研究主题, 范围, 时间要求]
+    outputs: [核心认知, 证据表, 不确定性, 下一步问题]
+    side_effects: [network-read]
+    status: candidate
+    install: builtin
+    aliases: []
+    route_ids: [route.systematic-cognition]
+  - id: skill-evaluation
+    title: Skill 结构与行为评测
+    summary: 审查 Skill 的触发边界、结构、安全、行为表现和质量门禁。
+    domains: [governance, quality]
+    capabilities: [skill-evaluation, regression-evaluation]
+    stages: [evaluate]
+    inputs: [目标 Skill, 版本或提交, Eval 范围]
+    outputs: [评测结论, 门禁结果, 风险与未验证项]
+    side_effects: [filesystem-read, command-execution]
+    status: active
+    install: builtin
+    aliases: [ske]
+    route_ids: [route.skill-evaluation]
+  - id: skill-router
+    title: 多 Skill 能力发现与路由
+    summary: 浏览能力地图、查看 Skill 卡片，并将自然语言任务路由到最小适用的 Skill。
+    domains: [governance]
+    capabilities: [task-routing, managed-install]
+    stages: [discover]
+    inputs: [任务描述, 目标领域, 安装需求]
+    outputs: [能力列表, Skill 卡片, 路由建议, 安装边界]
+    side_effects: [filesystem-read, network-read, filesystem-write]
+    status: active
+    install: builtin
+    aliases: [wtbp]
+    route_ids: [route.skill-router]
+  - id: prd-to-figma
+    title: PRD 到可编辑 Figma 设计
+    summary: 从 PRD 创建首版可编辑 Figma 设计、页面、状态、组件和基础设计资产。
+    domains: [product, design]
+    capabilities: [figma-create, figma-inspection]
+    stages: [design]
+    inputs: [PRD, Figma 目标, 目标终端]
+    outputs: [Figma 文件或节点, 设计契约, 页面和状态链接]
+    side_effects: [figma-read, figma-write]
+    status: candidate
+    install: builtin
+    aliases: []
+    route_ids: [route.prd-to-figma]
+  - id: figma-evolve
+    title: Figma 范围化演进
+    summary: 在保留历史设计证据的前提下，对已有 Figma 节点进行补丁或版本化重做。
+    domains: [product, design]
+    capabilities: [figma-evolve, figma-inspection]
+    stages: [evolve]
+    inputs: [Figma 节点, 变更请求, PRD 增量]
+    outputs: [变更节点, 版本链接, 下游影响]
+    side_effects: [figma-read, figma-write]
+    status: candidate
+    install: builtin
+    aliases: []
+    route_ids: [route.figma-evolve]
+  - id: figma-to-product
+    title: Figma 到指定产品终端实现
+    summary: 将明确 Figma 节点以可维护布局还原到唯一指定的 Web、小程序或 App 终端。
+    domains: [product, design, engineering]
+    capabilities: [figma-to-code, figma-inspection, layout-diagnosis]
+    stages: [implement]
+    inputs: [Figma 节点, 目标终端, 目标仓库]
+    outputs: [实现文件, 布局归因, 运行证据]
+    side_effects: [figma-read, filesystem-read, filesystem-write]
+    status: candidate
+    install: builtin
+    aliases: []
+    route_ids: [route.figma-to-product]
+  - id: figma-verify
+    title: Figma 与产品实现验收
+    summary: 对指定终端、视口和状态验证 Figma 与运行实现的差异，并定位首个布局责任层。
+    domains: [product, design, quality]
+    capabilities: [visual-verification, layout-diagnosis, figma-inspection]
+    stages: [verify]
+    inputs: [Figma 节点, 运行实现, 验收矩阵]
+    outputs: [通过矩阵, 差异归因, 修复证据或风险]
+    side_effects: [figma-read, filesystem-read, filesystem-write]
+    status: candidate
+    install: builtin
+    aliases: []
+    route_ids: [route.figma-verify]

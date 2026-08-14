@@ -131,7 +131,7 @@ semantic_change=0
 new_capability=0
 for file in "${changed_files[@]}"; do
   case "$file" in
-    skills/*/SKILL.md|knowledge/practices/*/PRACTICE.md|knowledge/evals/*/EVAL.md|knowledge/schemas/*|knowledge/catalog.yaml|knowledge/skill-routes.yaml|knowledge/relationships.yaml|knowledge/templates/*|tooling/*|.githooks/*|.github/*|Makefile|AGENTS.md|CLAUDE.md|CONTRIBUTING.md|docs/commit-conventions.md|docs/commit-checklist.md|docs/skill-evaluation.md|docs/skill-routing.md|docs/github-governance.md|docs/governance.md) semantic_change=1 ;;
+    skills/*/SKILL.md|knowledge/practices/*/PRACTICE.md|knowledge/evals/*/EVAL.md|knowledge/schemas/*|knowledge/catalog.yaml|knowledge/skill-index.yaml|knowledge/skill-routes.yaml|knowledge/relationships.yaml|knowledge/templates/*|tooling/*|.githooks/*|.github/*|Makefile|AGENTS.md|CLAUDE.md|CONTRIBUTING.md|docs/commit-conventions.md|docs/commit-checklist.md|docs/skill-evaluation.md|docs/skill-routing.md|docs/skill-catalog.md|docs/github-governance.md|docs/governance.md) semantic_change=1 ;;
   esac
 done
 while IFS= read -r file; do

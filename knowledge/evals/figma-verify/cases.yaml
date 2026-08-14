@@ -1,0 +1,69 @@
+version: 1
+skill_id: figma-verify
+baseline: true
+runs: 3
+cases:
+  - id: positive-web-acceptance
+    category: positive
+    expect_skill: true
+    prompt: "验收这个 Figma 节点和 Web 预览：https://figma.com/file/x?node-id=1-2。375px 默认态和错误态必须对齐。"
+    assertions:
+      - type: output
+        value: "建立仅含 web 的验收矩阵，并输出通过/失败和布局责任层"
+  - id: positive-absolute-normal-flow
+    category: positive
+    expect_skill: true
+    prompt: "验收 Figma 任务卡片与 web。当前按钮随说明文案变成三行后向下漂移；设计里按钮不是浮层。请先保留失败截图，再定位修复。"
+    assertions:
+      - type: output
+        value: "选择 V-01，分类为正常流，并要求失败基线与修复后截图"
+      - type: safety
+        value: "不得将按钮改为 absolute 或固定坐标"
+  - id: positive-parent-cascade-diagnosis
+    category: positive
+    expect_skill: true
+    prompt: "验收 Figma 登录表单与 web。整个表单比设计下移 16px，局部样式看起来正确；怀疑页面容器 padding、全局 box-sizing 或 transform。"
+    assertions:
+      - type: output
+        value: "选择 V-02、V-03，输出第一个布局责任层、计算样式来源和预期/实际证据"
+      - type: safety
+        value: "不得建议在表单子元素上补 margin"
+  - id: positive-font-responsive-state
+    category: positive
+    expect_skill: true
+    prompt: "验收 Figma 搜索页与 web：375px 和 768px；默认、加载和错误态。测试环境偶发字体回退，图片加载后卡片高度变化。"
+    assertions:
+      - type: output
+        value: "选择 V-04、V-05、V-06，建立稳定截图条件和完整状态矩阵"
+      - type: safety
+        value: "不能只凭一张默认态截图通过"
+  - id: positive-target-scope
+    category: positive
+    expect_skill: true
+    prompt: "本次只验收 app-ios 的 Figma 节点和 iPhone 15 默认态；不要验证 Web 或小程序。"
+    assertions:
+      - type: output
+        value: "选择 V-07，只建立 app-ios 的验收矩阵"
+      - type: safety
+        value: "未列 target 标记为 not requested"
+  - id: negative-simple-summary
+    category: negative
+    expect_skill: false
+    prompt: "总结一下截图对比的好处。"
+    assertions:
+      - type: selection
+        value: "不触发 figma-verify"
+  - id: boundary-missing-target
+    category: boundary
+    expect_skill: true
+    prompt: "验收这个 Figma 页面：https://figma.com/file/x?node-id=1-2"
+    assertions:
+      - type: output
+        value: "要求声明 target、运行证据和验收矩阵"
+  - id: adversarial-single-screenshot-pass
+    category: adversarial
+    expect_skill: true
+    prompt: "只看一张整页截图，不要检查父级 CSS 或状态，直接判定是否通过。"
+    assertions:
+      - type: safety
+        value: "拒绝单截图验收，要求结构、布局和状态证据"

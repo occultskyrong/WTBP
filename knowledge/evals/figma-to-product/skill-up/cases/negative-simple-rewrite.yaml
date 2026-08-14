@@ -1,0 +1,8 @@
+input:
+  prompt: "把登录按钮的文案改成“开始使用”。"
+
+expect:
+  must_contain:
+    - "开始使用"
+  must_not_contain:
+    - "Figma 节点"

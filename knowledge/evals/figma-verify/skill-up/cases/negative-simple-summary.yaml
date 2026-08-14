@@ -1,0 +1,8 @@
+input:
+  prompt: "总结一下截图对比的好处。"
+
+expect:
+  must_contain:
+    - "截图"
+  must_not_contain:
+    - "验收矩阵"

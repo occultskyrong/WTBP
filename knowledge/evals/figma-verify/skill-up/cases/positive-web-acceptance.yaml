@@ -1,0 +1,9 @@
+input:
+  prompt: "验收这个 Figma 节点和 Web 预览：https://figma.com/file/x?node-id=1-2。375px 默认态和错误态必须对齐。"
+
+expect:
+  must_contain:
+    - "web"
+    - "布局责任层"
+  must_not_contain:
+    - "miniapp"

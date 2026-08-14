@@ -9,6 +9,7 @@ routes:
     install: none
     status: active
     last_verified: 2026-08-11
+    keywords: [比较, 方案, 架构, 技术, 成本, 安全, 合规, 可逆性, practice, architecture, compare]
     triggers:
       - 需要比较架构、技术、成本、安全或可逆性方案
       - 需要复用 WTBP Practice、证据或参考实现
@@ -25,6 +26,7 @@ routes:
     install: none
     status: active
     last_verified: 2026-08-11
+    keywords: [全网, 搜索, 当前, 来源, 认知, 事实, 推论, research, search, source]
     triggers:
       - 用户要求全网搜索、当前信息、准确来源或系统化了解主题
       - 需要区分已确认事实、推论和未验证项
@@ -42,6 +44,7 @@ routes:
     alias: ske
     status: active
     last_verified: 2026-08-11
+    keywords: [评估, 评测, 验收, 回归, 门禁, skill, eval, evaluate, evaluation]
     triggers:
       - 需要审查、验收、回归或比较一个已有 Skill
       - 新增或修改 Skill，需要确认 Eval、触发边界和安全边界
@@ -49,3 +52,84 @@ routes:
     not_for:
       - 只修改普通文档或不涉及 Skill 行为的简单任务
       - 未提供目标 Skill、版本或评测范围的完整质量结论
+
+  - id: route.skill-router
+    title: 多 Skill 的统一发现与渐进路由
+    skill_id: skill-router
+    source: local
+    path: skills/skill-router
+    install: none
+    status: active
+    last_verified: 2026-08-13
+    keywords: [wtbp, skill, 技能, 路由, 选择, 安装, 复用, router, route, install]
+    triggers:
+      - 用户询问应使用哪个 Skill，或希望通过一个入口处理多个 Skill
+      - 任务可能命中多个 Skill，需要先比较边界和加载路径
+      - 需要查询已有 Skill、外部 Skill 的安装信息或复用方式
+    not_for:
+      - 已有单一明确 Skill 且用户要求直接执行的任务
+      - 不涉及 Skill 的普通翻译、改写或一次性编辑
+
+  - id: route.prd-to-figma
+    title: PRD 到可编辑 Figma 设计
+    skill_id: prd-to-figma
+    source: local
+    path: skills/prd-to-figma
+    install: none
+    status: candidate
+    last_verified: 2026-08-14
+    keywords: [PRD, 需求文档, 从零设计, 新建设计稿, create-figma]
+    triggers:
+      - 用户提供 PRD 文本、文件或链接，要求创建或更新可编辑 Figma 设计
+      - 用户要求新建 Figma 文件作为设计落点，或提供已有文件作为目标
+    not_for:
+      - 已有 Figma 节点后的局部设计修改
+      - 只需从 Figma 实现单个终端，或只需视觉验收
+
+  - id: route.figma-evolve
+    title: 已有 Figma 的受范围约束演进
+    skill_id: figma-evolve
+    source: local
+    path: skills/figma-evolve
+    install: none
+    status: candidate
+    last_verified: 2026-08-14
+    keywords: [修改, 改设计, 改版, 重做, 局部修改, patch, regenerate]
+    triggers:
+      - 用户提供 Figma 文件或节点链接，要求修改细节、补页面/状态或替换组件
+      - 用户要求在保留历史版本的条件下重做明确设计范围
+    not_for:
+      - 没有 Figma 设计时从 PRD 创建首次设计
+      - 从 Figma 落地代码或只做运行产品验收
+
+  - id: route.figma-to-product
+    title: Figma 节点到指定产品终端
+    skill_id: figma-to-product
+    source: local
+    path: skills/figma-to-product
+    install: none
+    status: candidate
+    last_verified: 2026-08-14
+    keywords: [落地, web, 小程序, app, 前端, CSS, 还原, 实现, to-product]
+    triggers:
+      - 用户提供 Figma 节点和目标代码仓库，要求实现 Web、小程序、iOS、Android 或其他一个明确终端
+      - 用户需要排查 Figma 到代码实现中的布局责任层、absolute 定位或父级 CSS 偏移
+    not_for:
+      - 仅创建或修改 Figma 设计，不需要代码实现
+      - 只需要已有运行实现与 Figma 的验收报告
+
+  - id: route.figma-verify
+    title: Figma 与指定终端的证据验收
+    skill_id: figma-verify
+    source: local
+    path: skills/figma-verify
+    install: none
+    status: candidate
+    last_verified: 2026-08-14
+    keywords: [验收, 截图, 差异, 偏移, 视觉回归, 验证, verify]
+    triggers:
+      - 用户提供 Figma 节点和运行中产品，要求按指定 target、状态、viewport 或设备验收
+      - 用户需要定位 Figma 与实现之间的视觉或 CSS 布局偏移
+    not_for:
+      - 没有运行产品时的首次 Figma 设计或代码实现
+      - 不涉及 Figma 或实现对比的普通截图说明

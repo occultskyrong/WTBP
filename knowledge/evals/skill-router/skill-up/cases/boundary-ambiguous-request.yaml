@@ -1,0 +1,9 @@
+input:
+  prompt: "我需要一个 Skill，但没有说明要解决什么问题。"
+
+expect:
+  must_contain:
+    - "缺少"
+    - "目标"
+  must_not_contain:
+    - "确定路由"

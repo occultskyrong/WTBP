@@ -1,0 +1,9 @@
+input:
+  prompt: "根据这个 PRD 做 Figma 设计，但我没有给文件链接，也没有说是否需要新建。"
+
+expect:
+  must_contain:
+    - "Figma"
+    - "新建"
+  must_not_contain:
+    - "已经创建"

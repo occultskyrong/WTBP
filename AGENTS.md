@@ -39,11 +39,12 @@ inspection and diagnostics. Provide commands for the user to run and continue on
 | Understand the repository | `README.md` | `docs/how-to-use.md`, `docs/concepts.md` |
 | High-impact technical or product decision | `skills/practice-search/SKILL.md` | `knowledge/catalog.yaml`, context schema, target Practice and evidence |
 | Add or change a Practice | `CONTRIBUTING.md` | Practice template, catalog, relationships |
-| Use, install, add, or change a Skill | `knowledge/skill-routes.yaml`, `docs/skill-routing.md` | Target Skill, Practice, Eval, contribution guidance |
+| Use, install, add, or change a Skill | `wtbp "<request>"`, `knowledge/skill-index.yaml` | Capability comparison, target Skill, installation boundary, and contribution guidance |
 | Commit, push, or create a PR | `docs/commit-conventions.md` | GitHub governance and PR template |
 | Validation, hook, or CI issue | `Makefile` | Validation scripts and repository workflow |
 
-Use the catalog or route index before expanding files. Do not load all templates, evidence, or Skill references merely
+Use the catalog, capability index, or route index before expanding files. The capability index is the only source for
+Skill tags and cards; routes only match tasks. Do not load all templates, evidence, or Skill references merely
 because their directories exist.
 
 ## Exploration and implementation

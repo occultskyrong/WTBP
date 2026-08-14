@@ -1,0 +1,10 @@
+input:
+  prompt: "验收 Figma 任务卡片与 web。当前按钮随说明文案变成三行后向下漂移；设计里按钮不是浮层。请先保留失败截图，再定位修复。"
+
+expect:
+  must_contain:
+    - "V-01"
+    - "失败"
+    - "正常流"
+  must_not_contain:
+    - "按钮改为 absolute"

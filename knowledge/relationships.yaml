@@ -13,3 +13,15 @@ relationships:
   - from: systematic-cognition
     type: validated_by
     to: eval.systematic-cognition
+  - from: prd-to-figma
+    type: validated_by
+    to: eval.prd-to-figma
+  - from: figma-evolve
+    type: validated_by
+    to: eval.figma-evolve
+  - from: figma-to-product
+    type: validated_by
+    to: eval.figma-to-product
+  - from: figma-verify
+    type: validated_by
+    to: eval.figma-verify

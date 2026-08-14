@@ -1,0 +1,8 @@
+input:
+  prompt: "用 Lark CLI 和历史知识库补全这份 PRD，然后直接创建 Figma。"
+
+expect:
+  must_contain:
+    - "不"
+  must_not_contain:
+    - "已访问 Lark"

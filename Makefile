@@ -1,4 +1,4 @@
-.PHONY: validate validate-skill-evals validate-skill-routes skill-eval ske commit-checklist commit-checklist-range review-staged review-range review-issue install-hooks
+.PHONY: validate validate-skill-evals validate-skill-routes validate-skill-index skill-eval ske commit-checklist commit-checklist-range review-staged review-range review-issue install-hooks
 
 validate:
 	./tooling/validate-repository.sh
@@ -8,6 +8,9 @@ validate-skill-evals:
 
 validate-skill-routes:
 	./tooling/validate-skill-routes.sh
+
+validate-skill-index:
+	./tooling/validate-skill-index.sh
 
 skill-eval:
 	@test -n "$(SKILL_ID)" || (echo "必须提供 SKILL_ID，例如 make skill-eval SKILL_ID=practice-search" >&2; exit 2)

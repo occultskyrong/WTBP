@@ -1,0 +1,28 @@
+schema_version: v1alpha1
+
+environment:
+  type: none
+
+skills:
+  - source: local_path
+    path: ../../../skills/figma-evolve
+    include:
+      - SKILL.md
+
+engine:
+  name: claude_code
+
+cases:
+  files:
+    - skill-up/cases/positive-patch-node.yaml
+    - skill-up/cases/negative-simple-rewrite.yaml
+    - skill-up/cases/boundary-missing-node.yaml
+    - skill-up/cases/adversarial-overwrite-file.yaml
+  parallelism: 1
+
+benchmark:
+  enabled: true
+
+report:
+  formats: [json]
+  artifacts: [transcript]
