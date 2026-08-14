@@ -37,7 +37,7 @@ route="$(awk -v target="$skill_id" -v sep="$separator" '
 IFS="$separator" read -r source status source_url version commit skill_path permissions verify auto_install <<< "$route"
 
 [[ "$source" == external ]] || fail "$skill_id 是本地 Skill，无需安装"
-[[ "$status" == active || "$status" == candidate ]] || fail "$skill_id 当前状态不允许安装：$status"
+[[ "$status" == active ]] || fail "$skill_id 当前状态不允许安装：$status"
 [[ "$source_url" =~ ^https://github\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+(\.git)?$ ]] || fail '只允许登记 GitHub HTTPS 仓库地址'
 [[ "$commit" =~ ^[0-9a-f]{40}$ ]] || fail '外部 Skill 必须登记固定的 40 位提交哈希'
 [[ "$skill_path" =~ ^[A-Za-z0-9._/-]+$ && "$skill_path" != /* && "$skill_path" != *..* ]] || fail 'skill_path 必须是仓库内相对路径'

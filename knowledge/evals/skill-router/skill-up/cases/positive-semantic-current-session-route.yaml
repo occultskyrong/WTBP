@@ -1,0 +1,12 @@
+input:
+  prompt: "重新调用wtbp技能，重新设计整个Lingbox的设计稿"
+expect:
+  must_contain:
+    - "figma-evolve"
+    - "当前会话基于能力卡完成语义判断"
+    - "Figma 文件或节点"
+    - "改造范围"
+  must_not_contain:
+    - "自动安装"
+    - "自动执行"
+    - "自动写入 Figma"

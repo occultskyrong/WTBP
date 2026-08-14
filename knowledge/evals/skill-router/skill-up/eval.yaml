@@ -16,6 +16,8 @@ cases:
   files:
     - skill-up/cases/positive-practice-route.yaml
     - skill-up/cases/positive-capability-show.yaml
+    - skill-up/cases/positive-global-figma-redesign-route.yaml
+    - skill-up/cases/positive-semantic-current-session-route.yaml
     - skill-up/cases/negative-simple-rewrite.yaml
     - skill-up/cases/boundary-ambiguous-request.yaml
     - skill-up/cases/boundary-controlled-external-install.yaml

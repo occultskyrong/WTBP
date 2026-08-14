@@ -10,6 +10,13 @@ cases:
     assertions:
       - type: output
         value: "说明 patch 范围、前后节点链接和受影响状态"
+  - id: positive-regenerate-redesign
+    category: positive
+    expect_skill: true
+    prompt: "对 Lingbox 的整体 Figma 设计重设计，范围是现有会员页：https://figma.com/file/x?node-id=8-9；创建 V2，不覆盖原页面。"
+    assertions:
+      - type: output
+        value: "使用 regenerate，保留原页面并返回 V2 前后节点链接"
   - id: negative-simple-rewrite
     category: negative
     expect_skill: false

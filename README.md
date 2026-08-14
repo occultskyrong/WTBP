@@ -53,7 +53,7 @@ Skill 必须同时维护对应的 Eval，具体规则见 [`docs/skill-evaluation
 make validate          # 校验仓库结构
 make validate-skill-evals # 校验 Skill 评测契约
 make validate-skill-routes # 校验问题到 Skill 的路由
-wtbp "<问题>"          # 发现并按受控规则安装适用的 Skill
+wtbp "<问题>"          # 输出本地候选和匹配依据；当前会话负责最终语义判断
 wtbp list --domain design # 按领域浏览能力
 wtbp show skill-router   # 查看 Skill 能力卡
 make commit-checklist  # 执行完整提交清单
@@ -74,5 +74,12 @@ make review-staged     # 审查暂存内容
 bash tooling/install-wtbp.sh
 ```
 
-它只安装 `wtbp` 命令本身。外部 Skill 只会在命中唯一、已核验且允许自动安装的路由时按需安装；规则见
-[`docs/skill-routing.md`](docs/skill-routing.md)。
+它只创建两个指向同一 WTBP 仓库的本机入口：命令行 `wtbp`，以及 Codex 中名为 `wtbp`、实际复用
+`skills/skill-router` 的唯一 Skill 链接。不会把每个本地 Skill 分别安装到 Codex；新增能力只需登记到
+WTBP 的目录、能力索引和路由中，再由该入口按需发现和加载。外部 Skill 只会在命中唯一、已核验且满足受控安装条件的
+路由时由当前会话确认后显式安装；规则见 [`docs/skill-routing.md`](docs/skill-routing.md)。
+
+`wtbp` 不会再启动第二个 LLM 会话，也不会把任务内容转发给外部模型。调用它的当前 Agent/Claude 会话直接读取
+`knowledge/skill-index.yaml` 中的能力卡，结合候选结果进行语义比较，再按需读取唯一目标 Skill 的 `SKILL.md`。
+这样可以保留完整会话上下文，避免重复调用、额外费用和上下文丢失；命令本身负责可解释的本地索引与候选发现，
+唯一命中的受控外部路由仍需由当前会话确认后显式运行 `wtbp install <skill-id>`。
