@@ -1,4 +1,4 @@
-.PHONY: validate validate-skill-evals validate-skill-routes validate-skill-index test-wtbp-router skill-eval ske commit-checklist commit-checklist-range review-staged review-range review-issue install-hooks
+.PHONY: validate validate-skill-evals validate-skill-routes validate-skill-index test-wtbp-router test-secret-scan skill-eval ske commit-checklist commit-checklist-range review-staged review-range review-issue install-hooks
 
 validate:
 	./tooling/validate-repository.sh
@@ -14,6 +14,9 @@ validate-skill-index:
 
 test-wtbp-router:
 	./tooling/test-wtbp-router.sh
+
+test-secret-scan:
+	./tooling/test-secret-scan.sh
 
 skill-eval:
 	@test -n "$(SKILL_ID)" || (echo "必须提供 SKILL_ID，例如 make skill-eval SKILL_ID=practice-search" >&2; exit 2)

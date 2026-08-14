@@ -60,6 +60,8 @@ required_paths=(
   "tooling/validate-skill-index.sh"
   "tooling/generate-skill-catalog.sh"
   "tooling/test-wtbp-router.sh"
+  "tooling/scan-secrets.sh"
+  "tooling/test-secret-scan.sh"
   "tooling/run-skill-eval.sh"
   "tooling/commit-checklist.sh"
 )
@@ -81,6 +83,8 @@ bash -n "$repo_root/tooling/validate-skill-routes.sh"
 bash -n "$repo_root/tooling/validate-skill-index.sh"
 bash -n "$repo_root/tooling/generate-skill-catalog.sh"
 bash -n "$repo_root/tooling/test-wtbp-router.sh"
+bash -n "$repo_root/tooling/scan-secrets.sh"
+bash -n "$repo_root/tooling/test-secret-scan.sh"
 bash -n "$repo_root/tooling/wtbp"
 bash -n "$repo_root/tooling/install-wtbp.sh"
 bash -n "$repo_root/tooling/install-skill.sh"
@@ -148,6 +152,7 @@ done < <(rg --files "$repo_root/skills" -g '*.md' | rg '/references/[^/]+\.md$' 
 "$repo_root/tooling/validate-skill-index.sh"
 "$repo_root/tooling/generate-skill-catalog.sh" --check
 "$repo_root/tooling/test-wtbp-router.sh"
+"$repo_root/tooling/test-secret-scan.sh"
 
 if [[ -d "$repo_root/knowledge/practices" ]]; then
   while IFS= read -r practice_file; do

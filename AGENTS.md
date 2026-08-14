@@ -21,7 +21,9 @@ when the task requires them.
 - Keep project-specific facts in the consuming project. Contribute only reusable knowledge with scope, counterexamples,
   traceable evidence, and verification methods.
 - Do not use `stale` or `deprecated` content as a default recommendation.
-- Modify, stage, commit, push, create a PR, and merge a PR are separate authorizations.
+- Modify, stage, commit, push, create a PR, and merge a PR remain separate action boundaries. In this repository,
+  an explicit user instruction to “commit” authorizes the complete commit-delivery workflow below: run the checklist,
+  commit only after it passes, push the branch, and create a PR. Merging the PR always remains a separate authorization.
 - Protect unrelated changes, unknown commits, and remote divergence. Do not force-push, auto-rebase, auto-stash,
   use `git reset --hard`, or use `--no-verify`.
 - Never commit secrets, tokens, generated reports, caches, or unrelated files.
@@ -57,5 +59,23 @@ because their directories exist.
 
 ## Commit gate
 
-Before a commit, run `make commit-checklist`. It runs `make validate`, staged-content review, `ske` contract evaluation
-for changed Skills, quality gates, and the `VERSION` check. See [docs/commit-checklist.md](docs/commit-checklist.md).
+Before a commit, run `make commit-checklist`. It runs repository validation, staged-content review, sensitive-information
+scanning, `skill-up` contract review for changed Skills, quality gates, and the `VERSION` check. See
+[docs/commit-checklist.md](docs/commit-checklist.md).
+
+## Commit delivery workflow
+
+When the user says “commit” (or an equivalent Chinese instruction such as “提交”), execute these steps in order:
+
+1. Inspect the worktree, staged scope, current branch, remote divergence, and the intended Conventional Commit message.
+2. Run `make commit-checklist`. If any check fails, stop; do not create a commit, push, or PR.
+3. Create the commit with the validated scope and a Chinese Conventional Commit summary.
+4. Push the current branch to its configured remote without force-push or history rewriting.
+5. Create a PR to the repository's configured default/base branch with a Chinese title and body that state the change,
+   affected Skills or practices, validation results, dry-run boundaries, and unresolved risks.
+6. Verify the remote branch and PR URL/state, then report the commit, push, and PR results separately.
+
+If commit, push, or PR creation fails because of conflicts, permissions, missing credentials, or remote divergence, stop
+at that step and report the exact blocker and the next user-authorized action. Never bypass a failed gate, use `--no-verify`,
+force-push, auto-rebase, or merge the PR as part of this workflow. An instruction to “run the commit checklist” alone
+authorizes validation only; it does not authorize commit, push, or PR creation.

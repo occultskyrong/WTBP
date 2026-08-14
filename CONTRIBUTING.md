@@ -31,14 +31,17 @@ AI 读取的规范入口（`AGENTS.md`、`CLAUDE.md`、`skills/**/SKILL.md` 和�
 5. 在 `knowledge/catalog.yaml` 同时登记 Skill 和 Eval，保持 `skill`、路径和状态一致；在
    `knowledge/skill-index.yaml` 填写中文标题、摘要、受控领域/能力/阶段标签、输入、输出、副作用和路由 ID；再在
    `knowledge/skill-routes.yaml` 增加问题场景到新 Skill 的路由。能力标签不得自行造词。
-6. 运行 `make validate`、`make validate-skill-evals`；提交前由 `make commit-checklist` 自动执行
-   `ske` 契约评测、门禁和版本检查。行为评测还要记录有 Skill / 无 Skill 基线、重复运行次数和主要失败原因。
+6. 运行 `make validate`、`make validate-skill-evals`；提交前由 `make commit-checklist` 自动执行敏感信息扫描、
+   `skill-up` 质量审查、门禁和版本检查。行为评测还要记录有 Skill / 无 Skill 基线、重复运行次数和主要失败原因。
 
 ## Skill 评测
 
 评测规范见 [`docs/skill-evaluation.md`](docs/skill-evaluation.md) 和
 [`knowledge/schemas/eval-schema.yaml`](knowledge/schemas/eval-schema.yaml)。没有 Eval 的新建
 或修改 Skill 会被提交前审查拒绝；评测结果、模型凭据和生成报告不得提交到仓库。
+
+提交清单还会扫描新增内容中的密钥、Token、私钥、带凭据连接串和高风险凭据文件名；敏感信息只能通过环境变量
+或仓库外的安全配置提供，不能用“示例”注释绕过高置信度命中。
 
 ## 评审原则
 
