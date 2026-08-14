@@ -1,0 +1,29 @@
+input:
+  prompt: "先根据当前消费项目的仓库和运行证据建立并确认 PDC-YYYYMMDD-VNN（PDC-01 至 PDC-06），形成由契约推导的 ARC-YYYYMMDD-VNN 整体架构，再根据契约设计。根据这个 PRD 创建包含多个小程序产品页面的 Figma 文件。必须先构造所有页面/状态的中性底层窗体并通过 BF-01 至 BF-06，再在小程序外框中逐页检查 layoutMode、TabBar 等权分布、独立右侧 annotation、文字和嵌套组件递归边界、共享组件实例与 master 的尺寸比例，并确认页面内没有设计说明。"
+
+expect:
+  must_contain:
+    - "BF-01"
+    - "BF-02"
+    - "BF-03"
+    - "BF-04"
+    - "BF-05"
+    - "BF-06"
+    - "PDC-01"
+    - "PDC-02"
+    - "PDC-03"
+    - "PDC-04"
+    - "PDC-05"
+    - "PDC-06"
+    - "ARC-YYYYMMDD-VNN"
+    - "分布"
+    - "递归"
+    - "G-01"
+    - "G-02"
+    - "G-03"
+    - "G-04"
+    - "G-05"
+    - "G-06"
+    - "所有页面"
+  must_not_contain:
+    - "节点创建成功即可验收"

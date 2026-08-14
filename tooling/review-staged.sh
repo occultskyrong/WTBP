@@ -204,6 +204,10 @@ check_skill() {
   skill_dir="${file%/SKILL.md}"
   [[ "${skill_dir##*/}" == "$skill_name" ]] || fail "$file 的目录名必须与 name 一致"
   catalog_contains "$skill_name" "$skill_dir" || fail "$file 未在 knowledge/catalog.yaml 中登记正确路径"
+  for required_heading in 'Input Contract' 'Workflow' 'Output Contract' 'Completion Gate'; do
+    source_file "$file" | rg -q "^## ${required_heading}$" || fail "$file 缺少统一契约章节: ## ${required_heading}"
+  done
+  source_file "$file" | rg -q '^## (Boundaries|Operating Boundaries|Change Rules|Design Evidence Gate|Evidence and Matrix Gate|Decision Rules|Figma Delivery Rules|Layout Provenance Gate)$' || fail "$file 缺少边界或门禁章节"
 }
 
 count_source_indented_field() {

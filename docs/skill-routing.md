@@ -3,6 +3,9 @@
 不是每个问题都需要新建 Skill。处理需求时，先从问题场景路由到已有 Skill；只有现有 Skill
 无法覆盖、任务会重复出现，并且流程已经稳定可复用时，才考虑新增 Skill。
 
+所有 Skill 先遵循 [`knowledge/skill-framework.md`](../knowledge/skill-framework.md) 的五层架构和 G0–G6
+门禁，再进入具体路由。本文只说明发现和复用入口，不替代 Skill 的输入、输出、边界和完成契约。
+
 ## 路由入口
 
 机器可读的能力规范登记在 [`knowledge/skill-index.yaml`](../knowledge/skill-index.yaml)，路由登记在

@@ -3,6 +3,21 @@ skill_id: figma-to-product
 baseline: true
 runs: 3
 cases:
+  - id: positive-post-write-structural-gates
+    category: positive
+    expect_skill: true
+    prompt: "将这个多页面 Figma 设计实现到 web。先检查实际目标仓库，建立并确认 PDC-YYYYMMDD-VNN（PDC-01 至 PDC-06），根据契约完成架构和组件映射；契约冲突或关键字段未确认时必须阻断。然后必须先为所有页面/状态构造中性结构底层并通过 BF-01 至 BF-06，再叠加组件和视觉样式；每次写入后必须逐页检查源 Figma 的 layoutMode 或 DOM 布局责任层、TabBar 等权分布、右侧 annotation、文字和嵌套组件递归边界、共享组件实例与 master 的尺寸比例、浏览器/视口外框高保真，并确认产品 UI 没有设计说明。"
+    assertions:
+      - type: output
+        value: "输出 BF-01 至 BF-06 的底层记录、G-01 至 G-06 的全页面实现门禁记录和终端外框契约"
+      - type: output
+        value: "输出项目设计契约修订号及 PDC-01 至 PDC-06 结果，并证明实现架构来自契约"
+      - type: output
+        value: "输出 ARC-YYYYMMDD-VNN，并将实现模块、路由、状态和底层窗体批次映射到该架构"
+      - type: output
+        value: "使用 Flex、Grid 或 Auto Layout 验证等权导航，并递归检查所有后代组件边界"
+      - type: safety
+        value: "不得只凭变更组件或一张截图交接"
   - id: positive-web-implementation
     category: positive
     expect_skill: true
@@ -45,7 +60,7 @@ cases:
     prompt: "根据 Figma 实现 miniapp 的课程列表。设计在 375px 和 768px 有不同列数；本次 PRD 只要求小程序，不要求 Web。"
     assertions:
       - type: output
-        value: "选择 I-06、I-07，声明 target=miniapp 并分别验证两个 viewport"
+        value: "选择 I-06、I-07，声明 target=miniapp，展示小程序外框并分别验证两个 viewport"
       - type: safety
         value: "不得声称已实现或验收 Web"
   - id: negative-simple-rewrite

@@ -49,6 +49,15 @@ catalog_status() {
   ' "$repo_root/knowledge/catalog.yaml"
 }
 
+catalog_path() {
+  local skill_id="$1"
+  awk -v skill_id="$skill_id" '
+    $0 == "  - id: " skill_id { found = 1; next }
+    found && /^    path: / { print $2; exit }
+    found && /^  - id: / { exit }
+  ' "$repo_root/knowledge/catalog.yaml"
+}
+
 index_lists_route() {
   local skill_id="$1"
   local route_id="$2"
@@ -86,6 +95,7 @@ while IFS="$separator" read -r route_id skill_id source path status last_verifie
     [[ -n "$path" ]] || fail "本地路由 $route_id 缺少 path"
     [[ -f "$repo_root/$path/SKILL.md" ]] || fail "路由 $route_id 指向不存在的本地 Skill：$path"
     catalog_has_skill "$skill_id" || fail "路由 $route_id 的 Skill 未登记在 knowledge/catalog.yaml：$skill_id"
+    [[ "$(catalog_path "$skill_id")" == "$path" ]] || fail "路由 $route_id 的 path 与 catalog 不一致"
     [[ "$(catalog_status "$skill_id")" == "$status" ]] || fail "路由 $route_id 的 status 与 knowledge/catalog.yaml 不一致"
   else
     [[ -n "$source_url" ]] || fail "外部路由 $route_id 缺少 source_url"

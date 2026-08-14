@@ -25,6 +25,8 @@
 高影响决策从 `knowledge/catalog.yaml` 开始，只加载目标 Practice、证据、参考实现或 Skill。发现 Skill 时先看
 `knowledge/skill-index.yaml`，再看 `knowledge/skill-routes.yaml`：前者是能力元数据唯一来源，后者只负责任务匹配。
 优先使用当前的 `approved` 内容，不把 `stale` 或 `deprecated` 作为默认依据。
+所有 Skill 相关工作都要遵循 `knowledge/skill-framework.zh-CN.md`：完成输入、边界、执行、输出和完成门禁后再声明结果，
+并保持登记/Eval 关系图同步。
 
 ## 执行
 

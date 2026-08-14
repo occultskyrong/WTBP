@@ -7,6 +7,11 @@ description: Discover and route a user request to the smallest applicable WTBP S
 
 Route first; do not merge every Skill into this Skill or load every `SKILL.md`.
 
+## Input Contract
+
+- A user task with its goal, constraints, expected evidence, and any requested installation or side effect.
+- If semantic intent, target domain, or acceptance boundary is missing, return `clarify` instead of guessing.
+
 ## Workflow
 
 1. Identify the user's goal, constraints, expected evidence, and whether the request needs discovery rather than direct execution.
@@ -41,3 +46,9 @@ Required next read or command
 Installation or authorization requirement, if any
 Unmatched or missing context
 ```
+
+## Completion Gate
+
+- The result is `select`, `clarify`, or `no_match` with matched evidence, boundaries, and the next read/command.
+- No keyword match is treated as semantic execution; no Skill is installed or run during discovery.
+- Installation is only reported after explicit authorization and the registered source, pin, permissions, and verification pass.

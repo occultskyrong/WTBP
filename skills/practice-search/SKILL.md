@@ -7,6 +7,11 @@ description: Search, compare, and apply WTBP practices for software or product d
 
 Use this Skill to turn an ambiguous request into a scoped, context-aware recommendation. It does not replace project facts, architecture design, or human review.
 
+## Input Contract
+
+- A decision question, current scenario, constraints, and the evidence or reversibility expected by the user.
+- Identify the one missing variable that could materially change the recommendation; ask before comparing when it is absent.
+
 ## Workflow
 
 1. Extract the question, current stack, scale, performance, security and compliance requirements, cost, team capability, and reversibility. State any missing variable that could change the decision.
@@ -14,6 +19,11 @@ Use this Skill to turn an ambiguous request into a scoped, context-aware recomme
 3. Read each candidate's metadata, applicable context, and context-specific recommendation rule first. Load evidence, reference implementations, or related Skills only when they are needed to support the decision.
 4. Compare candidates against the current constraints, and explain why each is adopted, adapted, or rejected. Do not use `stale` or `deprecated` content as the default recommendation.
 5. Provide a verification method. Require human confirmation before an irreversible, high-cost, security, or compliance decision.
+
+## Boundaries
+
+- This Skill compares reusable practices; it does not replace project-specific facts, architecture ownership, or human approval.
+- Do not make an irreversible change, install a tool, or claim current evidence without the required verification.
 
 ## Output Contract
 
@@ -29,6 +39,12 @@ Evidence and reference implementations
 Anti-patterns and residual risks
 Verification method and human confirmation points
 ```
+
+## Completion Gate
+
+- Every recommendation is tied to a Practice ID, current context, evidence or an explicit evidence gap, and a verification method.
+- Stale or deprecated material is not the default recommendation, and irreversible/high-impact choices have human confirmation points.
+- Missing context or unsupported evidence is reported as unresolved; do not present a preference as an accepted decision.
 
 ## Resources
 

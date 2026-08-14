@@ -7,6 +7,9 @@ relationships:
   - from: skill-evaluation
     type: validated_by
     to: eval.skill-evaluation
+  - from: skill-router
+    type: validated_by
+    to: eval.skill-router
   - from: systematic-cognition
     type: related_to
     to: product.evidence-first-cognition

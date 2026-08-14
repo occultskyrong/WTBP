@@ -6,5 +6,6 @@ expect:
     - "结构"
     - "安全"
     - "基线"
+    - "Runner"
   must_not_contain:
     - "已通过行为评测"

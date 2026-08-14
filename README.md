@@ -30,12 +30,13 @@ Skill 必须同时维护对应的 Eval，具体规则见 [`docs/skill-evaluation
 
 1. [`AGENTS.md`](AGENTS.md)、[`CLAUDE.md`](CLAUDE.md)：AI 使用的英文规范源，定义协作边界、输出契约和授权规则；中文对照见 [`AGENTS.zh-CN.md`](AGENTS.zh-CN.md)、[`CLAUDE.zh-CN.md`](CLAUDE.zh-CN.md)。
 2. [`docs/how-to-use.md`](docs/how-to-use.md)：知识库的使用方式和对象关系。
-3. [`docs/skill-catalog.md`](docs/skill-catalog.md)：面向人类的中文能力地图。
-4. [`knowledge/skill-index.yaml`](knowledge/skill-index.yaml)：Skill 能力、标签、输入输出和副作用的机器可读规范源。
-5. [`knowledge/catalog.yaml`](knowledge/catalog.yaml)：可发现对象索引；[`knowledge/skill-routes.yaml`](knowledge/skill-routes.yaml) 只负责将问题场景路由到 Skill。
-6. 不确定应使用哪个 Skill 时，先运行 `wtbp "<问题>"`；想浏览或核对能力时，使用 `wtbp list --domain <领域>` 或 `wtbp show <skill-id>`。
-7. 只加载目录指向的目标 Practice、证据、参考实现或 Skill；不要一次性读取全部模式和模板。
-8. 需要执行流程时，再读取目标 Skill 的英文 `SKILL.md` 及其按需引用的内容；同路径的 `SKILL.zh-CN.md` 是同步中文对照。完整命名约定见 [`docs/document-language-policy.md`](docs/document-language-policy.md)。
+3. [`knowledge/skill-framework.zh-CN.md`](knowledge/skill-framework.zh-CN.md)：Skill 的五层架构、最小契约和 G0–G6 门禁。
+4. [`docs/skill-catalog.md`](docs/skill-catalog.md)：面向人类的中文能力地图。
+5. [`knowledge/skill-index.yaml`](knowledge/skill-index.yaml)：Skill 能力、标签、输入输出和副作用的机器可读规范源。
+6. [`knowledge/catalog.yaml`](knowledge/catalog.yaml)：可发现对象索引；[`knowledge/skill-routes.yaml`](knowledge/skill-routes.yaml) 只负责将问题场景路由到 Skill。
+7. 不确定应使用哪个 Skill 时，先运行 `wtbp "<问题>"`；想浏览或核对能力时，使用 `wtbp list --domain <领域>` 或 `wtbp show <skill-id>`。
+8. 只加载目录指向的目标 Practice、证据、参考实现或 Skill；不要一次性读取全部模式和模板。
+9. 需要执行流程时，再读取目标 Skill 的英文 `SKILL.md` 及其按需引用的内容；同路径的 `SKILL.zh-CN.md` 是同步中文对照。完整命名约定见 [`docs/document-language-policy.md`](docs/document-language-policy.md)。
 
 ## 3. 项目结构
 

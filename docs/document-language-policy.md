@@ -27,6 +27,7 @@ WTBP 同时服务于人类读者和 AI。语言和文件名必须直接表达受
 | `AGENTS.md` | `AGENTS.zh-CN.md` | 通用 Agent 规则与任务路由 |
 | `CLAUDE.md` | `CLAUDE.zh-CN.md` | Claude 的渐进读取与交付规则 |
 | `knowledge/templates/skill-template/SKILL.md` | `knowledge/templates/skill-template/SKILL.zh-CN.md` | 新建 Skill 时使用的 AI 指令模板 |
+| `knowledge/skill-framework.md` | `knowledge/skill-framework.zh-CN.md` | 所有 Skill 的五层架构、最小契约和 G0–G6 门禁 |
 | `skills/<skill-id>/SKILL.md` | `skills/<skill-id>/SKILL.zh-CN.md` | 可执行 Skill 指令 |
 | `skills/<skill-id>/references/<name>.md` | `skills/<skill-id>/references/<name>.zh-CN.md` | 按需加载的 AI 参考材料 |
 

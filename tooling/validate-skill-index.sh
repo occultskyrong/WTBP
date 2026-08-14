@@ -46,6 +46,18 @@ catalog_field() {
   ' "$repo_root/knowledge/catalog.yaml"
 }
 
+relationship_has_validation() {
+  local skill_id="$1"
+  rg -q "^  - from: ${skill_id}$" "$repo_root/knowledge/relationships.yaml" && \
+    awk -v skill_id="$skill_id" '
+      $0 == "  - from: " skill_id { found = 1; next }
+      found && $0 == "    type: validated_by" { valid = 1; next }
+      found && valid && $0 == "    to: eval." skill_id { target = 1; exit }
+      found && /^  - from: / { exit }
+      END { exit(target ? 0 : 1) }
+    ' "$repo_root/knowledge/relationships.yaml"
+}
+
 [[ -f "$index_file" ]] || fail '缺少 knowledge/skill-index.yaml'
 [[ -f "$schema_file" ]] || fail '缺少 knowledge/schemas/skill-index-schema.yaml'
 rg -q '^version: 1$' "$index_file" || fail 'skill-index.yaml 必须声明 version: 1'
@@ -83,6 +95,9 @@ while IFS="$separator" read -r skill_id title summary skill_domains skill_capabi
   [[ -n "$catalog_path" ]] || fail "$skill_id 未登记在 knowledge/catalog.yaml"
   [[ -f "$repo_root/$catalog_path/SKILL.md" ]] || fail "$skill_id 的 catalog 路径不存在 SKILL.md"
   [[ "$catalog_status" == "$status" ]] || fail "$skill_id 的 status 与 catalog 不一致"
+  [[ -f "$repo_root/skills/$skill_id/SKILL.zh-CN.md" ]] || fail "$skill_id 缺少中文 Skill 对照"
+  [[ -f "$repo_root/knowledge/evals/$skill_id/EVAL.md" ]] || fail "$skill_id 缺少对应 Eval"
+  relationship_has_validation "$skill_id" || fail "$skill_id 缺少 relationships.yaml 的 validated_by 关系"
 
   route_values="${route_ids#[}"
   route_values="${route_values%]}"
@@ -116,6 +131,7 @@ duplicate_ids="$(printf '%s\n' "${index_ids[@]}" | sort | uniq -d)"
 while IFS= read -r skill_file; do
   skill_id="$(awk -F': ' '$1 == "name" { print $2; exit }' "$skill_file")"
   printf '%s\n' "${index_ids[@]}" | rg -qx "$skill_id" || fail "Skill $skill_id 未登记在 skill-index.yaml"
+  [[ -f "${skill_file%.md}.zh-CN.md" ]] || fail "Skill $skill_id 缺少中文对照"
 done < <(rg --files "$repo_root/skills" -g 'SKILL.md')
 
 printf 'Skill 能力索引校验：通过（Skill %s 个）\n' "${#index_ids[@]}"

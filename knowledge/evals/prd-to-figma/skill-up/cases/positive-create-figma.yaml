@@ -1,5 +1,5 @@
 input:
-  prompt: "根据这个 PRD 创建一个新的 Figma 文件：面向家长的预约页面，目标终端是小程序。"
+  prompt: "根据这个 PRD 创建一个新的 Figma 文件：面向终端用户的预约页面，目标终端是小程序。"
 
 expect:
   must_contain:

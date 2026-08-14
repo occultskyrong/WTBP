@@ -40,6 +40,10 @@ required_paths=(
   "knowledge/external-sources.yaml"
   "knowledge/design-workflow.md"
   "knowledge/design-workflow.zh-CN.md"
+  "knowledge/design-principles.md"
+  "knowledge/design-principles.zh-CN.md"
+  "knowledge/skill-framework.md"
+  "knowledge/skill-framework.zh-CN.md"
   "knowledge/templates/practice-template.md"
   "knowledge/templates/skill-template/SKILL.md"
   "knowledge/templates/skill-template/SKILL.zh-CN.md"
@@ -64,6 +68,7 @@ required_paths=(
   "tooling/test-secret-scan.sh"
   "tooling/run-skill-eval.sh"
   "tooling/commit-checklist.sh"
+  "tooling/new-task-branch.sh"
 )
 
 for path in "${required_paths[@]}"; do
@@ -90,6 +95,7 @@ bash -n "$repo_root/tooling/install-wtbp.sh"
 bash -n "$repo_root/tooling/install-skill.sh"
 bash -n "$repo_root/tooling/run-skill-eval.sh"
 bash -n "$repo_root/tooling/commit-checklist.sh"
+bash -n "$repo_root/tooling/new-task-branch.sh"
 
 if ! rg -q '^[0-9]+\.[0-9]+\.[0-9]+$' "$repo_root/VERSION"; then
   printf 'VERSION 必须符合 MAJOR.MINOR.PATCH 三段式格式。\n' >&2
@@ -124,6 +130,23 @@ while IFS= read -r skill_file; do
     printf 'Skill 元数据无效：%s\n' "${skill_file#$repo_root/}" >&2
     exit 1
   fi
+  for required_heading in 'Input Contract' 'Workflow' 'Output Contract' 'Completion Gate'; do
+    if ! rg -q "^## ${required_heading}$" "$skill_file"; then
+      printf 'Skill 缺少统一契约章节：%s（## %s）\n' "${skill_file#$repo_root/}" "$required_heading" >&2
+      exit 1
+    fi
+  done
+  if ! rg -q '^## (Boundaries|Operating Boundaries|Change Rules|Design Evidence Gate|Evidence and Matrix Gate|Decision Rules|Figma Delivery Rules|Layout Provenance Gate)$' "$skill_file"; then
+    printf 'Skill 缺少边界或门禁章节：%s\n' "${skill_file#$repo_root/}" >&2
+    exit 1
+  fi
+  companion_file="${skill_file%.md}.zh-CN.md"
+  for required_heading in '输入契约' '工作流' '输出契约' '完成门禁'; do
+    if ! rg -q "^## ${required_heading}$" "$companion_file"; then
+      printf 'Skill 中文对照缺少统一契约章节：%s（## %s）\n' "${companion_file#$repo_root/}" "$required_heading" >&2
+      exit 1
+    fi
+  done
 done < <(rg --files "$repo_root/skills" -g 'SKILL.md')
 
 while IFS= read -r ai_file; do
@@ -135,6 +158,7 @@ while IFS= read -r ai_file; do
 done < <(printf '%s\n' \
   "$repo_root/AGENTS.md" \
   "$repo_root/CLAUDE.md" \
+  "$repo_root/knowledge/skill-framework.md" \
   "$repo_root/knowledge/templates/skill-template/SKILL.md" \
   && rg --files "$repo_root/skills" -g 'SKILL.md')
 

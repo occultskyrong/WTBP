@@ -26,6 +26,9 @@ when the task requires them.
   commit only after it passes, push the branch, and create a PR. Merging the PR always remains a separate authorization.
 - Protect unrelated changes, unknown commits, and remote divergence. Do not force-push, auto-rebase, auto-stash,
   use `git reset --hard`, or use `--no-verify`.
+- Use one task branch per independent task. Continue the same branch for incremental commits within that task; never
+  append a new task to a branch whose scope is unclear. Create a new branch from a clean default branch with
+  `tooling/new-task-branch.sh` before staging new-task changes.
 - Never commit secrets, tokens, generated reports, caches, or unrelated files.
 
 ## Remote access hard boundary
@@ -49,6 +52,9 @@ Use the catalog, capability index, or route index before expanding files. The ca
 Skill tags and cards; routes only match tasks. Do not load all templates, evidence, or Skill references merely
 because their directories exist.
 
+Apply [knowledge/skill-framework.md](knowledge/skill-framework.md) to every Skill change or execution. It defines
+the five layers, minimum Skill contract, registry graph, G0–G6 gates, lifecycle statuses, and fail-closed rules.
+
 ## Exploration and implementation
 
 - When `.codegraph/` exists, use `codegraph files`, `codegraph explore`, or `codegraph node` before text search for
@@ -67,13 +73,14 @@ scanning, `skill-up` contract review for changed Skills, quality gates, and the 
 
 When the user says “commit” (or an equivalent Chinese instruction such as “提交”), execute these steps in order:
 
-1. Inspect the worktree, staged scope, current branch, remote divergence, and the intended Conventional Commit message.
-2. Run `make commit-checklist`. If any check fails, stop; do not create a commit, push, or PR.
-3. Create the commit with the validated scope and a Chinese Conventional Commit summary.
-4. Push the current branch to its configured remote without force-push or history rewriting.
-5. Create a PR to the repository's configured default/base branch with a Chinese title and body that state the change,
+1. Inspect the worktree, staged scope, current branch, task scope, remote divergence, and the intended Conventional Commit message.
+2. If the current branch is the default branch or its task scope is unclear, stop before staging/committing and create a clean task branch with `tooling/new-task-branch.sh`. Never auto-stash or migrate existing changes.
+3. Run `make commit-checklist`. If any check fails, stop; do not create a commit, push, or PR.
+4. Create the commit with the validated scope and a Chinese Conventional Commit summary.
+5. Push the current task branch to its configured remote without force-push or history rewriting.
+6. Create a PR to the repository's configured default/base branch with a Chinese title and body that state the change,
    affected Skills or practices, validation results, dry-run boundaries, and unresolved risks.
-6. Verify the remote branch and PR URL/state, then report the commit, push, and PR results separately.
+7. Verify the remote branch and PR URL/state, then report the commit, push, and PR results separately.
 
 If commit, push, or PR creation fails because of conflicts, permissions, missing credentials, or remote divergence, stop
 at that step and report the exact blocker and the next user-authorized action. Never bypass a failed gate, use `--no-verify`,

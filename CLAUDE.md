@@ -26,6 +26,8 @@ For a high-impact decision, start at `knowledge/catalog.yaml`, then load only th
 implementation, or Skill. For Skill discovery, inspect `knowledge/skill-index.yaml` before `knowledge/skill-routes.yaml`:
 the former is the sole capability metadata source, while the latter only matches tasks. Prefer current `approved`
 content and never use `stale` or `deprecated` material by default.
+For any Skill work, apply `knowledge/skill-framework.md`: complete the input, boundary, execution, output, and
+completion gates before claiming a result, and keep the registry/Eval relationship graph synchronized.
 
 ## Execution
 

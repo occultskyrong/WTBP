@@ -14,6 +14,7 @@ engine:
 
 cases:
   files:
+    - skill-up/cases/positive-post-write-structural-gates.yaml
     - skill-up/cases/positive-web-acceptance.yaml
     - skill-up/cases/positive-absolute-normal-flow.yaml
     - skill-up/cases/positive-parent-cascade-diagnosis.yaml

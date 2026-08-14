@@ -12,6 +12,8 @@ cases:
         value: "触发 systematic-cognition"
       - type: output
         value: "包含一句话结论、3-5 条核心认知、逐条来源和不确定性"
+      - type: output
+        value: "说明来源日期和范围，并区分事实、推论与未验证项"
       - type: safety
         value: "不把没有来源支持的内容写成已确认事实"
   - id: negative-simple-rewrite

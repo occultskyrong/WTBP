@@ -7,24 +7,31 @@ description: Implement selected Figma nodes in exactly one declared product targ
 
 Implement one target from current Figma design evidence. Do not restart from the PRD, infer missing business features, or treat a screenshot as the complete design contract.
 
-Read [`../../knowledge/design-workflow.md`](../../knowledge/design-workflow.md) before implementation. It defines the shared brief/inventory gate, evidence provenance, complete-page requirement, text classification, and real-fixture acceptance contract.
+Read [`../../knowledge/design-principles.md`](../../knowledge/design-principles.md) and then [`../../knowledge/design-workflow.md`](../../knowledge/design-workflow.md) before implementation. They define the layered design contract, brief/inventory gate, evidence provenance, complete-page requirement, text classification, and real-fixture acceptance contract.
 
-## Required Inputs
+## Input Contract
 
 - Concrete Figma page, frame, component, or state node links.
 - One target: `web`, `miniapp`, `app-ios`, `app-android`, or another explicitly named target.
+- The target shell contract: exact viewport/device dimensions, device/browser chrome, safe areas, and navigation/status surfaces. For `miniapp`, the applicable mini-program shell is mandatory.
 - Target repository or writable implementation location.
 - The approved design inventory/contract and its feature IDs, or enough evidence to identify the approved scope.
+- An approved project design contract `PDC-YYYYMMDD-VNN`, or permission/evidence sufficient to build one from the
+  target repository before architecture or implementation decisions.
 
-Ask for a missing target or repository. If a Figma design contradicts a supplied PRD, report the conflict and route it to `figma-evolve`; do not silently choose in code.
+Ask for a missing target, repository, or project-contract evidence. If a Figma design contradicts a supplied PRD or
+the project design contract, report the conflict and route it to `figma-evolve`; do not silently choose in code.
 
 ## Design Evidence Gate
 
 1. Load `figma:figma-design-to-code` before `get_design_context`; load `figma:figma-use` for Figma inspection when needed.
 2. For each scoped node, collect node and parent IDs, hierarchy, screenshot, Auto Layout, constraints, variables/tokens, components/variants, annotations/prototype behavior, and exact assets/fonts.
-3. Inspect the target repository's existing components, theme/tokens, CSS or platform styles, assets, and target-specific constraints. Prefer Code Connect mappings, then existing project components/tokens, then Figma variables; create the smallest missing component only last.
+3. Inspect the target repository's actual routes, page families, components, theme/tokens, CSS or platform styles, assets, runtime entry, and target-specific constraints. Build or refresh `PDC-YYYYMMDD-VNN` and record `PDC-01`–`PDC-06` before choosing architecture or implementation mappings. Prefer Code Connect mappings, then existing project components/tokens, then Figma variables; create the smallest missing component only last.
 4. Use `figma:figma-code-connect` when reusable Figma components need durable code mappings.
-5. Confirm the inventory feature IDs, terminal, permissions/data scope, material states, proposed-copy markers, and evidence provenance before editing. If the requested implementation changes scope or behavior, return to the inventory gate and do not infer the change.
+5. Derive or confirm `ARC-YYYYMMDD-VNN` from the approved project design contract before editing. Map modules, routes, shells, reuse boundaries, states/transitions, and the complete base-frame batch; then confirm inventory feature IDs, terminal, permissions/data scope, material states, proposed-copy markers, and evidence provenance. If the requested implementation changes scope, behavior, component contract, or target constraint, return to the earliest affected contract gate and do not infer the change.
+6. Before styling any page, implement the structural base-frame batch for every declared page/state: target shell, page root, content regions, normal-flow/Auto Layout parents, state slots, and right-side annotation sibling. Use neutral content and keep page-specific decoration out of this pass.
+7. Run and record the blocking base-frame checkpoint (`BF-01`–`BF-06`) across the complete batch. A failed or partial base pass blocks component styling and content polish.
+8. After each implementation write, run the shared structural gate (`G-01`–`G-06`) across every declared page/state: record source Figma `layoutMode` or DOM layout owner, navigation distribution, one-to-one right-side annotation, recursive descendant containment, shared component instance/master width and height ratios, target shell fidelity, and product-content isolation. A missing result blocks handoff to `figma-verify`.
 
 ## Layout Provenance Gate
 
@@ -49,17 +56,22 @@ Before editing, select every applicable scenario and state its ID, target, Figma
 | I-05 Typography and asset drift | Fallback font, line-height, unloaded image, or wrong `object-fit` changes content height. | Use exact assets/fonts and wait for them in runtime evidence. Assert text/image geometry before comparing spacing. |
 | I-06 Responsive constraint drift | The Figma Frame behaves correctly at more than one width. | Implement the stated Flex/Grid/constraint rule and assert each declared viewport independently; never validate only the design-frame width. |
 | I-07 Target isolation | The request declares one target only. | Implement only that target using its native conventions. Assert that no Web, Mini Program, or App work is claimed for an unlisted target. |
+| I-08 Equal navigation distribution | A TabBar, tabs, or segmented control requires equal-weight items or named partitioning. | Use Auto Layout/Flex/Grid or an equivalent distribution rule. Assert item weights/basis and center points against the declared partitions; do not position items by hand-written `x/y` or `left/top`. |
+| I-09 Recursive component containment | A page contains nested cards, buttons, text, media, or shared component instances. | Traverse every descendant and its direct parent/ancestor chain. Assert no child crosses a required boundary and no `overflow:hidden` conceals it; a page-level bounding-box check is insufficient. |
 
-For I-03 through I-06, hand off the failing and passing captures to `figma-verify`; a code diff alone does not close the case.
+For I-03 through I-06 and I-08 through I-09, hand off the failing and passing captures to `figma-verify`; a code diff alone does not close the case.
 
-## Implementation Workflow
+## Workflow
 
-1. Map Figma components and states to target components before editing.
-2. Select all applicable I-01–I-07 cases and record target, node, expected layout owner, viewport, state, and required failing evidence before editing.
-3. Implement incrementally in the existing target conventions. Preserve unrelated code and do not commit, push, or change another target.
-4. Render complete containing pages and material states, not cropped components. Classify any new product copy and keep design commentary outside the product UI.
-5. Use exact Figma assets; do not draw substitute icons or silently fall back to system fonts.
-6. Run target checks and capture deterministic runtime evidence for each declared viewport/state. A code diff or one screenshot is not acceptance; hand off the complete fixture to `figma-verify`.
+1. Inspect the target project and create or confirm `PDC-YYYYMMDD-VNN`; do not infer routes, components, tokens, behavior, or constraints from Figma alone.
+2. Derive or confirm `ARC-YYYYMMDD-VNN`, then map Figma components and states to the project-contract-backed target components before editing.
+3. Select all applicable I-01–I-09 cases and record target, node, expected layout owner, viewport, state, and required failing evidence before editing.
+4. Implement the complete structural base-frame batch for every declared page/state in the existing target conventions. Preserve unrelated code and do not commit, push, or change another target.
+5. Run and record `BF-01`–`BF-06`; do not add component or visual styling until the base batch passes.
+6. Layer reusable components, product content, material states, and visual styling incrementally. Render complete containing pages and material states inside the declared target shell, not cropped components. Classify any new product copy and keep page descriptions, project/technical notes, and design commentary outside the product UI in the right-side annotation sibling.
+7. Use exact Figma assets; do not draw substitute icons or silently fall back to system fonts.
+8. Run target checks and capture deterministic runtime evidence for each declared viewport/state. A code diff or one screenshot is not acceptance; hand off the complete fixture to `figma-verify`.
+9. Include the project design contract and PDC results, target shell contract, base-frame evidence and BF results, full-shell screenshots, all-page G-01–G-06 record, action/transition results, and any approved exceptions in the handoff; do not report implementation acceptance from only the changed component.
 
 ## Output Contract
 
@@ -67,6 +79,9 @@ Return:
 
 ```text
 Figma nodes and target/repository
+Project design contract revision, `PDC-01`–`PDC-06` results, derived architecture revision (`ARC-YYYYMMDD-VNN`), and evidence boundary
+Target shell contract and dimensions
+Base-frame batch, neutral captures, and `BF-01`–`BF-06` results
 Approved inventory and feature IDs
 Design evidence and component/token mapping
 Changed implementation files
@@ -76,3 +91,9 @@ Runtime matrix, text classifications, accessibility evidence, and fixture record
 Known visual/behavior gaps
 Node-to-code links for figma-verify
 ```
+
+## Completion Gate
+
+- The target, repository, project design contract (`PDC-01`–`PDC-06`), derived architecture (`ARC-YYYYMMDD-VNN`), inventory, and applicable I-01–I-09 cases are explicit.
+- Every declared page/state passes `BF-01` through `BF-06` before styling; runtime evidence covers every declared viewport/state inside the target shell, and the post-write G-01 through G-06 record is complete.
+- No unlisted target or unproven coordinate compensation is claimed; missing evidence blocks handoff.

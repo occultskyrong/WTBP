@@ -8,6 +8,11 @@ description: 评估一个 Agent Skill 的结构、触发边界、行为效果、
 这个 Skill 负责组织评测，不替代目标 Skill 的功能，也不把一次成功运行当作质量证明。
 本 Skill 的本地快捷别名为 `ske`；别名不改变规范名称 `skill-evaluation`，也不改变评测目录。
 
+## 输入契约
+
+- 目标 Skill ID、版本或提交、关联 Practice、评测范围和可用 Runner。
+- 任一项缺失时，先报告缺失边界，再给出质量结论。
+
 ## 工作流
 
 1. 确认目标 Skill、版本或提交、关联 Practice、评测范围和可用 Runner；缺少这些信息时先列出缺口。
@@ -47,3 +52,9 @@ make skill-eval SKILL_ID=<skill-id>
 
 评测目录存在 Runner 原生配置时，默认执行该 Runner；也可以通过 `SKILL_EVAL_CONFIG` 指定其他配置。
 没有 Runner 配置时，只完成契约校验并明确报告未运行行为评测。
+
+## 完成门禁
+
+- 已通过登记的 Eval、用例、Runner、门槛和安全边界的结构校验。
+- 已覆盖正向、反向、边界和必要对抗用例；行为结果写明重复次数和基线限制。
+- 契约 dry-run 不能报告为行为批准；缺少 Runner 证据时结论保持 `candidate` 或 `improve`。

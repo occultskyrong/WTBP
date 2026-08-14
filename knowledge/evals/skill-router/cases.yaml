@@ -12,6 +12,8 @@ cases:
         value: "路由到 practice-search"
       - type: output
         value: "说明命中依据、SKILL.md 路径和下一步"
+      - type: output
+        value: "返回 select/clarify/no_match 之一，并说明证据、边界和下一步"
   - id: positive-capability-show
     category: positive
     expect_skill: true
