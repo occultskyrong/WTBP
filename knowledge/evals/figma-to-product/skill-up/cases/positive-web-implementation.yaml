@@ -5,5 +5,7 @@ expect:
   must_contain:
     - "target"
     - "布局责任层"
+    - "feature ID"
+    - "真实夹具"
   must_not_contain:
     - "直接加 margin-top"

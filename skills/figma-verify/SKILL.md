@@ -7,11 +7,14 @@ description: Verify a Figma node against a running implementation for only the u
 
 Validate actual implementation evidence against current Figma design evidence. This Skill does not assume every delivery includes Web and Mini Program; verify only declared targets.
 
+Read `../../knowledge/design-workflow.md` before verification. It is the shared contract for scope, evidence precedence, inventory approval, complete-page coverage, annotation geometry, text classification, accessibility, and real-fixture acceptance.
+
 ## Required Inputs
 
 - Concrete Figma node links for the page, state, or component under review.
 - At least one declared target and its runnable product, preview, or repository.
 - Acceptance matrix: viewport/device and material states. Use PRD values when provided; otherwise request only the missing acceptance dimension.
+- The approved design inventory and stable feature IDs. If no approved inventory exists, reconstruct the smallest inventory from the authoritative requirement and record it as `Unverified` until approval; do not claim acceptance for unapproved scope.
 - Mode: `report` by default; `fix` only when the user explicitly authorizes scoped implementation changes.
 
 ## Evidence and Matrix Gate
@@ -19,7 +22,9 @@ Validate actual implementation evidence against current Figma design evidence. T
 1. Load the appropriate Figma inspection Skill and capture current Figma screenshots, hierarchy, tokens, constraints, components, and target node IDs.
 2. Build a target matrix. A target is valid only with applicable device/viewport, states, and runtime evidence. `figma-only` checks Figma completeness without implementation parity.
 3. Stabilize each implementation capture: correct viewport/device, loaded fonts and assets, deterministic data where possible, and no transient animation state.
-4. Compare structure, layout, and visual result. A page screenshot is necessary but not sufficient.
+4. Confirm the approved inventory and feature IDs are covered. Verify the complete containing page and all material states, not only a cropped component; when annotations are part of the artifact, verify the standalone right-side annotation block and its geometry.
+5. Classify every visible string as verified product copy, `Copy for review`, design commentary outside the artifact, or unsupported copy removed. Record provenance for verified copy and do not silently turn proposals into product requirements.
+6. Compare structure, layout, and visual result. A page screenshot is necessary but not sufficient.
 
 ## Layout Diagnosis Gate
 
@@ -69,16 +74,23 @@ changed files or Figma nodes, rerun result, human-review result
 
 Prompt-level cases prove that the agent follows the workflow. They do **not** prove a particular CSS implementation is fixed. Promote a case to solved only with this real-fixture evidence.
 
+## Acceptance Gate
+
+An acceptance record is complete only when it includes the inventory/feature IDs, target matrix, complete-page and material-state screenshots, expected-versus-actual geometry, annotation bounds when applicable, text classifications and provenance, accessibility checks (contrast, non-color status, and keyboard/focus behavior for HTML), the first divergent layout owner, and the rerun result after any authorized fix. A prompt, generated code, node creation, static check, one screenshot, or Skill-Eval dry run is not acceptance evidence.
+
 ## Output Contract
 
 Return:
 
 ```text
 Figma nodes, targets, matrix, and mode
+Approved inventory version and covered feature IDs
 Screenshots and deterministic capture conditions
 Pass/fail by target, viewport/device, and state
 Mismatch classification and first divergent layout owner
 Expected versus actual geometry/style evidence
+Annotation geometry, text classifications/provenance, and accessibility result
+Real-fixture acceptance record and rerun result
 Fixes made only in fix mode
 Human-review items, unresolved evidence, and next action
 ```

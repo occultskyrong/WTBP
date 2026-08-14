@@ -27,6 +27,12 @@
 完整能力地图见 [`docs/skill-catalog.md`](skill-catalog.md)。不要手工扩写上表来描述能力；更新时修改
 `knowledge/skill-index.yaml` 并由校验确认总览同步。
 
+设计类任务按责任边界分为 `prd-to-figma`（从需求形成设计产物）、`figma-evolve`（在既有 Figma 上有范围演进）、
+`figma-to-product`（针对单一 target 实现）和 `figma-verify`（运行证据与视觉验收）。四个 Skill 共享同一套
+简报、证据优先级、版本化清单审批、完整页面/状态、右侧注释、文案分类、几何与可访问性验收规则；规则详见
+[`knowledge/design-workflow.zh-CN.md`](../knowledge/design-workflow.zh-CN.md)。不要把一次截图、节点创建或
+Skill-Eval dry-run 当作真实视觉验收。
+
 ## 统一入口
 
 当不确定应该使用哪个 Skill 时，先运行统一入口，而不是加载全部 Skill：

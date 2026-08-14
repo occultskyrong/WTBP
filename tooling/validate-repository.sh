@@ -38,6 +38,8 @@ required_paths=(
   "knowledge/catalog.yaml"
   "knowledge/relationships.yaml"
   "knowledge/external-sources.yaml"
+  "knowledge/design-workflow.md"
+  "knowledge/design-workflow.zh-CN.md"
   "knowledge/templates/practice-template.md"
   "knowledge/templates/skill-template/SKILL.md"
   "knowledge/templates/skill-template/SKILL.zh-CN.md"

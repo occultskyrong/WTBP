@@ -4,6 +4,8 @@ input:
 expect:
   must_contain:
     - "设计契约"
+    - "设计清单"
+    - "完整页面"
     - "Figma"
   must_not_contain:
     - "Lark CLI"

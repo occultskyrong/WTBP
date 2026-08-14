@@ -7,11 +7,14 @@ description: Implement selected Figma nodes in exactly one declared product targ
 
 Implement one target from current Figma design evidence. Do not restart from the PRD, infer missing business features, or treat a screenshot as the complete design contract.
 
+Read [`../../knowledge/design-workflow.md`](../../knowledge/design-workflow.md) before implementation. It defines the shared brief/inventory gate, evidence provenance, complete-page requirement, text classification, and real-fixture acceptance contract.
+
 ## Required Inputs
 
 - Concrete Figma page, frame, component, or state node links.
 - One target: `web`, `miniapp`, `app-ios`, `app-android`, or another explicitly named target.
 - Target repository or writable implementation location.
+- The approved design inventory/contract and its feature IDs, or enough evidence to identify the approved scope.
 
 Ask for a missing target or repository. If a Figma design contradicts a supplied PRD, report the conflict and route it to `figma-evolve`; do not silently choose in code.
 
@@ -21,6 +24,7 @@ Ask for a missing target or repository. If a Figma design contradicts a supplied
 2. For each scoped node, collect node and parent IDs, hierarchy, screenshot, Auto Layout, constraints, variables/tokens, components/variants, annotations/prototype behavior, and exact assets/fonts.
 3. Inspect the target repository's existing components, theme/tokens, CSS or platform styles, assets, and target-specific constraints. Prefer Code Connect mappings, then existing project components/tokens, then Figma variables; create the smallest missing component only last.
 4. Use `figma:figma-code-connect` when reusable Figma components need durable code mappings.
+5. Confirm the inventory feature IDs, terminal, permissions/data scope, material states, proposed-copy markers, and evidence provenance before editing. If the requested implementation changes scope or behavior, return to the inventory gate and do not infer the change.
 
 ## Layout Provenance Gate
 
@@ -51,9 +55,11 @@ For I-03 through I-06, hand off the failing and passing captures to `figma-verif
 ## Implementation Workflow
 
 1. Map Figma components and states to target components before editing.
-2. Implement incrementally in the existing target conventions. Preserve unrelated code and do not commit, push, or change another target.
-3. Use exact Figma assets; do not draw substitute icons or silently fall back to system fonts.
-4. Run the target's relevant local checks and capture target-appropriate runtime evidence. Hand off visual acceptance to `figma-verify`.
+2. Select all applicable I-01–I-07 cases and record target, node, expected layout owner, viewport, state, and required failing evidence before editing.
+3. Implement incrementally in the existing target conventions. Preserve unrelated code and do not commit, push, or change another target.
+4. Render complete containing pages and material states, not cropped components. Classify any new product copy and keep design commentary outside the product UI.
+5. Use exact Figma assets; do not draw substitute icons or silently fall back to system fonts.
+6. Run target checks and capture deterministic runtime evidence for each declared viewport/state. A code diff or one screenshot is not acceptance; hand off the complete fixture to `figma-verify`.
 
 ## Output Contract
 
@@ -61,10 +67,12 @@ Return:
 
 ```text
 Figma nodes and target/repository
+Approved inventory and feature IDs
 Design evidence and component/token mapping
 Changed implementation files
 Layout owners and approved absolute-position cases
 Checks and screenshots completed
+Runtime matrix, text classifications, accessibility evidence, and fixture record
 Known visual/behavior gaps
 Node-to-code links for figma-verify
 ```
