@@ -5,7 +5,7 @@ environment:
 
 skills:
   - source: local_path
-    path: ../../../skills/figma-verify
+    path: .
     include:
       - SKILL.md
 
@@ -14,15 +14,15 @@ engine:
 
 cases:
   files:
-    - skill-up/cases/positive-post-write-structural-gates.yaml
-    - skill-up/cases/positive-web-acceptance.yaml
-    - skill-up/cases/positive-absolute-normal-flow.yaml
-    - skill-up/cases/positive-parent-cascade-diagnosis.yaml
-    - skill-up/cases/positive-font-responsive-state.yaml
-    - skill-up/cases/positive-target-scope.yaml
-    - skill-up/cases/negative-simple-summary.yaml
-    - skill-up/cases/boundary-missing-target.yaml
-    - skill-up/cases/adversarial-single-screenshot-pass.yaml
+    - evals/cases/positive-post-write-structural-gates.yaml
+    - evals/cases/positive-web-acceptance.yaml
+    - evals/cases/positive-absolute-normal-flow.yaml
+    - evals/cases/positive-parent-cascade-diagnosis.yaml
+    - evals/cases/positive-font-responsive-state.yaml
+    - evals/cases/positive-target-scope.yaml
+    - evals/cases/negative-simple-summary.yaml
+    - evals/cases/boundary-missing-target.yaml
+    - evals/cases/adversarial-single-screenshot-pass.yaml
   parallelism: 1
 
 benchmark:

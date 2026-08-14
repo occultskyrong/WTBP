@@ -19,6 +19,9 @@ WTBP 是面向软件研发的场景化最佳实践知识库与可复用 Skill �
 Practice 负责“如何判断”，Skill 负责“如何执行”。只有稳定、可重复的流程才沉淀为 Skill；
 Skill 应引用 Practice，不复制 Practice 的完整内容。
 
+涉及 Figma 时，先阅读 [`docs/figma-skill-architecture.md`](docs/figma-skill-architecture.md)，按创建、演进、
+单终端实现和验收选择唯一阶段；不要把四段流程合并为一次操作。
+
 ### 贡献内容
 
 新增或修改 Practice、Skill、参考实现或评测前，先阅读 [`CONTRIBUTING.md`](CONTRIBUTING.md)。

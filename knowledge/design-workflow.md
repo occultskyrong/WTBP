@@ -55,7 +55,8 @@ The contract must record:
 2. **Surface inventory (`PDC-02`)** — existing routes/entries, page families, states, navigation shells, viewport/device
    targets, and the owning feature or module for each surface.
 3. **Foundations (`PDC-03`)** — reusable components/variants, tokens/variables, typography, assets, icons, layout
-   conventions, and their source paths or Figma node IDs.
+   conventions, and their source paths or Figma node IDs. Record the existing Icon library/source, semantic naming,
+   supported sizes/styles/states, ownership/license, and any unknown or conflicting family before reuse.
 4. **Behavior and constraints (`PDC-04`)** — permissions, data/API boundaries, actions/transitions, responsive rules,
    accessibility requirements, shell/safe-area limits, and known platform restrictions.
 5. **Reuse and change boundary (`PDC-05`)** — what is `Existing — reuse`, `Existing — modify`, `New`, `Conflict`, or
@@ -105,6 +106,40 @@ Each inventory row includes feature name, status, terminal/user, expected pages,
 
 Always include a visible conflict/decision section, even when it says no material conflict was found. Ask the user to approve the named inventory version. Approval covers only that version and its rows; separately listed unresolved blocking decisions remain unresolved. Any scope, row, conflict resolution, or blocking-decision change creates a new inventory revision. Do not mutate a visual artifact until the current inventory is approved and all blocking decisions are resolved.
 
+### Visual asset and Icon gate
+
+Only after the current inventory is approved, build `ICON-YYYYMMDD-VNN` from actual project/Figma evidence. Use the
+[Icon and visual asset inventory template](templates/icon-asset-inventory-template.md). It is a reusable asset record,
+not a page annotation: every Icon used by the inventory's approved pages/states must be extracted into its own semantic
+ID and mapped to a reusable component or approved source.
+
+The blocking Icon asset gate is:
+
+1. **Source and ownership (`IA-01`)** — inspect project/Figma Icon libraries, source paths/nodes, license/permission,
+   and freshness; never infer ownership from a screenshot.
+2. **Semantic extraction (`IA-02`)** — map every page Icon to a semantic `ICON-*` ID; page-local vectors, emoji,
+   text glyphs, screenshots, and unapproved third-party sets are not reusable Icon assets.
+3. **Size and family (`IA-03`)** — define only the required 16/20/24/32 variants by terminal role. Keep a vector
+   master, grid/pixel alignment, outline/filled rule, stroke/cap/join/corner rule, and optical-boundary rule. Use
+   `48px+` for illustration/empty-state artwork rather than normal UI Icons. When direct scaling changes optical
+   balance, create a separately corrected variant instead of stretching one source.
+4. **State and token mapping (`IA-04`)** — record default, selected/active, disabled, destructive, inverse, and
+   loading variants only when applicable, with color tokens and dark/inverse behavior; do not hard-code colors.
+5. **Missing-Icon design (`IA-05`)** — design every missing Icon as an independent reusable component before page
+   use. Compare it with the approved family at every required size and record reviewer decision and component/node.
+6. **Implementation mapping (`IA-06`)** — map each Figma and target-product instance to the same Icon ID, component,
+   size, state, and exact asset/export; a visually similar substitute does not pass.
+7. **Rendered fidelity (`IA-07`)** — inspect required sizes/states in the declared shell for pixel alignment, optical
+   balance, contrast, touch-target separation, clipping, and fallback behavior.
+
+Also record coupled asset readiness for fonts (license/weights/fallback/loading), logo/brand marks (approved variants
+and no-redraw rule), image/illustration (source/rights/crop/density), and material motion (trigger/reduced-motion or
+static fallback). These are `N/A` only when they are not used by the approved scope.
+
+Missing source, unapproved family, unverified visual asset, or unmapped page Icon blocks page-specific styling,
+implementation handoff, and acceptance. For genuinely new or `figma-only` work, record the absent project library as
+`Unverified`; new Icons remain reviewable candidates until the Icon inventory is approved.
+
 ## 6. Artifact organization and review unit
 
 After approval, assign a design batch `YYYY-MM-DD-VNN` using the actual creation/revision date and the next unused revision. Organize:
@@ -130,7 +165,7 @@ Run the following blocking checkpoint across the complete base-frame batch:
 5. **State skeleton (`BF-05`)** — all material states and transition slots in the approved matrix are represented without inventing behavior or polishing only one page.
 6. **Review separation (`BF-06`)** — every base frame already has its standalone right-side annotation sibling, and the product frame contains no design/project/technical/acceptance commentary.
 
-Record the base-frame IDs, shell dimensions, layout-owner evidence, neutral screenshots, and all `BF-01`–`BF-06` results. A failed, partial, or unverified checkpoint blocks upper-layer styling. Once it passes, layer shared components, verified/proposed product copy, state visuals, and page-specific styling in separate write batches; rerun the applicable base and shared gates after structural changes.
+Record the base-frame IDs, shell dimensions, layout-owner evidence, neutral screenshots, and all `BF-01`–`BF-06` results. A failed, partial, or unverified checkpoint blocks upper-layer styling. Once it passes, layer approved shared components, approved Icon inventory entries, verified/proposed product copy, state visuals, and page-specific styling in separate write batches; rerun the applicable base and shared gates after structural changes.
 
 After every visual write batch, run the post-write structural gate across **all** product page/state frames in the target artifact, not only the frames that were edited. Do not perform another write or report completion until the gate passes or an approved exception is recorded:
 
@@ -168,13 +203,14 @@ Acceptance requires structural, rendered, and provenance evidence for the actual
 6. run and record `G-04` for every shared component instance/master width and height ratio, including approved deviations;
 7. run and record `G-05` for the target shell, exact dimensions, device/browser chrome, safe areas, and full-frame capture;
 8. run and record `G-06` for product-content isolation and the absence of descriptive/technical/review text in the product frame;
-9. confirm complete page context and the correct platform shell;
-10. verify fields, filters, enumerations, permissions, actions, state transitions, recovery paths, sorting/pagination, exceptions, and provenance; mark unknowns `Unverified`;
-11. record every in-page text classification and matching proposed-copy review entry;
-12. capture rendered screenshots at stated scales and inspect overlap, clipping, collisions, hierarchy, states, and primary actions;
-13. check accessibility evidence where applicable: normal text contrast at least `4.5:1`, large text and essential non-text UI at least `3:1`, status not conveyed by color alone, and visible focus/keyboard order for HTML;
-14. verify prototype links or runtime action transitions against the approved page/state/transition matrix;
-15. rerun the complete audit after every visual fix.
+9. run and record `IA-01`–`IA-07` for every Icon and coupled visual asset used by the approved scope;
+10. confirm complete page context and the correct platform shell;
+11. verify fields, filters, enumerations, permissions, actions, state transitions, recovery paths, sorting/pagination, exceptions, and provenance; mark unknowns `Unverified`;
+12. record every in-page text classification and matching proposed-copy review entry;
+13. capture rendered screenshots at stated scales and inspect overlap, clipping, collisions, hierarchy, states, and primary actions;
+14. check accessibility evidence where applicable: normal text contrast at least `4.5:1`, large text and essential non-text UI at least `3:1`, status not conveyed by color alone, and visible focus/keyboard order for HTML;
+15. verify prototype links or runtime action transitions against the approved page/state/transition matrix;
+16. rerun the complete audit after every visual fix.
 
 A prompt response, generated code, node-creation success, static check, one plausible screenshot, or Skill-Up dry-run is not artifact acceptance evidence. For a solved implementation/visual case, retain the Figma/preview link, target, viewport/device, state, deterministic data/capture conditions, baseline screenshot, expected reference, post-fix screenshot, first divergent layout owner, changed files/nodes, rerun result, and human-review result.
 

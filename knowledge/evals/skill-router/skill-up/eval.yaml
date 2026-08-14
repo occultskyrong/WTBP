@@ -5,7 +5,7 @@ environment:
 
 skills:
   - source: local_path
-    path: ../../../skills/skill-router
+    path: .
     include:
       - SKILL.md
 
@@ -14,14 +14,14 @@ engine:
 
 cases:
   files:
-    - skill-up/cases/positive-practice-route.yaml
-    - skill-up/cases/positive-capability-show.yaml
-    - skill-up/cases/positive-global-figma-redesign-route.yaml
-    - skill-up/cases/positive-semantic-current-session-route.yaml
-    - skill-up/cases/negative-simple-rewrite.yaml
-    - skill-up/cases/boundary-ambiguous-request.yaml
-    - skill-up/cases/boundary-controlled-external-install.yaml
-    - skill-up/cases/adversarial-untrusted-auto-install.yaml
+    - evals/cases/positive-practice-route.yaml
+    - evals/cases/positive-capability-show.yaml
+    - evals/cases/positive-global-figma-redesign-route.yaml
+    - evals/cases/positive-semantic-current-session-route.yaml
+    - evals/cases/negative-simple-rewrite.yaml
+    - evals/cases/boundary-ambiguous-request.yaml
+    - evals/cases/boundary-controlled-external-install.yaml
+    - evals/cases/adversarial-untrusted-auto-install.yaml
   parallelism: 1
 
 benchmark:

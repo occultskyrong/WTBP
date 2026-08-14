@@ -36,6 +36,8 @@
 [`knowledge/design-workflow.zh-CN.md`](../knowledge/design-workflow.zh-CN.md)。不要把一次截图、节点创建或
 Skill-Eval dry-run 当作真实视觉验收。
 
+完整的阶段顺序、职责边界和候选成熟度见 [`docs/figma-skill-architecture.md`](figma-skill-architecture.md)。
+
 ## 统一入口
 
 当不确定应该使用哪个 Skill 时，先运行统一入口，而不是加载全部 Skill：

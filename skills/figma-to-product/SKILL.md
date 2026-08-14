@@ -18,6 +18,7 @@ Read [`../../knowledge/design-principles.md`](../../knowledge/design-principles.
 - The approved design inventory/contract and its feature IDs, or enough evidence to identify the approved scope.
 - An approved project design contract `PDC-YYYYMMDD-VNN`, or permission/evidence sufficient to build one from the
   target repository before architecture or implementation decisions.
+- The approved `ICON-YYYYMMDD-VNN` inventory, or evidence sufficient to rebuild its semantic Icon mapping before implementation.
 
 Ask for a missing target, repository, or project-contract evidence. If a Figma design contradicts a supplied PRD or
 the project design contract, report the conflict and route it to `figma-evolve`; do not silently choose in code.
@@ -29,9 +30,10 @@ the project design contract, report the conflict and route it to `figma-evolve`;
 3. Inspect the target repository's actual routes, page families, components, theme/tokens, CSS or platform styles, assets, runtime entry, and target-specific constraints. Build or refresh `PDC-YYYYMMDD-VNN` and record `PDC-01`–`PDC-06` before choosing architecture or implementation mappings. Prefer Code Connect mappings, then existing project components/tokens, then Figma variables; create the smallest missing component only last.
 4. Use `figma:figma-code-connect` when reusable Figma components need durable code mappings.
 5. Derive or confirm `ARC-YYYYMMDD-VNN` from the approved project design contract before editing. Map modules, routes, shells, reuse boundaries, states/transitions, and the complete base-frame batch; then confirm inventory feature IDs, terminal, permissions/data scope, material states, proposed-copy markers, and evidence provenance. If the requested implementation changes scope, behavior, component contract, or target constraint, return to the earliest affected contract gate and do not infer the change.
-6. Before styling any page, implement the structural base-frame batch for every declared page/state: target shell, page root, content regions, normal-flow/Auto Layout parents, state slots, and right-side annotation sibling. Use neutral content and keep page-specific decoration out of this pass.
-7. Run and record the blocking base-frame checkpoint (`BF-01`–`BF-06`) across the complete batch. A failed or partial base pass blocks component styling and content polish.
-8. After each implementation write, run the shared structural gate (`G-01`–`G-06`) across every declared page/state: record source Figma `layoutMode` or DOM layout owner, navigation distribution, one-to-one right-side annotation, recursive descendant containment, shared component instance/master width and height ratios, target shell fidelity, and product-content isolation. A missing result blocks handoff to `figma-verify`.
+6. Before implementation styling, build or confirm `ICON-YYYYMMDD-VNN` and `IA-01`–`IA-07`. Map every Figma Icon instance to its semantic component, size, style, state, exact source/export, and target implementation. Reuse the project library first; independently design a missing Icon in the approved family before use, never as a page-local substitute.
+7. Before styling any page, implement the structural base-frame batch for every declared page/state: target shell, page root, content regions, normal-flow/Auto Layout parents, state slots, and right-side annotation sibling. Use neutral content and keep page-specific decoration out of this pass.
+8. Run and record the blocking base-frame checkpoint (`BF-01`–`BF-06`) across the complete batch. A failed or partial base pass blocks component styling and content polish.
+9. After each implementation write, run the shared structural gate (`G-01`–`G-06`) across every declared page/state: record source Figma `layoutMode` or DOM layout owner, navigation distribution, one-to-one right-side annotation, recursive descendant containment, shared component instance/master width and height ratios, target shell fidelity, and product-content isolation. A missing result blocks handoff to `figma-verify`.
 
 ## Layout Provenance Gate
 
@@ -65,13 +67,14 @@ For I-03 through I-06 and I-08 through I-09, hand off the failing and passing ca
 
 1. Inspect the target project and create or confirm `PDC-YYYYMMDD-VNN`; do not infer routes, components, tokens, behavior, or constraints from Figma alone.
 2. Derive or confirm `ARC-YYYYMMDD-VNN`, then map Figma components and states to the project-contract-backed target components before editing.
-3. Select all applicable I-01–I-09 cases and record target, node, expected layout owner, viewport, state, and required failing evidence before editing.
-4. Implement the complete structural base-frame batch for every declared page/state in the existing target conventions. Preserve unrelated code and do not commit, push, or change another target.
-5. Run and record `BF-01`–`BF-06`; do not add component or visual styling until the base batch passes.
-6. Layer reusable components, product content, material states, and visual styling incrementally. Render complete containing pages and material states inside the declared target shell, not cropped components. Classify any new product copy and keep page descriptions, project/technical notes, and design commentary outside the product UI in the right-side annotation sibling.
-7. Use exact Figma assets; do not draw substitute icons or silently fall back to system fonts.
-8. Run target checks and capture deterministic runtime evidence for each declared viewport/state. A code diff or one screenshot is not acceptance; hand off the complete fixture to `figma-verify`.
-9. Include the project design contract and PDC results, target shell contract, base-frame evidence and BF results, full-shell screenshots, all-page G-01–G-06 record, action/transition results, and any approved exceptions in the handoff; do not report implementation acceptance from only the changed component.
+3. Confirm the `ICON-YYYYMMDD-VNN` inventory and pass `IA-01`–`IA-07` before styling. Map every instance to semantic ID, component, size, style, state, exact source/export, and target implementation; design missing Icons as independent family-consistent components.
+4. Select all applicable I-01–I-09 cases and record target, node, expected layout owner, viewport, state, and required failing evidence before editing.
+5. Implement the complete structural base-frame batch for every declared page/state in the existing target conventions. Preserve unrelated code and do not commit, push, or change another target.
+6. Run and record `BF-01`–`BF-06`; do not add component or visual styling until the base batch passes.
+7. Layer reusable components, product content, material states, and visual styling incrementally. Render complete containing pages and material states inside the declared target shell, not cropped components. Classify any new product copy and keep page descriptions, project/technical notes, and design commentary outside the product UI in the right-side annotation sibling.
+8. Use exact Figma assets and the approved Icon mappings; do not draw page-local substitute icons, change an Icon's approved size/style/state, or silently fall back to system fonts.
+9. Run target checks and capture deterministic runtime evidence for each declared viewport/state. A code diff or one screenshot is not acceptance; hand off the complete fixture to `figma-verify`.
+10. Include the project design contract and PDC results, Icon inventory/IA results, target shell contract, base-frame evidence and BF results, full-shell screenshots, all-page G-01–G-06 record, action/transition results, and any approved exceptions in the handoff; do not report implementation acceptance from only the changed component.
 
 ## Output Contract
 
@@ -80,6 +83,7 @@ Return:
 ```text
 Figma nodes and target/repository
 Project design contract revision, `PDC-01`–`PDC-06` results, derived architecture revision (`ARC-YYYYMMDD-VNN`), and evidence boundary
+Icon inventory revision, per-instance semantic mapping, and `IA-01`–`IA-07` results
 Target shell contract and dimensions
 Base-frame batch, neutral captures, and `BF-01`–`BF-06` results
 Approved inventory and feature IDs
@@ -94,6 +98,6 @@ Node-to-code links for figma-verify
 
 ## Completion Gate
 
-- The target, repository, project design contract (`PDC-01`–`PDC-06`), derived architecture (`ARC-YYYYMMDD-VNN`), inventory, and applicable I-01–I-09 cases are explicit.
+- The target, repository, project design contract (`PDC-01`–`PDC-06`), derived architecture (`ARC-YYYYMMDD-VNN`), Icon inventory (`ICON-YYYYMMDD-VNN` with `IA-01`–`IA-07`), inventory, and applicable I-01–I-09 cases are explicit.
 - Every declared page/state passes `BF-01` through `BF-06` before styling; runtime evidence covers every declared viewport/state inside the target shell, and the post-write G-01 through G-06 record is complete.
 - No unlisted target or unproven coordinate compensation is claimed; missing evidence blocks handoff.

@@ -24,6 +24,7 @@ required_paths=(
   "docs/commit-checklist.md"
   "docs/document-language-policy.md"
   "docs/skill-routing.md"
+  "docs/figma-skill-architecture.md"
   "docs/skill-catalog.md"
   "docs/github-governance.md"
   "docs/governance.md"
@@ -42,6 +43,10 @@ required_paths=(
   "knowledge/design-workflow.zh-CN.md"
   "knowledge/design-principles.md"
   "knowledge/design-principles.zh-CN.md"
+  "knowledge/templates/project-design-contract-template.md"
+  "knowledge/templates/project-design-contract-template.zh-CN.md"
+  "knowledge/templates/icon-asset-inventory-template.md"
+  "knowledge/templates/icon-asset-inventory-template.zh-CN.md"
   "knowledge/skill-framework.md"
   "knowledge/skill-framework.zh-CN.md"
   "knowledge/templates/practice-template.md"
@@ -86,6 +91,7 @@ bash -n "$repo_root/tooling/validate-repository.sh"
 bash -n "$repo_root/tooling/validate-skill-evals.sh"
 bash -n "$repo_root/tooling/validate-skill-routes.sh"
 bash -n "$repo_root/tooling/validate-skill-index.sh"
+bash -n "$repo_root/tooling/validate-ai-companions.sh"
 bash -n "$repo_root/tooling/generate-skill-catalog.sh"
 bash -n "$repo_root/tooling/test-wtbp-router.sh"
 bash -n "$repo_root/tooling/scan-secrets.sh"
@@ -171,6 +177,20 @@ while IFS= read -r reference_file; do
   fi
 done < <(rg --files "$repo_root/skills" -g '*.md' | rg '/references/[^/]+\.md$' | rg -v '\.zh-CN\.md$' || true)
 
+for design_link in \
+  'knowledge/design-workflow.md:templates/project-design-contract-template.md' \
+  'knowledge/design-workflow.md:templates/icon-asset-inventory-template.md' \
+  'knowledge/design-workflow.zh-CN.md:templates/project-design-contract-template.zh-CN.md' \
+  'knowledge/design-workflow.zh-CN.md:templates/icon-asset-inventory-template.zh-CN.md'; do
+  source_file="${design_link%%:*}"
+  target_path="${design_link#*:}"
+  if ! rg -Fq "](${target_path})" "$repo_root/$source_file"; then
+    printf '设计工作流缺少关键模板链接：%s -> %s\n' "$source_file" "$target_path" >&2
+    exit 1
+  fi
+done
+
+"$repo_root/tooling/validate-ai-companions.sh"
 "$repo_root/tooling/validate-skill-evals.sh"
 "$repo_root/tooling/validate-skill-routes.sh"
 "$repo_root/tooling/validate-skill-index.sh"

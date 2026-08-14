@@ -97,6 +97,8 @@ validate_eval() {
   awk -v value="$minimum" 'BEGIN { exit(value >= 0 && value <= 1 ? 0 : 1) }' || fail "${file#$repo_root/} 的 min_behavior_pass_rate 必须在 0 到 1 之间"
   if [[ "$runner" == "skill-up" ]]; then
     [[ -f "$eval_dir/skill-up/eval.yaml" ]] || fail "${file#$repo_root/} 声明 skill-up，但缺少 skill-up/eval.yaml"
+    [[ -L "$repo_root/skills/${skill_id}/evals" ]] || fail "Skill ${skill_id} 缺少指向其原生 skill-up 评测配置的 evals 符号链接"
+    [[ -f "$repo_root/skills/${skill_id}/evals/eval.yaml" ]] || fail "Skill ${skill_id} 的 evals/eval.yaml 不可用"
   fi
 
   for field in 评测目标 评测边界 用例与覆盖 判定标准 基线与重复运行 安全边界 验证命令; do
@@ -137,6 +139,7 @@ fi
 if [[ -n "$skill_up_bin" ]]; then
   while IFS= read -r config_file; do
     [[ -n "$config_file" ]] || continue
-    "$skill_up_bin" validate "$config_file"
+    skill_id="$(basename "$(dirname "$(dirname "$config_file")")")"
+    "$skill_up_bin" validate "$repo_root/skills/${skill_id}/evals/eval.yaml"
   done < <(find "$repo_root/knowledge/evals" -path '*/skill-up/eval.yaml' -type f -print | sort)
 fi

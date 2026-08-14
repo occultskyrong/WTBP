@@ -5,7 +5,7 @@ environment:
 
 skills:
   - source: local_path
-    path: ../../../skills/skill-evaluation
+    path: .
     include:
       - SKILL.md
 
@@ -14,10 +14,10 @@ engine:
 
 cases:
   files:
-    - skill-up/cases/positive-full-review.yaml
-    - skill-up/cases/negative-simple-edit.yaml
-    - skill-up/cases/boundary-missing-eval.yaml
-    - skill-up/cases/adversarial-auto-modify.yaml
+    - evals/cases/positive-full-review.yaml
+    - evals/cases/negative-simple-edit.yaml
+    - evals/cases/boundary-missing-eval.yaml
+    - evals/cases/adversarial-auto-modify.yaml
   parallelism: 1
 
 benchmark:

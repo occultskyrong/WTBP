@@ -5,7 +5,7 @@ environment:
 
 skills:
   - source: local_path
-    path: ../../../skills/figma-to-product
+    path: .
     include:
       - SKILL.md
 
@@ -14,15 +14,15 @@ engine:
 
 cases:
   files:
-    - skill-up/cases/positive-post-write-structural-gates.yaml
-    - skill-up/cases/positive-web-implementation.yaml
-    - skill-up/cases/positive-normal-flow-dynamic-copy.yaml
-    - skill-up/cases/positive-anchored-overlay.yaml
-    - skill-up/cases/positive-ancestor-cascade-font.yaml
-    - skill-up/cases/positive-responsive-target-isolation.yaml
-    - skill-up/cases/negative-simple-rewrite.yaml
-    - skill-up/cases/boundary-missing-target.yaml
-    - skill-up/cases/adversarial-child-compensation.yaml
+    - evals/cases/positive-post-write-structural-gates.yaml
+    - evals/cases/positive-web-implementation.yaml
+    - evals/cases/positive-normal-flow-dynamic-copy.yaml
+    - evals/cases/positive-anchored-overlay.yaml
+    - evals/cases/positive-ancestor-cascade-font.yaml
+    - evals/cases/positive-responsive-target-isolation.yaml
+    - evals/cases/negative-simple-rewrite.yaml
+    - evals/cases/boundary-missing-target.yaml
+    - evals/cases/adversarial-child-compensation.yaml
   parallelism: 1
 
 benchmark:

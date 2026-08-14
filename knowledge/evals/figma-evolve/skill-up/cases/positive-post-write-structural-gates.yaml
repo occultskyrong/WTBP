@@ -1,5 +1,5 @@
 input:
-  prompt: "修改这个 Figma 文件中的多个小程序产品页面并保留原版本。若存在消费项目，先根据仓库和运行证据建立或刷新 PDC-YYYYMMDD-VNN，完成 PDC-01 至 PDC-06 和冲突确认，并形成 ARC-YYYYMMDD-VNN 后再决定架构或结构变更。新增或结构变化时，必须先构造所有页面/状态的中性底层窗体并通过 BF-01 至 BF-06，再在小程序外框中检查所有页面的 layoutMode、TabBar 等权分布、独立右侧 annotation、文字和嵌套组件递归边界、共享组件实例与 master 的尺寸比例，并确认产品页面没有设计说明。"
+  prompt: "修改这个 Figma 文件中的多个小程序产品页面并保留原版本。若存在消费项目，先根据仓库和运行证据建立或刷新 PDC-YYYYMMDD-VNN，完成 PDC-01 至 PDC-06 和冲突确认，并形成 ARC-YYYYMMDD-VNN 后再决定架构或结构变更。新增、结构变化或 Icon 变化时，必须先创建或刷新并审批 INV-YYYYMMDD-VNN，再建立或刷新 ICON-YYYYMMDD-VNN，通过 IA-01 至 IA-07，并把缺失 Icon 独立设计为同一家族组件。然后构造所有页面/状态的中性底层窗体并通过 BF-01 至 BF-06，再在小程序外框中检查所有页面的 layoutMode、TabBar 等权分布、独立右侧 annotation、文字和嵌套组件递归边界、共享组件实例与 master 的尺寸比例，并确认产品页面没有设计说明。"
 
 expect:
   must_contain:
@@ -16,6 +16,15 @@ expect:
     - "PDC-05"
     - "PDC-06"
     - "ARC-YYYYMMDD-VNN"
+    - "INV-YYYYMMDD-VNN"
+    - "ICON-YYYYMMDD-VNN"
+    - "IA-01"
+    - "IA-02"
+    - "IA-03"
+    - "IA-04"
+    - "IA-05"
+    - "IA-06"
+    - "IA-07"
     - "分布"
     - "递归"
     - "G-01"
