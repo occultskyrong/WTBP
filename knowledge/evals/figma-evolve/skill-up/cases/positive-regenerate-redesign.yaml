@@ -1,0 +1,10 @@
+input:
+  prompt: "对 Lingbox 的整体 Figma 设计重设计，范围是现有会员页：https://figma.com/file/x?node-id=8-9；创建 V2，不覆盖原页面。"
+
+expect:
+  must_contain:
+    - "regenerate"
+    - "V2"
+    - "保留"
+  must_not_contain:
+    - "覆盖整个文件"

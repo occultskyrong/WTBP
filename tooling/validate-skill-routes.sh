@@ -22,6 +22,58 @@ catalog_has_skill() {
   ' "$repo_root/knowledge/catalog.yaml"
 }
 
+index_has_skill() {
+  local skill_id="$1"
+  awk -v skill_id="$skill_id" '
+    $0 == "  - id: " skill_id { found = 1; next }
+    found && /^  - id: / { exit }
+    END { exit(found ? 0 : 1) }
+  ' "$repo_root/knowledge/skill-index.yaml"
+}
+
+index_status() {
+  local skill_id="$1"
+  awk -v skill_id="$skill_id" '
+    $0 == "  - id: " skill_id { found = 1; next }
+    found && /^    status: / { print $2; exit }
+    found && /^  - id: / { exit }
+  ' "$repo_root/knowledge/skill-index.yaml"
+}
+
+catalog_status() {
+  local skill_id="$1"
+  awk -v skill_id="$skill_id" '
+    $0 == "  - id: " skill_id { found = 1; next }
+    found && /^    status: / { print $2; exit }
+    found && /^  - id: / { exit }
+  ' "$repo_root/knowledge/catalog.yaml"
+}
+
+catalog_path() {
+  local skill_id="$1"
+  awk -v skill_id="$skill_id" '
+    $0 == "  - id: " skill_id { found = 1; next }
+    found && /^    path: / { print $2; exit }
+    found && /^  - id: / { exit }
+  ' "$repo_root/knowledge/catalog.yaml"
+}
+
+index_lists_route() {
+  local skill_id="$1"
+  local route_id="$2"
+  awk -v skill_id="$skill_id" -v route_id="$route_id" '
+    function contains(value, needle) {
+      sub(/^\[/, "", value)
+      sub(/\]$/, "", value)
+      gsub(/[[:space:]]/, "", value)
+      return ("," value ",") ~ ("," needle ",")
+    }
+    /^  - id: / { current = $3; next }
+    current == skill_id && /^    route_ids: / { found = contains($2, route_id); exit }
+    END { exit(found ? 0 : 1) }
+  ' "$repo_root/knowledge/skill-index.yaml"
+}
+
 route_count=0
 route_ids=()
 separator=$'\034'
@@ -35,11 +87,16 @@ while IFS="$separator" read -r route_id skill_id source path status last_verifie
   [[ "$status" =~ ^(active|candidate|stale|deprecated)$ ]] || fail "路由 $route_id 的 status 无效：$status"
   [[ "$last_verified" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]] || fail "路由 $route_id 的 last_verified 无效"
   [[ -n "$install" ]] || fail "路由 $route_id 缺少 install"
+  index_has_skill "$skill_id" || fail "路由 $route_id 的 Skill 未登记在 knowledge/skill-index.yaml：$skill_id"
+  index_lists_route "$skill_id" "$route_id" || fail "路由 $route_id 未被 skill-index.yaml 的 $skill_id 引用"
+  [[ "$(index_status "$skill_id")" == "$status" ]] || fail "路由 $route_id 的 status 与 skill-index.yaml 不一致"
 
   if [[ "$source" == local ]]; then
     [[ -n "$path" ]] || fail "本地路由 $route_id 缺少 path"
     [[ -f "$repo_root/$path/SKILL.md" ]] || fail "路由 $route_id 指向不存在的本地 Skill：$path"
     catalog_has_skill "$skill_id" || fail "路由 $route_id 的 Skill 未登记在 knowledge/catalog.yaml：$skill_id"
+    [[ "$(catalog_path "$skill_id")" == "$path" ]] || fail "路由 $route_id 的 path 与 catalog 不一致"
+    [[ "$(catalog_status "$skill_id")" == "$status" ]] || fail "路由 $route_id 的 status 与 knowledge/catalog.yaml 不一致"
   else
     [[ -n "$source_url" ]] || fail "外部路由 $route_id 缺少 source_url"
     [[ -n "$version" ]] || fail "外部路由 $route_id 缺少 version"

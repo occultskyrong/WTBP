@@ -8,6 +8,11 @@ description: Evaluate an Agent Skill's structure, trigger boundaries, behavioral
 This Skill organizes evaluation. It neither replaces the target Skill's function nor treats a single successful run as proof of quality.
 Its local shortcut is `ske`; the shortcut does not change the canonical name `skill-evaluation` or the evaluation directory.
 
+## Input Contract
+
+- A target Skill ID, version or commit, related Practice, evaluation scope, and an available runner.
+- If any item is missing, report the missing boundary before producing a quality conclusion.
+
 ## Workflow
 
 1. Confirm the target Skill, version or commit, related Practice, evaluation scope, and available runner. List missing inputs before proceeding.
@@ -48,3 +53,9 @@ make skill-eval SKILL_ID=<skill-id>
 ```
 
 When a native runner configuration exists, execute that runner by default. `SKILL_EVAL_CONFIG` may select another configuration. Without runner configuration, complete contract validation only and clearly report that behavioral evaluation was not run.
+
+## Completion Gate
+
+- The registered Eval, cases, runner, threshold, and safety boundary pass structural validation.
+- Positive, negative, boundary, and required adversarial cases are represented; behavior results state repetitions and baseline limits.
+- A contract dry-run is never reported as behavioral approval; missing runner evidence keeps the conclusion at `candidate` or `improve`.

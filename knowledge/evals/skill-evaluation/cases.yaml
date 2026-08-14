@@ -12,6 +12,8 @@ cases:
         value: "区分确定性证据、模型判断和人工结论"
       - type: output
         value: "报告有 Skill / 无 Skill 基线和重复运行"
+      - type: output
+        value: "先确认目标 Skill、版本或提交、关联 Practice、评测范围和 Runner；缺失时报告边界"
   - id: negative-simple-edit
     category: negative
     expect_skill: false

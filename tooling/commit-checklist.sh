@@ -41,10 +41,17 @@ while IFS= read -r file; do
 done < <(diff_names ACMRD)
 [[ ${#changed_files[@]} -gt 0 ]] || { printf '提交执行清单：跳过（没有变更）\n'; exit 0; }
 
-printf '%s\n' '提交执行清单：1/5 仓库结构校验（make validate）'
+printf '%s\n' '提交执行清单：1/6 仓库结构校验（make validate）'
 make validate
-printf '%s\n' '提交执行清单：2/5 内容审查'
+printf '%s\n' '提交执行清单：2/6 内容审查'
 if [[ "$mode" == staged ]]; then make review-staged; else make review-range BASE_SHA="$base_ref" HEAD_SHA="$head_ref"; fi
+
+printf '%s\n' '提交执行清单：3/6 敏感信息与高风险文件扫描'
+if [[ "$mode" == staged ]]; then
+  "$repo_root/tooling/scan-secrets.sh"
+else
+  "$repo_root/tooling/scan-secrets.sh" --range "$base_ref" "$head_ref"
+fi
 
 skill_ids=()
 for file in "${changed_files[@]}"; do
@@ -58,7 +65,7 @@ for file in "${changed_files[@]}"; do
   esac
 done
 
-printf '%s\n' '提交执行清单：3/5 Skill SKE 契约评测（默认 dry-run）'
+printf '%s\n' '提交执行清单：4/6 Skill-Up 质量审查（默认 dry-run）'
 skill_eval_runs="${SKILL_EVAL_RUNS:-3}"
 [[ "$skill_eval_runs" =~ ^[3-9][0-9]*$ ]] || fail 'Skill 评测重复运行次数不得少于 3 次'
 if [[ ${#skill_ids[@]} -eq 0 ]]; then
@@ -66,13 +73,18 @@ if [[ ${#skill_ids[@]} -eq 0 ]]; then
 else
   while IFS= read -r skill_id; do
     [[ -n "$skill_id" ]] || continue
+    eval_file="knowledge/evals/${skill_id}/EVAL.md"
+    eval_runner="$(source_file "$eval_file" | awk -F': ' '$1 == "runner" { print $2; exit }')"
+    [[ "$eval_runner" == "skill-up" ]] || fail "变更 Skill ${skill_id} 必须使用 skill-up Runner，当前为 ${eval_runner:-未声明}"
+    minimum_pass_rate="$(source_file "$eval_file" | awk -F': ' '$1 == "min_behavior_pass_rate" { print $2; exit }')"
+    awk -v value="$minimum_pass_rate" 'BEGIN { exit(value >= 0.90 ? 0 : 1) }' || fail "Skill ${skill_id} 的行为通过率门槛不得低于 0.90"
     printf '  - 评测 Skill：%s\n' "$skill_id"
     output_dir="${SKILL_EVAL_OUTPUT_DIR:-$repo_root/.wtbp-evals/commit-checklist/$skill_id}"
     SKILL_EVAL_DRY_RUN="${SKILL_EVAL_DRY_RUN:-true}" SKILL_EVAL_RUNS="$skill_eval_runs" SKILL_EVAL_OUTPUT_DIR="$output_dir" make ske SKILL_ID="$skill_id"
   done < <(printf '%s\n' "${skill_ids[@]}" | sort -u)
 fi
 
-printf '%s\n' '提交执行清单：4/5 质量门禁'
+printf '%s\n' '提交执行清单：5/6 质量门禁'
 if [[ ${#skill_ids[@]} -gt 0 ]]; then
   printf '  - 契约覆盖率：100%%；最少重复运行：%s 次\n' "$skill_eval_runs"
   if [[ "${WTBP_REQUIRE_BEHAVIOR_EVAL:-false}" == true || "${SKILL_EVAL_DRY_RUN:-true}" == false ]]; then
@@ -127,38 +139,153 @@ fi
 parse_version "$current_version"; current_major="$major"; current_minor="$minor"; current_patch="$patch"
 parse_version "$base_version"; base_major="$major"; base_minor="$minor"; base_patch="$patch"
 
+is_semantic_path() {
+  case "$1" in
+    knowledge/*|skills/*|tooling/*|.githooks/*|.github/*|docs/commit-conventions.md|docs/commit-checklist.md|docs/document-language-policy.md|docs/skill-evaluation.md|docs/skill-routing.md|docs/skill-catalog.md|docs/github-governance.md|docs/governance.md|Makefile|README.md|AGENTS.md|CLAUDE.md|CONTRIBUTING.md) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
+is_new_capability_path() {
+  case "$1" in
+    skills/*/SKILL.md|knowledge/practices/*/PRACTICE.md|knowledge/evals/*/EVAL.md) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
 semantic_change=0
 new_capability=0
 for file in "${changed_files[@]}"; do
-  case "$file" in
-    skills/*/SKILL.md|knowledge/practices/*/PRACTICE.md|knowledge/evals/*/EVAL.md|knowledge/schemas/*|knowledge/catalog.yaml|knowledge/skill-index.yaml|knowledge/skill-routes.yaml|knowledge/relationships.yaml|knowledge/templates/*|tooling/*|.githooks/*|.github/*|Makefile|AGENTS.md|CLAUDE.md|CONTRIBUTING.md|docs/commit-conventions.md|docs/commit-checklist.md|docs/skill-evaluation.md|docs/skill-routing.md|docs/skill-catalog.md|docs/github-governance.md|docs/governance.md) semantic_change=1 ;;
-  esac
+  is_semantic_path "$file" && semantic_change=1
 done
 while IFS= read -r file; do
-  case "$file" in
-    skills/*/SKILL.md|knowledge/practices/*/PRACTICE.md|knowledge/evals/*/EVAL.md) new_capability=1 ;;
-  esac
+  is_new_capability_path "$file" && new_capability=1
 done < <(diff_names A)
 
-printf '%s\n' '提交执行清单：5/5 三段式版本检查'
-if [[ "$base_version" == 0.0.0 && "$current_version" == 0.1.0 ]]; then
-  printf '  - 初次建立 VERSION：%s\n' "$current_version"
-elif [[ "$current_version" == "$base_version" ]]; then
-  [[ "$semantic_change" -eq 0 ]] || fail '检测到对外规则或可复用内容变更，但 VERSION 未升级'
-  printf '  - 仅微小变更，版本保持 %s\n' "$current_version"
+check_range_version_history() {
+  [[ "$mode" == range ]] || return 0
+  git rev-parse --verify "${base_ref}^{commit}" >/dev/null 2>&1 || return 0
+
+  local commit
+  local previous_version="$base_version"
+  local next_version
+  local commit_semantic
+  local commit_new_capability
+  local changed_version
+  local file
+  local previous_major
+  local previous_minor
+  local previous_patch
+  local next_major
+  local next_minor
+  local next_patch
+
+  while IFS= read -r commit; do
+    [[ -n "$commit" ]] || continue
+    next_version="$(git show "${commit}:VERSION" 2>/dev/null | tr -d '[:space:]' || true)"
+    parse_version "$previous_version"
+    previous_major="$major"; previous_minor="$minor"; previous_patch="$patch"
+    parse_version "$next_version"
+    next_major="$major"; next_minor="$minor"; next_patch="$patch"
+
+    commit_semantic=0
+    commit_new_capability=0
+    while IFS= read -r file; do
+      is_semantic_path "$file" && commit_semantic=1
+    done < <(git diff-tree --root --no-commit-id --name-only -r "$commit")
+    while IFS= read -r file; do
+      is_new_capability_path "$file" && commit_new_capability=1
+    done < <(git diff-tree --root --no-commit-id --diff-filter=A --name-only -r "$commit")
+    changed_version="$(git diff-tree --root --no-commit-id --name-only -r "$commit" -- VERSION)"
+
+    if [[ -n "$changed_version" && "$next_version" == "$previous_version" ]]; then
+      fail "提交 ${commit} 修改了 VERSION 但版本值未变化"
+    fi
+    if [[ "$commit_semantic" -eq 1 && "$next_version" == "$previous_version" ]]; then
+      fail "提交 ${commit} 包含规范或可复用内容变更但未升级 VERSION"
+    fi
+    if [[ "$commit_semantic" -eq 0 && "$next_version" != "$previous_version" ]]; then
+      fail "提交 ${commit} 升级了 VERSION 但没有对应的规范或可复用内容变更"
+    fi
+
+    if [[ "$next_version" != "$previous_version" ]]; then
+      if [[ "$next_major" -gt "$previous_major" ]]; then
+        [[ "$next_major" -eq $((previous_major + 1)) && "$next_minor" -eq 0 && "$next_patch" -eq 0 ]] || fail "提交 ${commit} 的 MAJOR 版本跳跃或未归零"
+      elif [[ "$next_minor" -gt "$previous_minor" ]]; then
+        [[ "$next_major" -eq "$previous_major" && "$next_minor" -eq $((previous_minor + 1)) && "$next_patch" -eq 0 && "$commit_new_capability" -eq 1 ]] || fail "提交 ${commit} 的 MINOR 版本必须只递增一级并包含新增能力"
+      else
+        [[ "$next_major" -eq "$previous_major" && "$next_minor" -eq "$previous_minor" && "$next_patch" -eq $((previous_patch + 1)) ]] || fail "提交 ${commit} 的 PATCH 版本必须只递增一级"
+      fi
+    fi
+    previous_version="$next_version"
+  done < <(git rev-list --reverse --no-merges "$base_ref..$head_ref")
+
+  [[ "$previous_version" == "$current_version" ]] || fail "范围最终 VERSION 与 HEAD 不一致"
+}
+
+check_commit_messages() {
+  [[ "$mode" == range ]] || return 0
+  git rev-parse --verify "${base_ref}^{commit}" >/dev/null 2>&1 || return 0
+
+  local commit
+  local subject
+  local body
+  local changed_version
+  local parent_commit
+  local parent_major
+  local commit_major
+  while IFS= read -r commit; do
+    [[ -n "$commit" ]] || continue
+    subject="$(git show -s --format=%s "$commit")"
+    case "$subject" in
+      Merge\ *|Revert\ *) continue ;;
+    esac
+    [[ "$(printf '%s' "$subject" | wc -m | tr -d ' ')" -le 72 ]] || fail "提交 ${commit} 标题超过 72 个字符"
+    printf '%s\n' "$subject" | LC_ALL=C grep -Eq '^(feat|fix|docs|refactor|test|chore|ci|build|perf)(\([a-z0-9][a-z0-9._/-]*\))?!?: [^[:space:]].*$' || fail "提交 ${commit} 标题不符合 Conventional Commits：${subject}"
+    changed_version="$(git diff-tree --no-commit-id --name-only -r "$commit" -- VERSION)"
+    parent_commit="$(git rev-list --parents -n 1 "$commit" | awk '{ print $2 }')"
+    parent_major="$base_major"
+    if [[ -n "$parent_commit" ]]; then
+      parse_version "$(git show "${parent_commit}:VERSION" 2>/dev/null | tr -d '[:space:]' || printf '0.0.0')"
+      parent_major="$major"
+    fi
+    parse_version "$(git show "${commit}:VERSION" 2>/dev/null | tr -d '[:space:]' || printf '0.0.0')"
+    commit_major="$major"
+    if [[ -n "$changed_version" && "$commit_major" -gt "$parent_major" ]]; then
+      body="$(git show -s --format=%b "$commit")"
+      if ! printf '%s\n' "$subject" | rg -q '^[a-z]+(\([a-z0-9][a-z0-9._/-]*\))?!:' && ! printf '%s\n' "$body" | rg -q '^BREAKING CHANGE:'; then
+        fail "提交 ${commit} 引入 MAJOR 版本升级时必须使用 ! 或声明 BREAKING CHANGE"
+      fi
+    fi
+  done < <(git rev-list --no-merges "$base_ref..$head_ref")
+}
+
+printf '%s\n' '提交执行清单：6/6 版本、提交消息与范围一致性检查'
+if [[ "$mode" == range ]] && git rev-parse --verify "${base_ref}^{commit}" >/dev/null 2>&1; then
+  check_range_version_history
+  printf '  - 范围版本历史：通过（%s -> %s）\n' "$base_version" "$current_version"
 else
-    [[ "$semantic_change" -eq 1 ]] || fail "仅有微小变更时不得升级 VERSION（${base_version} -> ${current_version}）"
-  if [[ "$current_major" -gt "$base_major" ]]; then
-    [[ "$current_major" -eq $((base_major + 1)) && "$current_minor" -eq 0 && "$current_patch" -eq 0 ]] || fail 'MAJOR 版本必须只递增一级并归零 MINOR/PATCH'
-    printf '  - MAJOR：%s -> %s（提交标题和正文必须说明不兼容变更）\n' "$base_version" "$current_version"
-  elif [[ "$current_minor" -gt "$base_minor" ]]; then
-    [[ "$current_major" -eq "$base_major" && "$current_minor" -eq $((base_minor + 1)) && "$current_patch" -eq 0 ]] || fail 'MINOR 版本必须只递增一级并归零 PATCH'
-    [[ "$new_capability" -eq 1 ]] || fail 'MINOR 升级必须包含新增 Practice、Skill 或 Eval 等能力'
-    printf '  - MINOR：%s -> %s\n' "$base_version" "$current_version"
+  if [[ "$base_version" == 0.0.0 && "$current_version" == 0.1.0 ]]; then
+    printf '  - 初次建立 VERSION：%s\n' "$current_version"
+  elif [[ "$current_version" == "$base_version" ]]; then
+    [[ "$semantic_change" -eq 0 ]] || fail '检测到对外规则或可复用内容变更，但 VERSION 未升级'
+    printf '  - 仅微小变更，版本保持 %s\n' "$current_version"
   else
-    [[ "$current_major" -eq "$base_major" && "$current_minor" -eq "$base_minor" && "$current_patch" -eq $((base_patch + 1)) ]] || fail 'PATCH 版本必须只递增一级'
-    printf '  - PATCH：%s -> %s\n' "$base_version" "$current_version"
+    [[ "$semantic_change" -eq 1 ]] || fail "仅有微小变更时不得升级 VERSION（${base_version} -> ${current_version}）"
+    if [[ "$current_major" -gt "$base_major" ]]; then
+      [[ "$current_major" -eq $((base_major + 1)) && "$current_minor" -eq 0 && "$current_patch" -eq 0 ]] || fail 'MAJOR 版本必须只递增一级并归零 MINOR/PATCH'
+      printf '  - MAJOR：%s -> %s（提交标题和正文必须说明不兼容变更）\n' "$base_version" "$current_version"
+    elif [[ "$current_minor" -gt "$base_minor" ]]; then
+      [[ "$current_major" -eq "$base_major" && "$current_minor" -eq $((base_minor + 1)) && "$current_patch" -eq 0 ]] || fail 'MINOR 版本必须只递增一级并归零 PATCH'
+      [[ "$new_capability" -eq 1 ]] || fail 'MINOR 升级必须包含新增 Practice、Skill 或 Eval 等能力'
+      printf '  - MINOR：%s -> %s\n' "$base_version" "$current_version"
+    else
+      [[ "$current_major" -eq "$base_major" && "$current_minor" -eq "$base_minor" && "$current_patch" -eq $((base_patch + 1)) ]] || fail 'PATCH 版本必须只递增一级'
+      printf '  - PATCH：%s -> %s\n' "$base_version" "$current_version"
+    fi
   fi
 fi
+
+check_commit_messages
 
 printf '提交执行清单：通过（模式=%s，变更文件=%s）\n' "$mode" "${#changed_files[@]}"

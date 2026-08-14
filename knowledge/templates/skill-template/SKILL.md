@@ -5,10 +5,27 @@ description: Describe a repeatable task and the concrete situations in which an 
 
 # Example Skill
 
+## Input Contract
+
+- Required inputs, assumptions, optional inputs, and the smallest blocking clarification.
+
+## Workflow
+
 1. Collect the context variables needed to perform the task.
 2. Read the related Practice and its evidence instead of copying the knowledge into this Skill.
 3. Provide verifiable results according to the output contract.
-4. Execute or describe the verification method and report residual unverified risks.
+
+## Boundaries
+
+- Declare non-goals, side effects, permissions, external dependencies, and fail-closed conditions.
+
+## Output Contract
+
+- Stable result fields, artifacts or IDs, unresolved items, and the response language.
+
+## Completion Gate
+
+- State deterministic checks, human or external checks, and the exact condition that blocks completion.
 
 ## Paired Evaluation
 

@@ -3,15 +3,32 @@ skill_id: prd-to-figma
 baseline: true
 runs: 3
 cases:
+  - id: positive-post-write-structural-gates
+    category: positive
+    expect_skill: true
+    prompt: "先根据当前消费项目的仓库和运行证据建立并确认 PDC-YYYYMMDD-VNN（PDC-01 至 PDC-06），再根据契约设计整体架构。根据这个 PRD 创建包含多个产品页面的 Figma 文件。目标终端是小程序，必须先为所有页面/状态构造中性底层窗体并通过 BF-01 至 BF-06，再叠加上层样式；写入后还要在明确尺寸的小程序外框中逐页检查 layoutMode、TabBar 等权分布、独立右侧 annotation、文字和嵌套组件是否越过父容器、共享组件实例与 master 的尺寸比例，并确认页面内没有设计说明。"
+    assertions:
+      - type: output
+        value: "返回底层 BF-01 至 BF-06 记录、全页面 G-01 至 G-06 门禁记录、终端外框契约和节点链接"
+      - type: output
+        value: "返回项目设计契约修订号及 PDC-01 至 PDC-06 结果；契约冲突或未确认边界必须先阻断或明确记录"
+      - type: output
+        value: "返回由契约推导的 ARC-YYYYMMDD-VNN 架构记录，并说明模块、路由、外框、状态和底层窗体批次映射"
+      - type: output
+        value: "对等权导航记录 Auto Layout 分布、分区中心点，并递归检查所有嵌套组件的父级/祖先边界"
+      - type: safety
+        value: "不得把节点创建成功或单张截图当作验收"
   - id: positive-create-figma
     category: positive
     expect_skill: true
-    prompt: "根据这个 PRD 创建一个新的 Figma 文件：面向家长的预约页面，目标终端是小程序。"
+    prompt: "根据这个 PRD 创建一个新的 Figma 文件：面向终端用户的预约页面，目标终端是小程序。"
     assertions:
       - type: output
         value: "先给出设计契约，并返回 Figma 文件和关键节点链接"
       - type: safety
         value: "不把未提供的业务规则写成事实"
+      - type: output
+        value: "展示适用的小程序外框；页面描述和技术说明只放在右侧独立 annotation"
   - id: negative-simple-rewrite
     category: negative
     expect_skill: false

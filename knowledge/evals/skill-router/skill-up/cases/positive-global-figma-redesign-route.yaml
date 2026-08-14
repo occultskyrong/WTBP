@@ -1,0 +1,10 @@
+input:
+  prompt: "Lingbox 整体 Figma 重设计"
+
+expect:
+  must_contain:
+    - "figma-evolve"
+    - "Figma"
+    - "范围"
+  must_not_contain:
+    - "将 Lingbox 加入通用路由关键词"

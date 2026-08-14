@@ -24,7 +24,7 @@ routes:
     source: local
     path: skills/systematic-cognition
     install: none
-    status: active
+    status: candidate
     last_verified: 2026-08-11
     keywords: [全网, 搜索, 当前, 来源, 认知, 事实, 推论, research, search, source]
     triggers:
@@ -61,7 +61,7 @@ routes:
     install: none
     status: active
     last_verified: 2026-08-13
-    keywords: [wtbp, skill, 技能, 路由, 选择, 安装, 复用, router, route, install]
+    keywords: [skill, 技能, 路由, 选择, 安装, 复用, router, route, install]
     triggers:
       - 用户询问应使用哪个 Skill，或希望通过一个入口处理多个 Skill
       - 任务可能命中多个 Skill，需要先比较边界和加载路径
@@ -94,7 +94,7 @@ routes:
     install: none
     status: candidate
     last_verified: 2026-08-14
-    keywords: [修改, 改设计, 改版, 重做, 局部修改, patch, regenerate]
+    keywords: [修改, 改设计, 改版, 重做, 重设计, 重新设计, 整体重设计, 全局重设计, 整体改版, 整套设计稿, 局部修改, patch, regenerate]
     triggers:
       - 用户提供 Figma 文件或节点链接，要求修改细节、补页面/状态或替换组件
       - 用户要求在保留历史版本的条件下重做明确设计范围

@@ -3,6 +3,21 @@ skill_id: figma-evolve
 baseline: true
 runs: 3
 cases:
+  - id: positive-post-write-structural-gates
+    category: positive
+    expect_skill: true
+    prompt: "修改这个 Figma 文件中的多个小程序产品页面并保留原版本。若存在消费项目，先根据仓库和运行证据建立或刷新 PDC-YYYYMMDD-VNN，完成 PDC-01 至 PDC-06 和冲突确认，再决定架构或结构变更。新增或结构变化时，必须先为所有页面/状态构造中性底层窗体并通过 BF-01 至 BF-06，再叠加上层样式；每次写入后还必须在小程序外框中检查所有页面的 layoutMode、TabBar 等权分布、独立右侧 annotation、文字和嵌套组件递归边界、共享组件实例与 master 的尺寸比例，并确认产品页面没有设计说明。"
+    assertions:
+      - type: output
+        value: "先完成 BF-01 至 BF-06 的底层窗体检查，再完成 G-01 至 G-06 的全页面写入后门禁和小程序外框检查，再报告完成"
+      - type: output
+        value: "先返回项目设计契约修订号及 PDC-01 至 PDC-06 结果；契约冲突必须阻断结构重设计"
+      - type: output
+        value: "结构变更返回由契约推导的 ARC-YYYYMMDD-VNN；范围很小且契约不变的 patch 才能复用旧架构"
+      - type: output
+        value: "重新验证等权导航分布和嵌套组件的递归父级/祖先边界"
+      - type: safety
+        value: "不得只验收修改过的页面"
   - id: positive-patch-node
     category: positive
     expect_skill: true
@@ -10,6 +25,13 @@ cases:
     assertions:
       - type: output
         value: "说明 patch 范围、前后节点链接和受影响状态"
+  - id: positive-regenerate-redesign
+    category: positive
+    expect_skill: true
+    prompt: "对 Lingbox 的整体 Figma 设计重设计，范围是现有会员页：https://figma.com/file/x?node-id=8-9；创建 V2，不覆盖原页面。"
+    assertions:
+      - type: output
+        value: "使用 regenerate，保留原页面并返回 V2 前后节点链接"
   - id: negative-simple-rewrite
     category: negative
     expect_skill: false

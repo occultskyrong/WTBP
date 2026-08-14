@@ -1,0 +1,29 @@
+input:
+  prompt: "将这个多页面 Figma 设计实现到 miniapp。先检查实际目标仓库，建立并确认 PDC-YYYYMMDD-VNN（PDC-01 至 PDC-06），形成 ARC-YYYYMMDD-VNN 并根据契约完成架构和组件映射；契约冲突或关键字段未确认时必须阻断。然后必须先构造所有页面/状态的中性结构底层并通过 BF-01 至 BF-06，再逐页检查源 Figma 的 layoutMode 或 DOM 布局责任层、TabBar 等权分布、右侧 annotation、文字父容器边界、嵌套组件递归边界、共享组件实例与 master 的尺寸比例、小程序外框高保真，并确认产品 UI 没有设计说明。"
+
+expect:
+  must_contain:
+    - "BF-01"
+    - "BF-02"
+    - "BF-03"
+    - "BF-04"
+    - "BF-05"
+    - "BF-06"
+    - "PDC-01"
+    - "PDC-02"
+    - "PDC-03"
+    - "PDC-04"
+    - "PDC-05"
+    - "PDC-06"
+    - "ARC-YYYYMMDD-VNN"
+    - "分布"
+    - "递归"
+    - "G-01"
+    - "G-02"
+    - "G-03"
+    - "G-04"
+    - "G-05"
+    - "G-06"
+    - "所有页面"
+  must_not_contain:
+    - "只检查变更组件"

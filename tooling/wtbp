@@ -24,12 +24,14 @@ usage() {
   cat <<'EOF'
 用法：
   wtbp                              # 列出可用 Skill
+  wtbp root                         # 输出 WTBP 仓库根目录
   wtbp list --domain <domain>        # 按领域浏览 Skill
   wtbp show <skill-id>               # 查看 Skill 能力卡
-  wtbp "<问题或任务>"                # 查找候选 Skill
+  wtbp "<问题或任务>"                # 输出本地候选 Skill 和可解释匹配依据
   wtbp install <skill-id>            # 安装已登记的外部 Skill
 
-只有唯一命中的、受控登记的外部 Skill 才会自动安装；不会自动执行任何 Skill。
+当前会话负责基于候选能力卡进行语义判断；本命令不会启动第二个 LLM 会话。
+候选查询不会自动安装或执行 Skill；确认后必须显式运行 `wtbp install <skill-id>`。
 EOF
 }
 
@@ -105,20 +107,30 @@ show_skill() {
   [[ -n "$skill_path" ]] && printf '%s\n' "- 规范文件：$skill_path/SKILL.md"
 }
 
+normalise_query() {
+  local query="$1"
+  query="$(printf '%s' "$query" | sed -E 's/^(请|帮我|重新)?调用[[:space:]]*[Ww][Tt][Bb][Pp]([[:space:]]*(技能|[Ss]kill))?[：:,，[:space:]]*//')"
+  printf '%s\n' "$query"
+}
+
 resolve_routes() {
   local query="$1"
   local matches
+
+  query="$(normalise_query "$query")"
+  [[ -n "$query" ]] || query="$1"
 
   matches="$(awk -v query="$query" '
     function emit() {
       if (id == "" || (status != "active" && status != "candidate")) return
       score = 0
       matched = ""
+      normalized_query = tolower(query)
       count = split(keywords, values, ",")
       for (i = 1; i <= count; i++) {
         keyword = values[i]
         gsub(/^[[:space:]]+|[[:space:]]+$/, "", keyword)
-        if (keyword != "" && index(query, keyword) > 0) {
+        if (keyword != "" && index(normalized_query, tolower(keyword)) > 0) {
           score++
           matched = matched (matched == "" ? "" : ", ") keyword
         }
@@ -142,16 +154,6 @@ resolve_routes() {
     return 0
   fi
 
-  local match_count
-  match_count="$(printf '%s\n' "$matches" | awk 'END { print NR }')"
-  if [[ "$match_count" -eq 1 ]]; then
-    IFS=$'\t' read -r score route_id title skill_id source path status install auto_install matched <<< "$matches"
-    if [[ "$source" == external && "$status" == active && "$auto_install" == true ]]; then
-      printf '唯一命中受控外部 Skill：%s；正在安装。\n' "$skill_id"
-      bash "$repo_root/tooling/install-skill.sh" "$skill_id"
-    fi
-  fi
-
   printf '候选 Skill（按关键词匹配度排序）：\n'
   while IFS=$'\t' read -r score route_id title skill_id source path status install auto_install matched; do
     printf '%s\n' "- ${skill_id}（匹配 ${score}，${status}）"
@@ -160,7 +162,7 @@ resolve_routes() {
     if [[ "$source" == local ]]; then
       printf '  下一步：读取 %s/SKILL.md；该命令不会替你执行 Skill。\n' "$path"
     elif [[ "$auto_install" == true && "$status" == active ]]; then
-      printf '  安装：已按受控登记处理；下一步：读取已安装的 %s Skill。\n' "$skill_id"
+      printf '  安装：当前会话确认后运行 wtbp install %s；该查询不会自动安装。\n' "$skill_id"
     else
       printf '  下一步：核对来源、版本、权限和安装方式：%s；未经确认不得安装。\n' "$install"
     fi
@@ -168,6 +170,10 @@ resolve_routes() {
 }
 
 case "${1:-}" in
+  root)
+    [[ $# -eq 1 ]] || { usage >&2; exit 2; }
+    printf '%s\n' "$repo_root"
+    ;;
   list|'')
     if [[ $# -eq 0 || $# -eq 1 && "${1:-}" == list ]]; then
       list_skills

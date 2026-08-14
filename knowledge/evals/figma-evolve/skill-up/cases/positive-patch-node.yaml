@@ -5,5 +5,7 @@ expect:
   must_contain:
     - "patch"
     - "节点"
+    - "清单"
+    - "设计批次"
   must_not_contain:
     - "覆盖整个文件"
