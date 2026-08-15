@@ -9,6 +9,7 @@ WTBP 的 Figma 能力不是单一“大设计 Skill”，而是按责任边界�
 PDC 项目契约
   → ARC 整体架构
   → INV 范围清单并获得审批
+  → AGC 动作组契约与 AGC-01～AGC-06
   → ICON 资产清单与 IA-01～IA-07
   → 设计批次与底层窗体（BF-01～BF-06）
   → 组件、状态与页面样式（G-01～G-06）
@@ -17,7 +18,10 @@ PDC 项目契约
 ```
 
 `PDC-03` 可以提前发现项目已有的图标和其他资产，但只能在 `INV` 获批后，按批准页面/状态建立正式
-`ICON` 清单。这样不会让资产设计反向决定尚未批准的产品范围。
+`AGC` 与 `ICON` 清单。`AGC` 先为单一操作、动作组、分段选择与对称导航登记语义、共享组件、宽度/插槽策略、
+可见尺寸与触达目标尺寸；例如左右翻页加“本月”的导航必须使用等大的左右插槽，并让中部操作相对父级居中。
+模板见 [`knowledge/templates/action-group-contract-template.zh-CN.md`](../knowledge/templates/action-group-contract-template.zh-CN.md)。这样不会让资产设计或
+页面局部 CSS 反向决定尚未批准的产品范围。
 
 ## 四段 Skill
 
@@ -31,6 +35,13 @@ PDC 项目契约
 四个 Skill 的英文 `SKILL.md` 是 AI 规范源，`SKILL.zh-CN.md` 是同步中文对照；共享规则见
 [`knowledge/design-principles.zh-CN.md`](../knowledge/design-principles.zh-CN.md) 与
 [`knowledge/design-workflow.zh-CN.md`](../knowledge/design-workflow.zh-CN.md)。
+
+## 外部能力的接入边界
+
+官方 Figma MCP 是默认能力源，Code Connect 是组件到代码映射的优先来源；它们为 WTBP 提供事实和操作能力，
+但不替代 WTBP 的项目契约与验收门禁。第三方 Token、WCAG 或设计 lint 能力仅在明确授权后作为补充审计，
+不得自动安装、索取 PAT 或代替真实验收。采用清单与授权边界见
+[`docs/external-design-capabilities.md`](external-design-capabilities.md)。
 
 ## 证据成熟度
 

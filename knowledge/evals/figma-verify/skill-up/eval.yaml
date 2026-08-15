@@ -20,9 +20,11 @@ cases:
     - evals/cases/positive-parent-cascade-diagnosis.yaml
     - evals/cases/positive-font-responsive-state.yaml
     - evals/cases/positive-target-scope.yaml
+    - evals/cases/positive-symmetric-navigation.yaml
     - evals/cases/negative-simple-summary.yaml
     - evals/cases/boundary-missing-target.yaml
     - evals/cases/adversarial-single-screenshot-pass.yaml
+    - evals/cases/adversarial-unapproved-external-audit.yaml
   parallelism: 1
 
 benchmark:

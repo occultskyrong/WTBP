@@ -44,13 +44,14 @@ inspection and diagnostics. Provide commands for the user to run and continue on
 | Understand the repository | `README.md` | `docs/how-to-use.md`, `docs/concepts.md` |
 | High-impact technical or product decision | `skills/practice-search/SKILL.md` | `knowledge/catalog.yaml`, context schema, target Practice and evidence |
 | Add or change a Practice | `CONTRIBUTING.md` | Practice template, catalog, relationships |
-| Use, install, add, or change a Skill | `wtbp "<request>"`, `knowledge/skill-index.yaml` | Capability comparison, target Skill, installation boundary, and contribution guidance |
+| Use, install, add, or change a Skill | `wtbp "<request>"`, `knowledge/skill-index.yaml`, `knowledge/external-capabilities.yaml` | Capability comparison, reuse decision, target Skill, installation boundary, and contribution guidance |
 | Commit, push, or create a PR | `docs/commit-conventions.md` | GitHub governance and PR template |
 | Validation, hook, or CI issue | `Makefile` | Validation scripts and repository workflow |
 
-Use the catalog, capability index, or route index before expanding files. The capability index is the only source for
-Skill tags and cards; routes only match tasks. Do not load all templates, evidence, or Skill references merely
-because their directories exist.
+Use the catalog, local Skill index, external capability register, or route index before expanding files. The local
+Skill index is the only source for local Skill tags and cards; the external capability register is the only source for
+external capability cards; routes only match tasks and separately managed installations. Do not load all templates,
+evidence, or Skill references merely because their directories exist.
 
 Apply [knowledge/skill-framework.md](knowledge/skill-framework.md) to every Skill change or execution. It defines
 the five layers, minimum Skill contract, registry graph, G0–G6 gates, lifecycle statuses, and fail-closed rules.

@@ -8,9 +8,11 @@
 
 ## 路由入口
 
-机器可读的能力规范登记在 [`knowledge/skill-index.yaml`](../knowledge/skill-index.yaml)，路由登记在
-[`knowledge/skill-routes.yaml`](../knowledge/skill-routes.yaml)。前者是标签、输入输出和副作用的唯一来源；后者只说明问题
-如何命中 Skill。每条路由至少说明：
+机器可读的本地 Skill 规范登记在 [`knowledge/skill-index.yaml`](../knowledge/skill-index.yaml)，外部能力登记在
+[`knowledge/external-capabilities.yaml`](../knowledge/external-capabilities.yaml)，路由登记在
+[`knowledge/skill-routes.yaml`](../knowledge/skill-routes.yaml)。本地索引是本地 Skill 的标签、输入输出和副作用的唯一来源；
+外部登记表只记录可追溯的采用边界；路由只说明问题如何命中本地 Skill 或另行受控安装的外部 Skill。详细决策规则见
+[`docs/network-first-capability-governance.md`](network-first-capability-governance.md)。每条路由至少说明：
 
 - 要解决的问题场景和触发条件。
 - 使用哪个 `skill_id`，以及 Skill 的仓库路径。
@@ -45,12 +47,14 @@ Skill-Eval dry-run 当作真实视觉验收。
 ```bash
 wtbp
 wtbp "比较两个架构方案的成本、安全和可逆性"
+wtbp external --domain design
 ```
 
-入口按受控关键词列出活跃或候选路由及其下一步读取路径；它不执行目标 Skill。命中唯一且明确的本地候选后，再读取
-对应的英文 `SKILL.md`；多个候选或高影响流程必须先说明推荐和边界。唯一命中的外部候选只有同时满足已登记、`active`、
-GitHub HTTPS 来源、固定 40 位提交、声明权限和 `auto_install: true` 时，当前会话确认后才允许运行
-`wtbp install <skill-id>`；查询命令本身不会自动安装。其他外部候选必须先获得明确安装授权。
+入口按受控关键词分别列出本地 Skill 和外部能力候选及其下一步读取路径；它不执行目标 Skill。当前会话先判断采用
+`direct-use`、`adapt`、`compose`、`reference-only` 还是 `build-local`，再加载唯一明确的本地候选英文 `SKILL.md`。
+`local-adapter` 外部能力必须保留本地 Skill 的项目契约与门禁；`manual-optional` 外部能力不会安装。只有唯一命中的外部
+安装路由同时满足已登记、`active`、GitHub HTTPS 来源、固定 40 位提交、声明权限和 `auto_install: true` 时，当前会话确认后
+才允许运行 `wtbp install <skill-id>`；查询命令本身不会自动安装。
 
 ## 当前会话完成语义路由
 
@@ -58,10 +62,10 @@ GitHub HTTPS 来源、固定 40 位提交、声明权限和 `auto_install: true`
 `wtbp` 的当前 Agent/Claude 会话负责完成一次语义判断。推荐按以下顺序渐进加载：
 
 1. 运行 `wtbp root`，确认 WTBP 根目录。
-2. 运行 `wtbp "<任务>"`，获取可解释的本地候选和命中依据。
-3. 读取 `knowledge/skill-index.yaml` 中候选 Skill 的能力卡，比较场景、输入、输出、阶段和副作用。
-4. 由当前会话给出 `select`、`clarify` 或 `no_match` 判断，并说明理由和缺失信息；不得凭关键词直接执行。
-5. 只有在选择明确后，才读取唯一目标 Skill 的英文 `SKILL.md`，并按其权限边界执行。
+2. 运行 `wtbp "<任务>"`，获取可解释的本地候选、外部能力候选和命中依据；需要浏览时运行 `wtbp external`。
+3. 读取 `knowledge/skill-index.yaml` 中的本地 Skill 卡与 `knowledge/external-capabilities.yaml` 中的外部能力卡，比较场景、输入、输出、阶段、副作用、来源、权限和证据。
+4. 由当前会话给出 `select`、`clarify` 或 `no_match`，以及本次采用决策；不得凭关键词直接执行、安装或新建。
+5. 只有在选择明确后，才读取唯一目标本地 Skill 的英文 `SKILL.md`，并按其权限边界执行。
 
 这种分层沿用 LLM Wiki 的“维护结构化知识、按需提供小范围上下文”原则：索引和命令负责提供上下文，当前会话负责
 理解语义。它避免重复启动会话、丢失前文和额外模型费用；命令仍保持可测试、可解释和无外部模型依赖。
@@ -70,9 +74,9 @@ GitHub HTTPS 来源、固定 40 位提交、声明权限和 `auto_install: true`
 - `~/.local/bin/wtbp` 指向仓库内的路由命令；
 - `~/.codex/skills/wtbp` 指向 `skills/skill-router`，让 Codex 通过一个名为 `wtbp` 的入口发现本仓库能力。
 
-该入口是 `skill-router` 的别名，不会把每个本地 Skill 分别安装到 Codex。新增能力仍只在 WTBP 内登记：
-`knowledge/catalog.yaml` 负责对象发现，`knowledge/skill-index.yaml` 是能力卡和标签的唯一来源，
-`knowledge/skill-routes.yaml` 只负责任务匹配。若同名目标已经存在、不是符号链接或指向其他位置，安装会停止而不会覆盖。
+该入口是 `skill-router` 的别名，不会把每个本地 Skill 分别安装到 Codex。新增本地 Skill 仍只在 WTBP 内登记：
+`knowledge/catalog.yaml` 负责对象发现，`knowledge/skill-index.yaml` 是本地能力卡和标签的唯一来源，
+`knowledge/skill-routes.yaml` 只负责任务匹配。外部能力只登记到 `knowledge/external-capabilities.yaml`，不能因登记而获得安装或执行授权。若同名目标已经存在、不是符号链接或指向其他位置，安装会停止而不会覆盖。
 
 ## 外部 Skill 受控安装
 
@@ -91,11 +95,10 @@ wtbp install <skill-id>
 ## 使用顺序
 
 1. 先描述问题目标、范围、约束和所需证据。
-2. 读取 `knowledge/skill-routes.yaml`，按触发条件筛选已有 Skill。
-3. 命中本地 Skill 时，直接读取对应路径的 `SKILL.md`；不要复制一份新的 Skill。
-4. 命中外部 Skill 时，先核对来源、版本、安装范围、权限、许可证和 Eval；语义确认和授权通过后再显式运行
-   `wtbp install <skill-id>`，未登记或无法验证的安装命令不得执行。
-5. 只有没有合适路由，或已有 Skill 明确不适用，且任务具备稳定重复流程时，才提出新建 Skill。
+2. 先检索 `knowledge/external-capabilities.yaml` 与可追溯来源，判断是否可以直接使用、适配、组合或仅作参考。
+3. 再读取 `knowledge/skill-routes.yaml`，按触发条件筛选已有本地 Skill；命中时读取对应 `SKILL.md`，不要复制一份新的 Skill。
+4. 只有受控外部安装路由才可在来源、版本、安装范围、权限、许可证和验证通过且明确授权后运行 `wtbp install <skill-id>`；外部能力卡不能触发安装。
+5. 只有既有能力明确不适用、任务具备稳定重复流程且可编写 Eval 时，才提出新建 Skill。
 
 ## 外部 Skill 登记要求
 

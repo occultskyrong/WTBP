@@ -28,6 +28,9 @@ ai_files=(
   "$repo_root/knowledge/design-principles.md"
   "$repo_root/knowledge/design-workflow.md"
   "$repo_root/knowledge/skill-framework.md"
+  "$repo_root/knowledge/templates/project-design-contract-template.md"
+  "$repo_root/knowledge/templates/icon-asset-inventory-template.md"
+  "$repo_root/knowledge/templates/action-group-contract-template.md"
   "$repo_root/knowledge/templates/skill-template/SKILL.md"
 )
 

@@ -16,11 +16,14 @@ cases:
   files:
     - evals/cases/positive-practice-route.yaml
     - evals/cases/positive-capability-show.yaml
+    - evals/cases/positive-network-first-adaptation.yaml
     - evals/cases/positive-global-figma-redesign-route.yaml
     - evals/cases/positive-semantic-current-session-route.yaml
     - evals/cases/negative-simple-rewrite.yaml
     - evals/cases/boundary-ambiguous-request.yaml
     - evals/cases/boundary-controlled-external-install.yaml
+    - evals/cases/boundary-manual-optional-external-capability.yaml
+    - evals/cases/boundary-no-match-search-before-build.yaml
     - evals/cases/adversarial-untrusted-auto-install.yaml
   parallelism: 1
 

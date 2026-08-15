@@ -20,6 +20,7 @@ cases:
     - evals/cases/positive-anchored-overlay.yaml
     - evals/cases/positive-ancestor-cascade-font.yaml
     - evals/cases/positive-responsive-target-isolation.yaml
+    - evals/cases/positive-symmetric-navigation.yaml
     - evals/cases/negative-simple-rewrite.yaml
     - evals/cases/boundary-missing-target.yaml
     - evals/cases/adversarial-child-compensation.yaml

@@ -6,7 +6,7 @@ cases:
   - id: positive-post-write-structural-gates
     category: positive
     expect_skill: true
-    prompt: "将这个多页面 Figma 设计实现到 web。先检查实际目标仓库，建立并确认 PDC-YYYYMMDD-VNN（PDC-01 至 PDC-06），根据契约完成架构和组件映射；契约冲突或关键字段未确认时必须阻断。页面样式前必须确认 ICON-YYYYMMDD-VNN 和 IA-01 至 IA-07，把每个 Icon 映射到语义组件、尺寸、风格、状态、精确来源和目标实现；缺失 Icon 独立设计。然后必须先为所有页面/状态构造中性结构底层并通过 BF-01 至 BF-06，再叠加组件和视觉样式；每次写入后必须逐页检查源 Figma 的 layoutMode 或 DOM 布局责任层、TabBar 等权分布、右侧 annotation、文字和嵌套组件递归边界、共享组件实例与 master 的尺寸比例、浏览器/视口外框高保真，并确认产品 UI 没有设计说明。"
+    prompt: "将这个多页面 Figma 设计实现到 web。先检查实际目标仓库，建立并确认 PDC-YYYYMMDD-VNN（PDC-01 至 PDC-06），根据契约完成架构和组件映射；契约冲突或关键字段未确认时必须阻断。页面样式前必须确认 AGC-YYYYMMDD-VNN 和 AGC-01 至 AGC-06，为每个动作组登记语义、共享组件、宽度/插槽策略、可见尺寸与触达目标尺寸；对称导航必须左右等大且中部相对父级居中。再确认 ICON-YYYYMMDD-VNN 和 IA-01 至 IA-07，把每个 Icon 映射到语义组件、尺寸、风格、状态、精确来源和目标实现；缺失 Icon 独立设计。然后必须先为所有页面/状态构造中性结构底层并通过 BF-01 至 BF-06，再叠加组件和视觉样式；每次写入后必须逐页检查源 Figma 的 layoutMode 或 DOM 布局责任层、TabBar 等权分布、右侧 annotation、文字和嵌套组件递归边界、共享组件实例与 master 的尺寸比例、浏览器/视口外框高保真，并确认产品 UI 没有设计说明。"
     assertions:
       - type: output
         value: "输出 BF-01 至 BF-06 的底层记录、G-01 至 G-06 的全页面实现门禁记录和终端外框契约"
@@ -15,11 +15,22 @@ cases:
       - type: output
         value: "输出 ARC-YYYYMMDD-VNN，并将实现模块、路由、状态和底层窗体批次映射到该架构"
       - type: output
+        value: "输出 AGC-YYYYMMDD-VNN、AGC-01 至 AGC-06，以及动作组的语义/组件/宽度/插槽/目标/几何映射"
+      - type: output
         value: "输出 ICON-YYYYMMDD-VNN、IA-01 至 IA-07 和逐实例语义/尺寸/风格/状态/来源/实现映射"
       - type: output
         value: "使用 Flex、Grid 或 Auto Layout 验证等权导航，并递归检查所有后代组件边界"
       - type: safety
         value: "不得只凭变更组件或一张截图交接"
+  - id: positive-symmetric-navigation
+    category: positive
+    expect_skill: true
+    prompt: "将 Figma 月份导航实现到 web：左右为上月/下月箭头，中间为“本月”。不得让外框变成一个空白很大的伪按钮；左右触达区域相等，中间文字必须相对父容器精确居中。"
+    assertions:
+      - type: output
+        value: "选择 I-10，建立 AGC-YYYYMMDD-VNN 并记录左右目标尺寸、中部中心偏差和布局责任层"
+      - type: safety
+        value: "不得用 left/top、子元素 margin/transform 或仅用 space-between 证明居中"
   - id: positive-web-implementation
     category: positive
     expect_skill: true

@@ -1,0 +1,10 @@
+input:
+  prompt: "我要做一个新的浏览器硬件控制流程，现在没有找到对应能力，直接帮我新建 Skill。"
+
+expect:
+  must_contain:
+    - "practice-search"
+    - "systematic-cognition"
+    - "build-local"
+  must_not_contain:
+    - "直接新建"

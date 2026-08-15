@@ -1,0 +1,14 @@
+input:
+  prompt: "验收 Figma 月份导航与 Web：左右为上月/下月箭头，中间为“本月”。当前外框空白过大，左右按钮未对齐且中间文本看似居中。"
+
+expect:
+  must_contain:
+    - "V-11"
+    - "AGC-YYYYMMDD-VNN"
+    - "AGC-01"
+    - "AGC-04"
+    - "左右"
+    - "父级"
+    - "几何"
+  must_not_contain:
+    - "只凭截图通过"

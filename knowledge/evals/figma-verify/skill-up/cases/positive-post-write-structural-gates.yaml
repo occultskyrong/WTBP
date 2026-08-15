@@ -1,5 +1,5 @@
 input:
-  prompt: "验收这个 Figma 文件和 Web 预览：包含 4 个产品页面、默认/错误状态和表单提交转移。先确认当前项目设计契约 PDC-YYYYMMDD-VNN 已根据仓库和运行证据建立且 PDC-01 至 PDC-06 无冲突，并确认由契约推导的 ARC-YYYYMMDD-VNN 架构没有漂移，再确认 ICON-YYYYMMDD-VNN 和 IA-01 至 IA-07，逐个核对 Icon 的语义、组件家族、尺寸、风格、状态、来源和实现映射，然后确认所有页面/状态的中性底层窗体已通过 BF-01 至 BF-06，再逐页检查 Web 视口外框、layoutMode、TabBar 等权分布、右侧独立 annotation、文字和嵌套组件递归边界、共享组件实例与 master 的尺寸比例、产品 UI 是否混入设计说明，并核对操作转移。"
+  prompt: "验收这个 Figma 文件和 Web 预览：包含 4 个产品页面、默认/错误状态和表单提交转移。先确认当前项目设计契约 PDC-YYYYMMDD-VNN 已根据仓库和运行证据建立且 PDC-01 至 PDC-06 无冲突，并确认由契约推导的 ARC-YYYYMMDD-VNN 架构没有漂移，再确认 AGC-YYYYMMDD-VNN 和 AGC-01 至 AGC-06，逐个核对动作组的语义、共享组件、宽度/插槽、可见尺寸与触达目标尺寸；对称导航还须验证左右目标相等和中部相对父级居中。再确认 ICON-YYYYMMDD-VNN 和 IA-01 至 IA-07，逐个核对 Icon 的语义、组件家族、尺寸、风格、状态、来源和实现映射，然后确认所有页面/状态的中性底层窗体已通过 BF-01 至 BF-06，再逐页检查 Web 视口外框、layoutMode、TabBar 等权分布、右侧独立 annotation、文字和嵌套组件递归边界、共享组件实例与 master 的尺寸比例、产品 UI 是否混入设计说明，并核对操作转移。"
 
 expect:
   must_contain:
@@ -16,6 +16,13 @@ expect:
     - "PDC-05"
     - "PDC-06"
     - "ARC-YYYYMMDD-VNN"
+    - "AGC-YYYYMMDD-VNN"
+    - "AGC-01"
+    - "AGC-02"
+    - "AGC-03"
+    - "AGC-04"
+    - "AGC-05"
+    - "AGC-06"
     - "ICON-YYYYMMDD-VNN"
     - "IA-01"
     - "IA-02"

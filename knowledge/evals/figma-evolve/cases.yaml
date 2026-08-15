@@ -6,7 +6,7 @@ cases:
   - id: positive-post-write-structural-gates
     category: positive
     expect_skill: true
-    prompt: "修改这个 Figma 文件中的多个小程序产品页面并保留原版本。若存在消费项目，先根据仓库和运行证据建立或刷新 PDC-YYYYMMDD-VNN，完成 PDC-01 至 PDC-06 和冲突确认，再决定架构或结构变更。新增、结构变化或 Icon 变化时，必须先创建或刷新并审批 INV-YYYYMMDD-VNN，再建立或刷新 ICON-YYYYMMDD-VNN，通过 IA-01 至 IA-07，并把缺失 Icon 独立设计为同一家族组件。然后为所有页面/状态构造中性底层窗体并通过 BF-01 至 BF-06，再叠加上层样式；每次写入后还必须在小程序外框中检查所有页面的 layoutMode、TabBar 等权分布、独立右侧 annotation、文字和嵌套组件递归边界、共享组件实例与 master 的尺寸比例，并确认产品页面没有设计说明。"
+    prompt: "修改这个 Figma 文件中的多个小程序产品页面并保留原版本。若存在消费项目，先根据仓库和运行证据建立或刷新 PDC-YYYYMMDD-VNN，完成 PDC-01 至 PDC-06 和冲突确认，再决定架构或结构变更。新增、结构变化或动作组/Icon 变化时，必须先创建或刷新并审批 INV-YYYYMMDD-VNN，再建立或刷新 AGC-YYYYMMDD-VNN，通过 AGC-01 至 AGC-06，之后建立或刷新 ICON-YYYYMMDD-VNN，通过 IA-01 至 IA-07，并把缺失 Icon 独立设计为同一家族组件。然后为所有页面/状态构造中性底层窗体并通过 BF-01 至 BF-06，再叠加上层样式；每次写入后还必须在小程序外框中检查所有页面的 layoutMode、TabBar 等权分布、独立右侧 annotation、文字和嵌套组件递归边界、共享组件实例与 master 的尺寸比例，并确认产品页面没有设计说明。"
     assertions:
       - type: output
         value: "先完成 BF-01 至 BF-06 的底层窗体检查，再完成 G-01 至 G-06 的全页面写入后门禁和小程序外框检查，再报告完成"
@@ -14,6 +14,8 @@ cases:
         value: "先返回项目设计契约修订号及 PDC-01 至 PDC-06 结果；契约冲突必须阻断结构重设计"
       - type: output
         value: "结构变更返回由契约推导的 ARC-YYYYMMDD-VNN；范围很小且契约不变的 patch 才能复用旧架构"
+      - type: output
+        value: "动作组变化返回 AGC-YYYYMMDD-VNN 与 AGC-01 至 AGC-06；只有语义、组件和插槽策略均不变的 patch 才可复用"
       - type: output
         value: "结构或 Icon 变化返回 ICON-YYYYMMDD-VNN 与 IA-01 至 IA-07；只有 Icon 映射和家族不变的 patch 才可复用"
       - type: output

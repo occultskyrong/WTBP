@@ -24,6 +24,7 @@ required_paths=(
   "docs/commit-checklist.md"
   "docs/document-language-policy.md"
   "docs/skill-routing.md"
+  "docs/network-first-capability-governance.md"
   "docs/figma-skill-architecture.md"
   "docs/skill-catalog.md"
   "docs/github-governance.md"
@@ -34,11 +35,13 @@ required_paths=(
   "knowledge/schemas/relationship-schema.yaml"
   "knowledge/schemas/eval-schema.yaml"
   "knowledge/schemas/skill-index-schema.yaml"
+  "knowledge/schemas/external-capability-schema.yaml"
   "knowledge/skill-routes.yaml"
   "knowledge/skill-index.yaml"
   "knowledge/catalog.yaml"
   "knowledge/relationships.yaml"
   "knowledge/external-sources.yaml"
+  "knowledge/external-capabilities.yaml"
   "knowledge/design-workflow.md"
   "knowledge/design-workflow.zh-CN.md"
   "knowledge/design-principles.md"
@@ -47,6 +50,8 @@ required_paths=(
   "knowledge/templates/project-design-contract-template.zh-CN.md"
   "knowledge/templates/icon-asset-inventory-template.md"
   "knowledge/templates/icon-asset-inventory-template.zh-CN.md"
+  "knowledge/templates/action-group-contract-template.md"
+  "knowledge/templates/action-group-contract-template.zh-CN.md"
   "knowledge/skill-framework.md"
   "knowledge/skill-framework.zh-CN.md"
   "knowledge/templates/practice-template.md"
@@ -67,6 +72,7 @@ required_paths=(
   "tooling/validate-skill-evals.sh"
   "tooling/validate-skill-routes.sh"
   "tooling/validate-skill-index.sh"
+  "tooling/validate-external-capabilities.sh"
   "tooling/generate-skill-catalog.sh"
   "tooling/test-wtbp-router.sh"
   "tooling/scan-secrets.sh"
@@ -91,6 +97,7 @@ bash -n "$repo_root/tooling/validate-repository.sh"
 bash -n "$repo_root/tooling/validate-skill-evals.sh"
 bash -n "$repo_root/tooling/validate-skill-routes.sh"
 bash -n "$repo_root/tooling/validate-skill-index.sh"
+bash -n "$repo_root/tooling/validate-external-capabilities.sh"
 bash -n "$repo_root/tooling/validate-ai-companions.sh"
 bash -n "$repo_root/tooling/generate-skill-catalog.sh"
 bash -n "$repo_root/tooling/test-wtbp-router.sh"
@@ -180,8 +187,10 @@ done < <(rg --files "$repo_root/skills" -g '*.md' | rg '/references/[^/]+\.md$' 
 for design_link in \
   'knowledge/design-workflow.md:templates/project-design-contract-template.md' \
   'knowledge/design-workflow.md:templates/icon-asset-inventory-template.md' \
+  'knowledge/design-workflow.md:templates/action-group-contract-template.md' \
   'knowledge/design-workflow.zh-CN.md:templates/project-design-contract-template.zh-CN.md' \
-  'knowledge/design-workflow.zh-CN.md:templates/icon-asset-inventory-template.zh-CN.md'; do
+  'knowledge/design-workflow.zh-CN.md:templates/icon-asset-inventory-template.zh-CN.md' \
+  'knowledge/design-workflow.zh-CN.md:templates/action-group-contract-template.zh-CN.md'; do
   source_file="${design_link%%:*}"
   target_path="${design_link#*:}"
   if ! rg -Fq "](${target_path})" "$repo_root/$source_file"; then
@@ -194,6 +203,7 @@ done
 "$repo_root/tooling/validate-skill-evals.sh"
 "$repo_root/tooling/validate-skill-routes.sh"
 "$repo_root/tooling/validate-skill-index.sh"
+"$repo_root/tooling/validate-external-capabilities.sh"
 "$repo_root/tooling/generate-skill-catalog.sh" --check
 "$repo_root/tooling/test-wtbp-router.sh"
 "$repo_root/tooling/test-secret-scan.sh"

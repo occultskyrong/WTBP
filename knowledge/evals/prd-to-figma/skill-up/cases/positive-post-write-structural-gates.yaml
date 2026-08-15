@@ -1,5 +1,5 @@
 input:
-  prompt: "先根据当前消费项目的仓库和运行证据建立并确认 PDC-YYYYMMDD-VNN（PDC-01 至 PDC-06），形成由契约推导的 ARC-YYYYMMDD-VNN 整体架构，再创建并审批 INV-YYYYMMDD-VNN。根据这个 PRD 创建包含多个小程序产品页面的 Figma 文件。只有清单获批后才能建立 ICON-YYYYMMDD-VNN，抽取批准范围内每个 Icon，按 16/20/24/32px 使用场景映射尺寸，通过 IA-01 至 IA-07；缺失 Icon 必须独立设计为同一家族组件。然后构造所有页面/状态的中性底层窗体并通过 BF-01 至 BF-06，再在小程序外框中逐页检查 layoutMode、TabBar 等权分布、独立右侧 annotation、文字和嵌套组件递归边界、共享组件实例与 master 的尺寸比例，并确认页面内没有设计说明。"
+  prompt: "先根据当前消费项目的仓库和运行证据建立并确认 PDC-YYYYMMDD-VNN（PDC-01 至 PDC-06），形成由契约推导的 ARC-YYYYMMDD-VNN 整体架构，再创建并审批 INV-YYYYMMDD-VNN。根据这个 PRD 创建包含多个小程序产品页面的 Figma 文件。清单获批后必须先建立 AGC-YYYYMMDD-VNN，通过 AGC-01 至 AGC-06，为每个动作组登记语义、共享组件、宽度/插槽、可见尺寸与触达目标尺寸；对称导航必须左右等大且中部相对父级居中。再建立 ICON-YYYYMMDD-VNN，抽取批准范围内每个 Icon，按 16/20/24/32px 使用场景映射尺寸，通过 IA-01 至 IA-07；缺失 Icon 必须独立设计为同一家族组件。然后构造所有页面/状态的中性底层窗体并通过 BF-01 至 BF-06，再在小程序外框中逐页检查 layoutMode、TabBar 等权分布、独立右侧 annotation、文字和嵌套组件递归边界、共享组件实例与 master 的尺寸比例，并确认页面内没有设计说明。"
 
 expect:
   must_contain:
@@ -17,6 +17,13 @@ expect:
     - "PDC-06"
     - "ARC-YYYYMMDD-VNN"
     - "INV-YYYYMMDD-VNN"
+    - "AGC-YYYYMMDD-VNN"
+    - "AGC-01"
+    - "AGC-02"
+    - "AGC-03"
+    - "AGC-04"
+    - "AGC-05"
+    - "AGC-06"
     - "ICON-YYYYMMDD-VNN"
     - "IA-01"
     - "IA-02"

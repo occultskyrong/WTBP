@@ -44,7 +44,7 @@ the layers below; a prompt, screenshot, generated page, or local visual preferen
 | L0 Evidence and intent | What problem, for whom, on which target, and why? | Cognition record, source authority, outcome, actor, target, product, entry, scope, exclusions, project design contract | Missing or conflicting material facts are `Unverified`/blocking |
 | L1 Information architecture | How does the user move through the product? | Project-contract-backed modules, routes/entries, primary journey, page/state/transition matrix, recovery paths | `PDC-01`–`PDC-06` pass before architecture; no page or action is designed without its containing journey, state coverage, and transition outcome |
 | L2 Product contract | What is in scope and how will it be judged? | Versioned inventory, stable feature IDs, status, rules, permissions, acceptance conditions, decisions | Explicit user approval and no unresolved blocking decision |
-| L3 Foundations | Which reusable rules and building blocks express the contract? | Tokens, typography, versioned Icon asset inventory, coupled-asset readiness, components, variants, layout conventions, source mappings | `IA-01`–`IA-07` pass before page-specific styling; reuse/extension decision and consumer impact recorded |
+| L3 Foundations | Which reusable rules and building blocks express the contract? | Tokens, typography, versioned Icon asset inventory, coupled-asset readiness, components, variants, action-group contracts, layout conventions, source mappings | `IA-01`–`IA-07` and `AGC-01`–`AGC-06` pass before page-specific styling; reuse/extension decision and consumer impact recorded |
 | L4 Page composition | How is each approved feature represented? | All approved page/state base frames first, then layered page composition, target shell, Auto Layout hierarchy, right-side annotation, classified copy | `BF-01`–`BF-06` pass before styling; then `G-01`–`G-06` pass for all product pages/states |
 | L5 Implementation mapping | How does the artifact become one declared target? | Figma node → component/style/data/state mapping, target constraints, changed files | No coordinate-only translation or unscoped target work |
 | L6 Verification | Does the target preserve the contract across conditions? | Target × viewport/device × state/transition matrix, baseline/expected/post-fix captures, geometry and runtime evidence | Structural, rendered, interaction, accessibility, and human review pass |
@@ -56,13 +56,15 @@ the layers below; a prompt, screenshot, generated page, or local visual preferen
 - Before information architecture, inspect the consuming project and produce the project design contract. Run
   `PDC-01`–`PDC-06`; do not design a new route, page family, component system, or visual foundation while the contract
   is missing, stale, or materially conflicting.
-- After architecture, create and obtain approval for `INV-YYYYMMDD-VNN`; only then build `ICON-YYYYMMDD-VNN` and pass
-  `IA-01`–`IA-07`. The approved inventory is the sole page/state scope for Icon extraction. Do not create page-local
-  Icon substitutes, text glyphs, emoji, or unapproved external assets.
+- After architecture, create and obtain approval for `INV-YYYYMMDD-VNN`; only then build
+  `AGC-YYYYMMDD-VNN`, then `ICON-YYYYMMDD-VNN`, and pass `AGC-01`–`AGC-06` and `IA-01`–`IA-07`. The approved
+  inventory is the sole page/state scope for action-group and Icon contracts. Do not create page-local Icon
+  substitutes, text glyphs, emoji, unapproved external assets, or ad hoc page CSS for a registered action group.
 - Within visual composition, use this fixed order: (1) define the shared shell and layout foundations, (2) approve the
-  versioned scope inventory, (3) build the approved Icon asset inventory and coupled-asset mappings, (4) construct
-  every approved page/state base frame in one scaffold pass, (5) run `BF-01`–`BF-06`, (6) layer reusable components,
-  product content, states, and visual styling, and (7) rerun `G-01`–`G-06` after each write batch and at handoff.
+  versioned scope inventory, (3) approve action-group contracts, (4) build the approved Icon asset inventory and
+  coupled-asset mappings, (5) construct every approved page/state base frame in one scaffold pass, (6) run
+  `BF-01`–`BF-06`, (7) layer reusable components, product content, states, and visual styling, and (8) rerun
+  `G-01`–`G-06` after each write batch and at handoff.
 - A failed or incomplete base-frame gate blocks all upper-layer styling. Do not polish one page while another page's
   root layout, shell, regions, or state skeleton is still unresolved.
 - A change to outcome, actor/target, journey, scope, permission/data scope, state, component contract, token, or
@@ -76,7 +78,7 @@ the layers below; a prompt, screenshot, generated page, or local visual preferen
 
 ## Minimum handoff contract
 
-Every handoff must identify the project design contract revision and `PDC-01`–`PDC-06` results, the derived architecture revision (`ARC-YYYYMMDD-VNN`), the Icon inventory revision and `IA-01`–`IA-07` results, the approved inventory and design batch, feature IDs, target and platform, page/state
+Every handoff must identify the project design contract revision and `PDC-01`–`PDC-06` results, the derived architecture revision (`ARC-YYYYMMDD-VNN`), the action-group contract revision and `AGC-01`–`AGC-06` results, the Icon inventory revision and `IA-01`–`IA-07` results, the approved inventory and design batch, feature IDs, target and platform, page/state
 coverage, target shell and dimensions, foundation mappings, Figma node IDs, changed files/nodes, `BF-01`–`BF-06` and `G-01`–`G-06` results, target matrix, evidence
 links, approved exceptions, unresolved `Unverified` items, and the next Skill. If any required evidence is unavailable,
 report the artifact as incomplete or blocked rather than complete.

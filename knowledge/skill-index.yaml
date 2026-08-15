@@ -1,5 +1,5 @@
 version: 1
-description: Skill 能力规范索引。它是能力标签、输入输出、影响范围与路由关联的唯一来源；catalog 仅负责对象发现，routes 仅负责任务匹配。
+description: 本地 Skill 能力规范索引。它是本地 Skill 标签、输入输出、影响范围与路由关联的唯一来源；外部能力另见 external-capabilities.yaml，catalog 仅负责对象发现，routes 仅负责任务匹配与受控安装。
 taxonomy:
   domains: [research, product, governance, design, engineering, quality]
   capabilities: [practice-search, option-comparison, evidence-synthesis, web-research, source-verification, skill-evaluation, regression-evaluation, task-routing, managed-install, figma-create, figma-evolve, figma-inspection, figma-to-code, visual-verification, layout-diagnosis]

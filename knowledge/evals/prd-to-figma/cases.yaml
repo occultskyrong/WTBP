@@ -6,7 +6,7 @@ cases:
   - id: positive-post-write-structural-gates
     category: positive
     expect_skill: true
-    prompt: "先根据当前消费项目的仓库和运行证据建立并确认 PDC-YYYYMMDD-VNN（PDC-01 至 PDC-06），再根据契约设计整体架构并创建、审批 INV-YYYYMMDD-VNN。根据这个 PRD 创建包含多个产品页面的 Figma 文件。目标终端是小程序，只有清单获批后才能建立 ICON-YYYYMMDD-VNN，抽取批准范围内每个 Icon，按 16/20/24/32px 使用场景映射尺寸，通过 IA-01 至 IA-07；缺失 Icon 必须独立设计为同一家族组件。然后为所有页面/状态构造中性底层窗体并通过 BF-01 至 BF-06，再叠加上层样式；写入后还要在明确尺寸的小程序外框中逐页检查 layoutMode、TabBar 等权分布、独立右侧 annotation、文字和嵌套组件是否越过父容器、共享组件实例与 master 的尺寸比例，并确认页面内没有设计说明。"
+    prompt: "先根据当前消费项目的仓库和运行证据建立并确认 PDC-YYYYMMDD-VNN（PDC-01 至 PDC-06），再根据契约设计整体架构并创建、审批 INV-YYYYMMDD-VNN。根据这个 PRD 创建包含多个产品页面的 Figma 文件。目标终端是小程序，清单获批后必须先建立 AGC-YYYYMMDD-VNN、通过 AGC-01 至 AGC-06，登记每个动作组的语义、共享组件、宽度/插槽、可见尺寸与触达目标尺寸；对称导航必须左右等大且中部相对父级居中。再建立 ICON-YYYYMMDD-VNN，抽取批准范围内每个 Icon，按 16/20/24/32px 使用场景映射尺寸，通过 IA-01 至 IA-07；缺失 Icon 必须独立设计为同一家族组件。然后为所有页面/状态构造中性底层窗体并通过 BF-01 至 BF-06，再叠加上层样式；写入后还要在明确尺寸的小程序外框中逐页检查 layoutMode、TabBar 等权分布、独立右侧 annotation、文字和嵌套组件是否越过父容器、共享组件实例与 master 的尺寸比例，并确认页面内没有设计说明。"
     assertions:
       - type: output
         value: "返回底层 BF-01 至 BF-06 记录、全页面 G-01 至 G-06 门禁记录、终端外框契约和节点链接"
@@ -14,6 +14,8 @@ cases:
         value: "返回项目设计契约修订号及 PDC-01 至 PDC-06 结果；契约冲突或未确认边界必须先阻断或明确记录"
       - type: output
         value: "返回由契约推导的 ARC-YYYYMMDD-VNN 架构记录，并说明模块、路由、外框、状态和底层窗体批次映射"
+      - type: output
+        value: "返回 AGC-YYYYMMDD-VNN、AGC-01 至 AGC-06，以及动作组的组件、宽度/插槽、目标和几何映射"
       - type: output
         value: "返回 ICON-YYYYMMDD-VNN、IA-01 至 IA-07 结果，以及每个 Icon 的语义、尺寸、风格、状态、来源和缺失资产设计记录"
       - type: output

@@ -18,17 +18,18 @@ Read [`../../knowledge/design-principles.md`](../../knowledge/design-principles.
 - The consuming project repository/worktree and preview entry when the Figma change serves an existing product; for a
   Figma-only change, state that no implementation project is in scope.
 - A target shell contract with terminal, exact viewport/device dimensions, safe areas, and navigation/status surfaces. For `miniapp`, explicitly identify the mini-program shell; do not invent a generic device frame.
+- The current `AGC-YYYYMMDD-VNN` action-group contract or project evidence sufficient to confirm the affected component, width/slot policy, and target-size mapping remain valid.
 - The current `ICON-YYYYMMDD-VNN` inventory or project evidence sufficient to confirm whether the affected Icon mapping and asset family remain valid.
 
 If no scope node is given, inspect the file and ask for the smallest scope that can safely change. Do not choose an authoritative version or invent a business-rule resolution.
 
 ## Workflow
 
-1. Preflight the callable Figma integration with read-only identity/permission proof. Read the target node, parent context, components, variables, constraints, annotations, and current screenshot before mutation.
+1. Preflight the callable official Figma integration with read-only identity/permission proof and record `EX-01`. Read the target node, parent context, components, variables, constraints, annotations, and current screenshot before mutation; do not install a third-party tool when the capability is unavailable.
 2. Restate the intended change and inspect the consuming project. Create or refresh `PDC-YYYYMMDD-VNN` and pass `PDC-01`–`PDC-06` for project identity, surfaces, foundations, behavior/constraints, reuse/change boundaries, and evidence. For Figma-only work, record the explicit implementation boundary and `Unverified` fields.
-3. Resolve project-contract conflicts. For a structural change or `regenerate`, derive or refresh `ARC-YYYYMMDD-VNN` from the approved PDC, then create or refresh and obtain approval for `INV-YYYYMMDD-VNN` before building or refreshing `ICON-YYYYMMDD-VNN` and passing `IA-01`–`IA-07`. A narrow patch may reuse the current architecture only when its contract is unchanged, and may reuse the Icon inventory only when the approved scope and affected Icon semantic mapping/family are unchanged. Record modules, routes, shells, reuse boundaries, states/transitions, affected base-frame batch, and Icon impact. Obtain approval before mutation unless an already-approved inventory explicitly covers the change.
+3. Resolve project-contract conflicts. For a structural change or `regenerate`, derive or refresh `ARC-YYYYMMDD-VNN` from the approved PDC, then create or refresh and obtain approval for `INV-YYYYMMDD-VNN` before building or refreshing `AGC-YYYYMMDD-VNN` and passing `AGC-01`–`AGC-06`, then `ICON-YYYYMMDD-VNN` and `IA-01`–`IA-07`. A narrow patch may reuse the current architecture only when its contract is unchanged, the action-group contract only when affected semantic actions/component/slot policy are unchanged, and the Icon inventory only when the approved scope and affected Icon semantic mapping/family are unchanged. Record modules, routes, shells, reuse boundaries, states/transitions, affected base-frame batch, action-group impact, and Icon impact. Obtain approval before mutation unless an already-approved inventory explicitly covers the change.
 4. Assign a `YYYY-MM-DD-VNN` design batch. If the request or current evidence creates a material conflict, stop, offer distinct resolutions, and re-open the inventory gate.
-5. In `patch` mode, mutate only the target nodes and necessary shared components, including approved Icon components when required. Preserve valid Auto Layout, constraints, variants, and asset links.
+5. In `patch` mode, mutate only the target nodes and necessary shared components, including approved action-group and Icon components when required. Preserve valid Auto Layout, constraints, variants, and asset links.
 6. In `regenerate` mode, create a new versioned page or Frame such as `V2`; preserve the prior page/frame and return both links. Never replace a whole file by default.
 7. Ensure every affected feature is shown in its complete containing page and declared terminal shell with a standalone right-side annotation block. When a new page/state or structural redesign is in scope, first construct or revalidate the base-frame batch for all approved pages/states using neutral placeholders. Keep design/project/technical descriptions out of the product frame. Classify in-frame text and record provenance, proposed copy, actions, states, and exceptions.
 8. Run and record the blocking base-frame checkpoint (`BF-01`–`BF-06`) before adding or changing page-specific styling. A patch may reuse an already approved base only when its structural contract is unchanged; otherwise the checkpoint must cover the full affected batch.
@@ -44,8 +45,10 @@ If no scope node is given, inspect the file and ask for the smallest scope that 
 - Do not layer page-specific styling onto a new or structurally changed page until all approved base frames pass `BF-01`–`BF-06`; a partial base batch blocks the change.
 - Do not choose a new module, page family, component foundation, or visual direction until the consuming project contract passes `PDC-01`–`PDC-06` or the Figma-only boundary is explicit.
 - Do not use a page-local Vector, emoji, text glyph, screenshot crop, or unapproved third-party set as a reusable Icon. Reuse the approved semantic Icon family; independently design a missing Icon before placing an instance.
+- Do not create a page-local action-group clone, compensate a registered control with local CSS, or use `space-between` as proof that a symmetric navigation action is centered. Reuse the approved action-group component and its width/slot policy.
 - A write is blocked from completion when any page lacks a recorded `layoutMode`/layout owner, one-to-one annotation, text-containment result, or instance/master scale result. An approved exception must name the affected frame and rationale.
 - A write is blocked when the target shell/dimensions are absent, the full shell is not visible, or descriptive/technical/review text appears inside the product frame. These are G-05/G-06 failures and require a named approved exception.
+- A third-party design lint, token, or accessibility audit is optional only. It requires explicit user authorization and `EX-03`–`EX-04`; its result cannot replace the required Figma geometry evidence.
 
 ## Failure-Driven Change Scenarios
 
@@ -55,6 +58,7 @@ If no scope node is given, inspect the file and ask for the smallest scope that 
 | E-02 | A redesign changes component hierarchy or layout behavior. | Use `regenerate` and create `V2` rather than overwriting the baseline. | Both version links exist and downstream implementation impact is explicit. |
 | E-03 | A requested visual fix would change ordinary children to absolute positioning. | Reject that mutation until overlay intent and containing parent are evidenced. | No coordinate-only workaround is introduced. |
 | E-04 | A change touches equal-weight navigation or a nested component boundary. | Revalidate distribution/parent-chain geometry for the affected base batch before styling. | No hand-placed navigation or unexplained child overflow remains. |
+| E-05 | A change touches previous/current-or-reset/next actions. | Revalidate the `symmetric-navigation` contract, equal edge targets, parent-centered middle child, and target-size evidence before styling. | `AGC-01`–`AGC-06` pass; no large outlined pseudo-button or compensating coordinates remain. |
 
 ## Output Contract
 
@@ -64,6 +68,7 @@ Return:
 Figma source and selected mode
 Requested change and business-rule conflicts
 Project design contract revision, `PDC-01`–`PDC-06` results, derived architecture revision (`ARC-YYYYMMDD-VNN`), and evidence boundary
+Action-group contract revision, affected component/token/slot mappings, and `AGC-01`–`AGC-06` results when interaction structure changes
 Icon inventory revision, affected semantic mappings, and `IA-01`–`IA-07` results when Icons or structure change
 Inventory version, feature IDs, approval, and design batch
 Before and after node links
@@ -83,6 +88,7 @@ Unverified items and required next Skill
 - The input scope, inventory approval, design batch, and conflict decisions are recorded.
 - The consuming project was inspected and `PDC-01` through `PDC-06` are approved, or the Figma-only boundary and `Unverified` fields are explicit.
 - Structural changes have a derived `ARC-YYYYMMDD-VNN` based on the approved project design contract, with no unrecorded route, page family, foundation, terminal, state, or behavior.
+- Structural or action-group-affecting changes have a current `AGC-YYYYMMDD-VNN`; `AGC-01` through `AGC-06` pass before page-specific styling, or the unchanged semantic/component/slot reuse is recorded.
 - Structural or Icon-affecting changes have a current `ICON-YYYYMMDD-VNN`; `IA-01` through `IA-07` pass before page-specific styling, or the unchanged mapping/family reuse is recorded.
 - Every affected and unchanged product page/state frame has G-01 through G-06 results or a named approved exception, and every new/structurally changed base batch has passed BF-01 through BF-06 first.
 - Full-shell before/after links, screenshots, interaction matrix, and downstream handoff are present; otherwise stop as incomplete.

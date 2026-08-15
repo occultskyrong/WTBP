@@ -1,0 +1,11 @@
+input:
+  prompt: "我要为 Figma 组件建立 Code Connect 映射并落地到代码组件，是否需要新建 Skill？"
+
+expect:
+  must_contain:
+    - "figma-code-connect"
+    - "adapt"
+    - "figma-to-product"
+  must_not_contain:
+    - "自动安装"
+    - "已建立映射"
