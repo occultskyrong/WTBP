@@ -1,3 +1,63 @@
 version: 1
-description: 外部来源目录。Practice 中的证据必须记录来源、版本或访问日期。
-sources: []
+description: 外部来源目录。Practice 中的证据必须记录来源、版本或访问日期；外部能力的采用级别由 external-capabilities.yaml 和 docs/network-first-capability-governance.md 说明。
+sources:
+  - id: source.figma-mcp-server-guide
+    title: Figma MCP Server Guide
+    kind: github-skill-source
+    url: https://github.com/figma/mcp-server-guide
+    publisher: figma
+    trust: first-party
+    accessed_on: 2026-08-15
+    adoption: default-capability-source
+    scope: 官方 Figma MCP、设计实现、设计系统规则与组件库工作流
+    credential_boundary: 当前客户端的 Figma OAuth/权限；不由 WTBP 安装或代管
+  - id: source.figma-code-connect
+    title: Figma Code Connect
+    kind: github-reference-implementation
+    url: https://github.com/figma/code-connect
+    publisher: figma
+    trust: first-party
+    accessed_on: 2026-08-15
+    adoption: preferred-component-mapping
+    scope: Figma 组件与真实代码组件、属性及设计系统映射
+    credential_boundary: 由消费项目和 Figma 计划/权限决定；缺失时记录为 Unverified
+  - id: source.figma-sds
+    title: Figma Simple Design System
+    kind: github-reference-implementation
+    url: https://github.com/figma/sds
+    publisher: figma
+    trust: first-party
+    accessed_on: 2026-08-15
+    adoption: reference-only
+    scope: Variables、Components、Code Connect 与 React 的设计系统示例
+    credential_boundary: 不安装；仅作结构参考
+  - id: source.figma-console-mcp-skills
+    title: Figma Console MCP Skills
+    kind: github-optional-skill-source
+    url: https://github.com/southleft/figma-console-mcp-skills
+    publisher: southleft
+    trust: third-party
+    accessed_on: 2026-08-15
+    adoption: optional-explicit-authorization
+    scope: 设计 Token、组件树、WCAG、目标尺寸和设计 lint 审计
+    credential_boundary: 需要使用方明确授权、Figma PAT 与命令执行环境；不得自动安装或读取凭据
+  - id: source.design-lint
+    title: Design Lint
+    kind: github-reference-implementation
+    url: https://github.com/destefanis/design-lint
+    publisher: destefanis
+    trust: third-party
+    accessed_on: 2026-08-15
+    adoption: reference-only
+    scope: Figma 节点样式规则和可配置 lint 的实现参考
+    credential_boundary: 不安装；不替代 WTBP 几何门禁
+  - id: source.ui-ux-pro-max
+    title: UI UX Pro Max Skill
+    kind: github-reference-skill
+    url: https://github.com/nextlevelbuilder/ui-ux-pro-max-skill
+    publisher: nextlevelbuilder
+    trust: third-party
+    accessed_on: 2026-08-15
+    adoption: reference-only
+    scope: UI/UX 模式、视觉方向和启发式建议
+    credential_boundary: 不作为项目事实或 WTBP 强制规则

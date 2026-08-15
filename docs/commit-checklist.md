@@ -19,9 +19,10 @@ Git Hook 会自动调用该入口；CI 在检查提交范围时也使用同一�
 3. `tooling/scan-secrets.sh`：扫描新增内容中的私钥、云访问密钥、GitHub/Slack/Google Token、JWT、带凭据连接串、
    疑似密码/密钥赋值和高风险凭据文件名。扫描器只输出文件和命中类型，不输出敏感值；示例凭据必须使用明确的
    `example`、`sample`、`placeholder` 等占位词。二进制变更默认不能通过文本扫描，需改为可审查的文本或单独评估。
-4. Skill 变更检查：发现新增或修改 `skills/*/SKILL.md` 时，必须同步修改对应 Eval，且 Eval 的 `runner` 必须为
-   `skill-up`，行为门槛不得低于 `0.90`，再执行 `make ske SKILL_ID=<skill-id>`。默认 dry-run 也必须由 skill-up
-   加载 Runner 配置、Skill、用例和断言。
+4. Skill/Eval 变更检查：发现新增或修改 `skills/*/SKILL.md`，或修改 `knowledge/evals/<skill-id>/` 下已登记的
+   Eval、通用用例或 Skill-up 原生用例/配置时，必须对受影响 Skill 执行 `make ske SKILL_ID=<skill-id>`。Skill 变更
+   仍必须同步修改对应 Eval；Eval 的 `runner` 必须为 `skill-up`，行为门槛不得低于 `0.90`。默认 dry-run 也必须由
+   skill-up 加载 Runner 配置、Skill、用例和断言。
 5. 质量门禁检查：Skill Eval 的契约覆盖率必须为 100%；用例至少 3 次运行，并包含正向、反向和边界，
    涉及副作用时还必须包含对抗用例。真实行为评测的默认通过率门槛为 90%。
 6. 版本、提交消息和范围一致性检查：核对根目录 `VERSION` 是否符合三段式版本和本次变更级别；范围模式还会
@@ -38,7 +39,7 @@ make test-secret-scan
 
 ## Skill 评测门禁
 
-`ske` 是 `skill-evaluation` 的本地快捷名称。对新增或修改的 Skill，提交清单会强制使用 `skill-up` Runner，至少执行：
+`ske` 是 `skill-evaluation` 的本地快捷名称。对新增或修改的 Skill，以及任何已登记 Eval 资产的变更，提交清单会强制使用 `skill-up` Runner，至少执行：
 
 ```bash
 make ske SKILL_ID=<skill-id>
@@ -63,7 +64,7 @@ SKILL_EVAL_RUNS=3 \
 make commit-checklist
 ```
 
-这会要求每个变更 Skill 生成本次评测报告并达到门槛。CI 和无外部模型的本地环境使用 dry-run，只能证明
+这会要求每个受影响 Skill 生成本次评测报告并达到门槛。CI 和无外部模型的本地环境使用 dry-run，只能证明
 契约门禁，不能宣称行为评测已通过。
 
 ## 三段式版本规则

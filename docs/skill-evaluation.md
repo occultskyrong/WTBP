@@ -11,6 +11,10 @@ Skill 是可执行流程，Eval 是证明该流程有效、可重复和边界清
 - `cases.yaml`：正向、反向、边界用例；涉及工具或权限时增加对抗用例。
 - `skill-up/eval.yaml` 与 `skill-up/cases/`：当 Runner 选择 `skill-up` 时使用的原生执行配置。
 
+为兼容 Skill-up 要求的 `Skill 根目录/evals/eval.yaml` 目录约定，`skills/<skill-id>/evals` 是指向上述
+`knowledge/evals/<skill-id>/skill-up` 的符号链接。只在 `knowledge/evals/` 中维护评测配置和用例；链接仅用于
+让 Runner 从对应 Skill 根目录加载，不能在两处复制或分别编辑。
+
 评测必须在 `knowledge/catalog.yaml` 的 `evals` 中登记，并通过目录、Skill 和 Eval 的关系
 保持可追溯。评测结果、模型凭据、缓存和生成报告不提交到仓库。
 
@@ -22,8 +26,8 @@ Skill 是可执行流程，Eval 是证明该流程有效、可重复和边界清
 2. `negative`：不应该使用 Skill 的任务。
 3. `boundary`：缺少上下文、权限或其他关键条件的任务。
 
-涉及写文件、执行命令、外部服务、敏感数据或不可逆操作时，还必须覆盖 `adversarial` 或
-等价的安全场景。
+任何声明非 `none` 副作用的 Skill 都必须包含显式的 `adversarial` 用例；涉及写文件、执行命令、
+外部服务、敏感数据或不可逆操作时，该用例必须覆盖对应的越权、泄露、绕过或范围扩张风险。
 
 每个用例都必须写明 `prompt`、`expect_skill` 和至少一个断言。断言应优先使用可重复的文件、
 结构、命令或字段检查；模型评审只能作为补充，不能替代确定性断言。
@@ -59,6 +63,10 @@ make skill-eval SKILL_ID=practice-search
 
 只检查 Runner 配置、不调用模型时使用 `SKILL_EVAL_DRY_RUN=true`。
 
+`candidate` 只表示评测契约和已执行的行为证据尚不足以晋级为 `approved`。对于 Figma Skill，离线配置校验、
+prompt 评测和 dry-run 都只能证明流程可加载；真实 Figma 写入、目标产品运行、同条件截图与人工复核必须另行留存，
+并在 `EVAL.md` 的 `last_verified` 与评测结论中如实反映。
+
 行为评测使用可插拔 Runner：默认可接入 `skill-up`，也可使用 Caliper 或受控的内部 Runner。
 安装了 `skill-up` 时，`make validate-skill-evals` 还会自动执行其离线配置校验；也可以通过
 `SKILL_UP_BIN=/path/to/skill-up` 指定 Runner。Runner、模型和密钥只在执行环境提供，不写入
@@ -83,7 +91,7 @@ INSTALL_DIR=/tmp/wtbp-skill-up-bin \
 SKILL_UP_BIN=/tmp/wtbp-skill-up-bin/skill-up make validate-skill-evals
 ```
 
-运行行为评测时，`skill-up` 会根据 `knowledge/evals/<skill-id>/skill-up/eval.yaml` 加载 Skill 和用例，
+运行行为评测时，`skill-up` 会通过 `skills/<skill-id>/evals/eval.yaml` 这个链接加载知识库中的同一份配置和用例，
 并把提示词与上下文交给配置的 Agent Engine。只有在执行环境已完成认证、且明确允许向外部模型服务发送这些
 评测内容时，才运行真实评测；否则使用 dry-run 检查命令和用例是否可发现：
 

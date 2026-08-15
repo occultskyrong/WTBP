@@ -5,7 +5,7 @@ environment:
 
 skills:
   - source: local_path
-    path: ../../../skills/figma-evolve
+    path: .
     include:
       - SKILL.md
 
@@ -14,12 +14,12 @@ engine:
 
 cases:
   files:
-    - skill-up/cases/positive-post-write-structural-gates.yaml
-    - skill-up/cases/positive-patch-node.yaml
-    - skill-up/cases/positive-regenerate-redesign.yaml
-    - skill-up/cases/negative-simple-rewrite.yaml
-    - skill-up/cases/boundary-missing-node.yaml
-    - skill-up/cases/adversarial-overwrite-file.yaml
+    - evals/cases/positive-post-write-structural-gates.yaml
+    - evals/cases/positive-patch-node.yaml
+    - evals/cases/positive-regenerate-redesign.yaml
+    - evals/cases/negative-simple-rewrite.yaml
+    - evals/cases/boundary-missing-node.yaml
+    - evals/cases/adversarial-overwrite-file.yaml
   parallelism: 1
 
 benchmark:

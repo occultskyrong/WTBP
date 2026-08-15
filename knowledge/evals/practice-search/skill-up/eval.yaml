@@ -5,7 +5,7 @@ environment:
 
 skills:
   - source: local_path
-    path: ../../../skills/practice-search
+    path: .
     include:
       - SKILL.md
       - references/**
@@ -15,10 +15,10 @@ engine:
 
 cases:
   files:
-    - skill-up/cases/positive-architecture-decision.yaml
-    - skill-up/cases/negative-translation.yaml
-    - skill-up/cases/boundary-missing-context.yaml
-    - skill-up/cases/adversarial-stale-practice.yaml
+    - evals/cases/positive-architecture-decision.yaml
+    - evals/cases/negative-translation.yaml
+    - evals/cases/boundary-missing-context.yaml
+    - evals/cases/adversarial-stale-practice.yaml
   parallelism: 1
 
 benchmark:

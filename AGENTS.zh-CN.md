@@ -40,11 +40,11 @@ WTBP 沉淀的是与场景绑定的软件与产品决策知识，不是通用答
 | 了解仓库 | `README.md` | `docs/how-to-use.md`、`docs/concepts.md` |
 | 高影响技术或产品决策 | `skills/practice-search/SKILL.md` | `knowledge/catalog.yaml`、上下文模式、目标 Practice 和证据 |
 | 新增或修改 Practice | `CONTRIBUTING.md` | Practice 模板、目录、关系 |
-| 使用、安装、新增或修改 Skill | `wtbp "<请求>"`、`knowledge/skill-index.yaml` | 能力比较、目标 Skill、安装边界和贡献指南 |
+| 使用、安装、新增或修改 Skill | `wtbp "<请求>"`、`knowledge/skill-index.yaml`、`knowledge/external-capabilities.yaml` | 能力比较、复用决策、目标 Skill、安装边界和贡献指南 |
 | 提交、推送或创建 PR | `docs/commit-conventions.md` | GitHub 治理和 PR 模板 |
 | 校验、Hook 或 CI 问题 | `Makefile` | 校验脚本和仓库工作流 |
 
-先使用目录、能力索引或路由索引确定目标；能力索引是 Skill 标签和能力卡的唯一来源，路由表只负责任务匹配；不要因为看到目录就读取全部模板、证据或 Skill 引用。
+先使用目录、本地 Skill 索引、外部能力登记或路由索引确定目标；本地 Skill 索引是本地 Skill 标签和能力卡的唯一来源，外部能力登记是外部能力卡的唯一来源，路由表只负责任务匹配和另行受管的安装；不要因为看到目录就读取全部模板、证据或 Skill 引用。
 
 所有 Skill 的变更和执行都必须遵循 [knowledge/skill-framework.zh-CN.md](knowledge/skill-framework.zh-CN.md)。它定义五层架构、
 Skill 最小契约、登记关系图、G0–G6 门禁、生命周期状态和失败即停止规则。
@@ -58,7 +58,7 @@ Skill 最小契约、登记关系图、G0–G6 门禁、生命周期状态和失
 
 ## 提交门禁
 
-提交前运行 `make commit-checklist`。它会执行仓库结构校验、暂存内容审查、敏感信息扫描、变更 Skill 的
+提交前运行 `make commit-checklist`。它会执行仓库结构校验、暂存内容审查、敏感信息扫描、变更 Skill 或已登记 Eval 资产的
 `skill-up` 契约审查、质量门禁和 `VERSION` 检查。详见 [docs/commit-checklist.md](docs/commit-checklist.md)。
 
 ## 提交交付流程

@@ -216,6 +216,16 @@ count_source_indented_field() {
   source_file "$file" | awk -v field="$field" 'index($0, "    " field ":") == 1 { count++ } END { print count + 0 }'
 }
 
+source_skill_requires_adversarial_case() {
+  local skill_name="$1"
+  source_file knowledge/skill-index.yaml | awk -v skill_name="$skill_name" '
+    $0 == "  - id: " skill_name { found = 1; next }
+    found && /^    side_effects: / { exit($2 == "[none]" ? 1 : 0) }
+    found && /^  - id: / { exit 1 }
+    END { if (!found) exit 1 }
+  '
+}
+
 check_eval_cases() {
   local file="$1"
   local skill_name="$2"
@@ -235,6 +245,9 @@ check_eval_cases() {
   for category in positive negative boundary; do
     source_file "$file" | rg -q "^    category: ${category}$" || fail "$file 缺少 ${category} 用例"
   done
+  if source_skill_requires_adversarial_case "$skill_name"; then
+    source_file "$file" | rg -q '^    category: adversarial$' || fail "$file 的 ${skill_name} 声明了副作用，必须包含 adversarial 用例"
+  fi
   for field in category prompt expect_skill assertions; do
     field_count="$(count_source_indented_field "$file" "$field")"
     [[ "$field_count" -ge "$case_count" ]] || fail "$file 每个用例都必须包含 ${field}"
@@ -462,6 +475,11 @@ for file in "${changed_files[@]}"; do
       ;;
     knowledge/evals/*/EVAL.md)
       source_exists "$file" && check_eval "$file"
+      ;;
+    knowledge/evals/*/cases.yaml|knowledge/evals/*/skill-up/cases/*.yaml)
+      eval_file="knowledge/evals/$(printf '%s\n' "$file" | cut -d/ -f3)/EVAL.md"
+      source_exists "$eval_file" || fail "$file 必须配套 $eval_file"
+      check_eval "$eval_file"
       ;;
     knowledge/evals/*/skill-up/eval.yaml)
       eval_file="${file%/skill-up/eval.yaml}/EVAL.md"

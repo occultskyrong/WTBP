@@ -6,16 +6,26 @@ cases:
   - id: positive-post-write-structural-gates
     category: positive
     expect_skill: true
-    prompt: "修改这个 Figma 文件中的多个小程序产品页面并保留原版本。若存在消费项目，先根据仓库和运行证据建立或刷新 PDC-YYYYMMDD-VNN，完成 PDC-01 至 PDC-06 和冲突确认，再决定架构或结构变更。新增或结构变化时，必须先为所有页面/状态构造中性底层窗体并通过 BF-01 至 BF-06，再叠加上层样式；每次写入后还必须在小程序外框中检查所有页面的 layoutMode、TabBar 等权分布、独立右侧 annotation、文字和嵌套组件递归边界、共享组件实例与 master 的尺寸比例，并确认产品页面没有设计说明。"
+    prompt: "修改这个 Figma 文件中的多个小程序产品页面并保留原版本。若存在消费项目，先根据仓库和运行证据建立或刷新 PDC-YYYYMMDD-VNN，完成 PDC-01 至 PDC-06 和冲突确认，再决定架构或结构变更。新增、结构变化或动作组/Icon 变化时，必须先创建或刷新并审批 INV-YYYYMMDD-VNN，再建立或刷新 AGC-YYYYMMDD-VNN，通过 AGC-01 至 AGC-06，之后建立或刷新 ICON-YYYYMMDD-VNN，通过 IA-01 至 IA-07，并把缺失 Icon 独立设计为同一家族组件。然后为所有页面/状态构造中性底层窗体并通过 BF-01 至 BF-06，再叠加上层样式；评审发现节点迁移、页面增删或 Section 列数变化时，必须按实际内容边界加固定内边距重算受影响 Section，不得沿用旧固定宽高。每次写入后还必须在可见边界完整包围页面的小程序外框中检查所有页面的 layoutMode、TabBar 等权分布、独立右侧 annotation、文字和嵌套组件递归边界、共享组件实例与 master 的尺寸比例，并确认产品页面没有设计说明；不得用通用手机框或裸画布代替小程序外框。"
     assertions:
       - type: output
-        value: "先完成 BF-01 至 BF-06 的底层窗体检查，再完成 G-01 至 G-06 的全页面写入后门禁和小程序外框检查，再报告完成"
+        value: "先完成 BF-01 至 BF-06 的底层窗体检查，再完成 G-01 至 G-06 的全页面写入后门禁和可见小程序外框检查，再报告完成；通用手机框或裸画布不得通过"
       - type: output
         value: "先返回项目设计契约修订号及 PDC-01 至 PDC-06 结果；契约冲突必须阻断结构重设计"
       - type: output
         value: "结构变更返回由契约推导的 ARC-YYYYMMDD-VNN；范围很小且契约不变的 patch 才能复用旧架构"
       - type: output
+        value: "受影响页面/状态先建立或刷新 PS-YYYYMMDD-VNN，返回 PS-01 至 PS-05、元素清单、复用矩阵和 L0 至 L3 分层计划；只有页面结果、层级、复用和分层均不变的窄 patch 才可复用"
+      - type: output
+        value: "动作组变化返回 AGC-YYYYMMDD-VNN 与 AGC-01 至 AGC-06；只有语义、组件和插槽策略均不变的 patch 才可复用"
+      - type: output
+        value: "结构或 Icon 变化返回 ICON-YYYYMMDD-VNN 与 IA-01 至 IA-07；只有 Icon 映射和家族不变的 patch 才可复用"
+      - type: output
+        value: "结构或 Icon 变化先返回并审批 INV-YYYYMMDD-VNN，再建立 ICON-YYYYMMDD-VNN；未经审批的范围不得抽取 Icon"
+      - type: output
         value: "重新验证等权导航分布和嵌套组件的递归父级/祖先边界"
+      - type: output
+        value: "节点迁移、页面增删或列数变化时，记录 Section 的子元素/列输入、固定内边距和重算边界；旧固定宽高不得沿用"
       - type: safety
         value: "不得只验收修改过的页面"
   - id: positive-patch-node

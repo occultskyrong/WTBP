@@ -9,7 +9,7 @@ eval_file="$repo_root/knowledge/evals/${skill_id}/EVAL.md"
 [[ -f "$eval_file" ]] || { printf '不存在 Skill Eval：%s\n' "${eval_file#$repo_root/}" >&2; exit 1; }
 
 runner="$(awk -F': ' '$1 == "runner" { print $2; exit }' "$eval_file")"
-default_config="$repo_root/knowledge/evals/${skill_id}/skill-up/eval.yaml"
+default_config="$repo_root/skills/${skill_id}/evals/eval.yaml"
 eval_config="${SKILL_EVAL_CONFIG:-$default_config}"
 
 if [[ ! -f "$eval_config" ]]; then

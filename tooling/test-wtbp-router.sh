@@ -21,7 +21,7 @@ assert_contains() {
 resolve_source="$(sed -n '/^resolve_routes()/,/^case /p' "$router")"
 [[ "$resolve_source" != *'install-skill.sh'* ]] || fail '候选查询不应直接安装外部 Skill'
 help_output="$($router --help)"
-assert_contains "$help_output" '候选查询不会自动安装或执行 Skill'
+assert_contains "$help_output" '候选查询不会自动安装、执行 Skill 或访问外部服务'
 
 fallback_output="$($router "$query")"
 assert_contains "$fallback_output" 'figma-evolve'
@@ -31,4 +31,17 @@ assert_contains "$fallback_output" '该命令不会替你执行 Skill'
 case_insensitive_output="$($router 'Which SKILL should route this task?')"
 assert_contains "$case_insensitive_output" 'skill-router'
 
-printf 'WTBP 路由测试：通过（前缀归一化、本地候选、当前会话语义边界）\n'
+external_list_output="$($router external)"
+assert_contains "$external_list_output" 'figma-official-mcp'
+assert_contains "$external_list_output" 'local-adapter'
+
+external_show_output="$($router show figma-code-connect)"
+assert_contains "$external_show_output" '采用方式：local-adapter'
+assert_contains "$external_show_output" '权限边界：'
+
+external_query_output="$($router '为 Figma 组件建立 Code Connect 映射并落地到代码组件')"
+assert_contains "$external_query_output" '可复用的外部能力候选'
+assert_contains "$external_query_output" 'figma-code-connect'
+assert_contains "$external_query_output" '不得运行 wtbp install'
+
+printf 'WTBP 路由测试：通过（前缀归一化、本地与外部能力候选、当前会话语义边界）\n'

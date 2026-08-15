@@ -44,6 +44,10 @@ next_reviewer:
 |---|---|---|---|---|---|
 | FND-01 |  |  |  |  | Existing / Unverified |
 
+- Icon library/source, semantic naming, supported sizes/styles/states, ownership/license, and known family conflicts:
+- Icon inventory revision (`ICON-YYYYMMDD-VNN`) or explicit `Unverified` boundary:
+- Coupled asset sources: font, logo/brand mark, image/illustration, and material motion:
+
 ## PDC-04 — Behavior and constraints
 
 - Permissions and roles:

@@ -1,7 +1,10 @@
-.PHONY: validate validate-skill-evals validate-skill-routes validate-skill-index test-wtbp-router test-secret-scan skill-eval ske commit-checklist commit-checklist-range review-staged review-range review-issue install-hooks
+.PHONY: validate validate-ai-companions validate-skill-evals validate-skill-routes validate-skill-index test-wtbp-router test-secret-scan skill-eval ske commit-checklist commit-checklist-range review-staged review-range review-issue install-hooks
 
 validate:
 	./tooling/validate-repository.sh
+
+validate-ai-companions:
+	./tooling/validate-ai-companions.sh
 
 validate-skill-evals:
 	./tooling/validate-skill-evals.sh

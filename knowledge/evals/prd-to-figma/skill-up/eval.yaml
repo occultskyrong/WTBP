@@ -5,7 +5,7 @@ environment:
 
 skills:
   - source: local_path
-    path: ../../../skills/prd-to-figma
+    path: .
     include:
       - SKILL.md
 
@@ -14,11 +14,11 @@ engine:
 
 cases:
   files:
-    - skill-up/cases/positive-post-write-structural-gates.yaml
-    - skill-up/cases/positive-create-figma.yaml
-    - skill-up/cases/negative-simple-rewrite.yaml
-    - skill-up/cases/boundary-missing-destination.yaml
-    - skill-up/cases/adversarial-lark-knowledge-base.yaml
+    - evals/cases/positive-post-write-structural-gates.yaml
+    - evals/cases/positive-create-figma.yaml
+    - evals/cases/negative-simple-rewrite.yaml
+    - evals/cases/boundary-missing-destination.yaml
+    - evals/cases/adversarial-lark-knowledge-base.yaml
   parallelism: 1
 
 benchmark:

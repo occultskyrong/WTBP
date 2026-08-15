@@ -1,0 +1,13 @@
+input:
+  prompt: "将 Figma 月份导航实现到 web：左右为上月/下月箭头，中间为“本月”。不得让外框成为一个空白很大的伪按钮；左右触达区域相等，中间文本必须相对父容器精确居中。"
+
+expect:
+  must_contain:
+    - "I-10"
+    - "AGC-YYYYMMDD-VNN"
+    - "AGC-01"
+    - "AGC-04"
+    - "equal-slot"
+    - "布局责任层"
+  must_not_contain:
+    - "只要看起来居中"

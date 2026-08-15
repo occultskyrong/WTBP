@@ -10,9 +10,11 @@ The layers are ordered. A later layer may not silently invent a missing decision
 
 1. **Intent and scope** — capture the goal, scenario, constraints, non-goals, required evidence, and the
    decision or artifact that will be accepted.
-2. **Capability and routing** — use `knowledge/skill-index.yaml` as the only source for capability cards and
-   `knowledge/skill-routes.yaml` only for task matching. The current session makes the semantic `select`,
-   `clarify`, or `no_match` decision; keyword matching never executes or installs a Skill.
+2. **Capability and routing** — use `knowledge/skill-index.yaml` as the source for local Skill cards,
+   `knowledge/external-capabilities.yaml` as the source for external capability cards, and
+   `knowledge/skill-routes.yaml` only for task matching and separately managed installation routes. The current
+   session makes the semantic `select`, `clarify`, or `no_match` decision plus an adoption decision; keyword
+   matching never executes, installs, or creates a Skill.
 3. **Bounded execution** — load the smallest selected Skill, verify its input contract, follow its workflow,
    and request only the side effects declared in the capability card. Stop when a required input, permission,
    or external dependency is missing.
@@ -57,6 +59,18 @@ All edges must point to the same `skill-id`. A missing edge, stale verification 
 is a registry failure, not a reason to guess. The catalog describes discoverable objects; it does not override
 the capability index, route, or Skill contract.
 
+The minimum graph for an external capability is:
+
+```text
+external capability card -> knowledge/external-capabilities.yaml
+  └─ traceable source    -> knowledge/external-sources.yaml
+      └─ adoption, availability, permissions, and verification boundary
+```
+
+An external capability is not a local Skill and therefore does not inherit a local catalog object, route, Eval,
+or installation authority. A local adapter or managed-install route that uses it must still satisfy its own local
+registry graph and gates.
+
 ## Gate model
 
 | Gate | Question | Fail-closed action |
@@ -72,20 +86,24 @@ the capability index, route, or Skill contract.
 ## Lifecycle and progressive disclosure
 
 `discover -> analyze -> design/evolve/implement -> verify -> evaluate -> maintain` is the default lifecycle.
-Discovery loads cards and routes; execution loads one Skill; references and Evals are loaded only when the
-selected step needs them. New Skills require a repeated stable task, a distinct boundary, and the minimum Eval
-matrix. Otherwise register a route to an existing Skill or an external pinned Skill instead.
+Discovery loads local and external cards, then routes; execution loads one Skill; references and Evals are loaded
+only when the selected step needs them. Before proposing a new Skill, assess existing official capabilities,
+external Skills, and reference implementations. Choose direct use, local adaptation, composition, or reference-only
+when they meet the scenario with declared boundaries. New Skills require a repeated stable task, a distinct
+project-specific boundary, recorded reuse/search evidence, and the minimum Eval matrix.
 
 `active` is selectable, `candidate` is selectable only after the current session confirms scope, `stale` is not
-a default recommendation, and `deprecated` is not selectable except for migration or audit. External Skills
-must remain pinned, allowlisted, permission-declared, and explicitly authorized before installation.
+a default recommendation, and `deprecated` is not selectable except for migration or audit. External capability
+cards never authorize installation. A separately managed external Skill must remain pinned, allowlisted,
+permission-declared, and explicitly authorized before installation.
 
 ## Review checklist
 
 Before declaring a Skill change complete, verify:
 
 - the five layers and all six gates have an owner and evidence;
-- the English Skill, Chinese companion, index, route, catalog, Eval, and relationship agree;
+- the English Skill, Chinese companion, index, route, catalog, Eval, and relationship agree; external capability
+  cards instead agree with their source, adoption, availability, permissions, and verification boundary;
 - no step relies on a keyword match as semantic execution or on a dry-run as runtime proof;
 - side effects and installation authority are narrower than or equal to the registered capability card;
 - the next handoff, unresolved risk, and verification command are explicit.

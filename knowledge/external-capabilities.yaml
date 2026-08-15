@@ -1,0 +1,59 @@
+version: 1
+description: 外部能力登记。它只记录可发现、可追溯的外部能力；不替代本地 Skill 的能力索引、路由、Eval 或安装授权。
+capabilities:
+  - id: figma-official-mcp
+    title: Figma 官方 MCP 能力
+    summary: 在当前客户端已提供且获授权时，读取或写入 Figma 设计产物、组件和变量。
+    source_id: source.figma-mcp-server-guide
+    kind: official-integration
+    domains: [product, design, engineering]
+    capabilities: [figma-create, figma-evolve, figma-inspection, figma-to-code]
+    stages: [design, evolve, implement, verify]
+    adoption: local-adapter
+    availability: client-provided
+    permissions: 受当前客户端 Figma OAuth、文件访问权限和目标项目授权约束。
+    verify: 由当前会话确认 Figma 工具可用、目标文件可访问；不可用时记录为 Unverified。
+    status: active
+    keywords: [Figma, 设计稿, 组件, 变量, 节点, MCP]
+  - id: figma-code-connect
+    title: Figma Code Connect
+    summary: 将 Figma 组件、属性和设计系统映射到消费项目的真实代码组件。
+    source_id: source.figma-code-connect
+    kind: official-integration
+    domains: [design, engineering]
+    capabilities: [figma-to-code, figma-inspection]
+    stages: [design, implement, verify]
+    adoption: local-adapter
+    availability: client-provided
+    permissions: 受 Figma 计划、消费项目仓库权限和项目配置约束；不得由 WTBP 代管。
+    verify: 核对目标组件、属性和代码映射；无法访问时标记为 Unverified，不得虚构映射。
+    status: active
+    keywords: [Code Connect, 组件映射, 设计系统, Figma, 代码组件]
+  - id: figma-console-mcp-audit
+    title: Figma Console MCP 审计能力
+    summary: 可选的第三方 Figma Token、组件树、WCAG 和目标尺寸审计能力。
+    source_id: source.figma-console-mcp-skills
+    kind: external-skill
+    domains: [design, quality]
+    capabilities: [figma-inspection, visual-verification]
+    stages: [verify, evaluate]
+    adoption: manual-optional
+    availability: manual-install
+    permissions: 需要使用方明确授权、Figma PAT、命令执行环境和第三方代码审查；不得自动安装或读取凭据。
+    verify: 核对固定来源、许可、提交版本、权限范围和实际审计输出；不能替代 WTBP 的几何和视觉验收。
+    status: candidate
+    keywords: [Figma 审计, Token, WCAG, 目标尺寸, lint, 组件树]
+  - id: figma-sds-reference
+    title: Figma Simple Design System 参考实现
+    summary: 官方 Variables、Components、Code Connect 与 React 的设计系统结构参考。
+    source_id: source.figma-sds
+    kind: reference-implementation
+    domains: [design, engineering]
+    capabilities: [figma-create, figma-to-code]
+    stages: [discover, design, implement]
+    adoption: reference-only
+    availability: reference
+    permissions: 仅阅读和评估其许可证与适用性；不复制为项目事实或自动执行方案。
+    verify: 将采用的结构与目标项目设计契约、组件和运行实现逐项核验。
+    status: active
+    keywords: [设计系统, Variables, Components, React, Code Connect, Figma]

@@ -14,6 +14,7 @@ done
 repo_root="$(cd "$(dirname "$script_path")/.." && pwd)"
 route_file="$repo_root/knowledge/skill-routes.yaml"
 index_file="$repo_root/knowledge/skill-index.yaml"
+external_capability_file="$repo_root/knowledge/external-capabilities.yaml"
 
 fail() {
   printf 'WTBP 路由失败：%s\n' "$1" >&2
@@ -27,16 +28,18 @@ usage() {
   wtbp root                         # 输出 WTBP 仓库根目录
   wtbp list --domain <domain>        # 按领域浏览 Skill
   wtbp show <skill-id>               # 查看 Skill 能力卡
-  wtbp "<问题或任务>"                # 输出本地候选 Skill 和可解释匹配依据
+  wtbp external                      # 列出已登记的外部能力及采用边界
+  wtbp "<问题或任务>"                # 输出本地 Skill 与外部能力候选及可解释匹配依据
   wtbp install <skill-id>            # 安装已登记的外部 Skill
 
 当前会话负责基于候选能力卡进行语义判断；本命令不会启动第二个 LLM 会话。
-候选查询不会自动安装或执行 Skill；确认后必须显式运行 `wtbp install <skill-id>`。
+候选查询不会自动安装、执行 Skill 或访问外部服务。外部能力卡只说明复用方式；只有受控安装路由才可在确认后显式运行 `wtbp install <skill-id>`。
 EOF
 }
 
 [[ -f "$route_file" ]] || fail '缺少 knowledge/skill-routes.yaml'
 [[ -f "$index_file" ]] || fail '缺少 knowledge/skill-index.yaml'
+[[ -f "$external_capability_file" ]] || fail '缺少 knowledge/external-capabilities.yaml'
 
 list_skills() {
   local domain="${1:-}"
@@ -103,8 +106,139 @@ show_skill() {
     /^    aliases: / { aliases = $2 }
     /^    route_ids: / { route_ids = $2 }
     END { emit(); exit(found ? 0 : 1) }
-  ' "$index_file" || fail "未找到 Skill：$requested_id"
-  [[ -n "$skill_path" ]] && printf '%s\n' "- 规范文件：$skill_path/SKILL.md"
+  ' "$index_file" && {
+    [[ -n "$skill_path" ]] && printf '%s\n' "- 规范文件：$skill_path/SKILL.md"
+    return 0
+  }
+
+  show_external_capability "$requested_id" || fail "未找到 Skill 或外部能力：$requested_id"
+}
+
+list_external_capabilities() {
+  local domain="${1:-}"
+
+  awk -F': ' -v domain="$domain" '
+    function clean(value) { sub(/^\[/, "", value); sub(/\]$/, "", value); return value }
+    function has_domain(value, expected) { value = clean(value); gsub(/[[:space:]]/, "", value); return expected == "" || ("," value ",") ~ ("," expected ",") }
+    function emit() { if (id != "" && has_domain(domains, domain)) print id "\t" title "\t" summary "\t" adoption "\t" availability "\t" status }
+    /^  - id: / { emit(); id = title = summary = domains = adoption = availability = status = ""; id = $2; next }
+    /^    title: / { title = $2 }
+    /^    summary: / { summary = $2 }
+    /^    domains: / { domains = $2 }
+    /^    adoption: / { adoption = $2 }
+    /^    availability: / { availability = $2 }
+    /^    status: / { status = $2 }
+    END { emit() }
+  ' "$external_capability_file" | while IFS=$'\t' read -r capability_id title summary adoption availability status; do
+    printf '%s\n' "- ${capability_id}（${status}）"
+    printf '  %s｜采用：%s｜可用性：%s\n' "$title" "$adoption" "$availability"
+    printf '  %s\n' "$summary"
+  done
+}
+
+show_external_capability() {
+  local requested_id="$1"
+
+  awk -F': ' -v requested_id="$requested_id" '
+    function emit() {
+      if (id != requested_id) return
+      print "# " title " (`" id "`)"
+      print ""
+      print summary
+      print ""
+      print "- 类型：" kind
+      print "- 来源 ID：" source_id
+      print "- 状态：" status
+      print "- 领域：" domains
+      print "- 核心能力：" capabilities
+      print "- 阶段：" stages
+      print "- 采用方式：" adoption
+      print "- 可用性：" availability
+      print "- 权限边界：" permissions
+      print "- 验证方式：" verify
+      print "- 关键词：" keywords
+      found = 1
+    }
+    /^  - id: / { emit(); id = $2; title = summary = source_id = kind = domains = capabilities = stages = adoption = availability = permissions = verify = status = keywords = ""; next }
+    /^    title: / { title = $2 }
+    /^    summary: / { summary = $2 }
+    /^    source_id: / { source_id = $2 }
+    /^    kind: / { kind = $2 }
+    /^    domains: / { domains = $2 }
+    /^    capabilities: / { capabilities = $2 }
+    /^    stages: / { stages = $2 }
+    /^    adoption: / { adoption = $2 }
+    /^    availability: / { availability = $2 }
+    /^    permissions: / { permissions = $2 }
+    /^    verify: / { verify = $2 }
+    /^    status: / { status = $2 }
+    /^    keywords: / { keywords = $2 }
+    END { emit(); exit(found ? 0 : 1) }
+  ' "$external_capability_file"
+}
+
+external_next_step() {
+  local adoption="$1"
+  local capability_id="$2"
+
+  case "$adoption" in
+    direct-use)
+      printf '当前会话确认客户端可用性与权限后可直接复用；无需 wtbp install。\n'
+      ;;
+    local-adapter)
+      printf '按关联的本地 WTBP Skill 执行；该能力是受本地契约和门禁约束的底层能力，不单独替代流程，也不得运行 wtbp install。\n'
+      ;;
+    manual-optional)
+      printf '仅在用户明确授权后，单独核对来源、固定版本、许可证、权限与凭据；不得运行 wtbp install 或读取凭据。\n'
+      ;;
+    reference-only)
+      printf '仅作为方案与结构参考；需经项目设计契约或技术决策确认后才可采用。\n'
+      ;;
+    *)
+      fail "外部能力 $capability_id 的 adoption 无法识别：$adoption"
+      ;;
+  esac
+}
+
+resolve_external_capabilities() {
+  local query="$1"
+  local matches
+
+  matches="$(awk -F': ' -v query="$query" '
+    function emit() {
+      if (id == "" || (status != "active" && status != "candidate")) return
+      score = 0
+      matched = ""
+      normalized_query = tolower(query)
+      count = split(keywords, values, ",")
+      for (i = 1; i <= count; i++) {
+        keyword = values[i]
+        gsub(/^[[:space:]]+|[[:space:]]+$/, "", keyword)
+        if (keyword != "" && index(normalized_query, tolower(keyword)) > 0) {
+          score++
+          matched = matched (matched == "" ? "" : ", ") keyword
+        }
+      }
+      if (score > 0) print score "\t" id "\t" title "\t" adoption "\t" availability "\t" status "\t" matched
+    }
+    /^  - id: / { emit(); id = title = adoption = availability = status = keywords = ""; id = $2; next }
+    /^    title: / { title = $2 }
+    /^    adoption: / { adoption = $2 }
+    /^    availability: / { availability = $2 }
+    /^    status: / { status = $2 }
+    /^    keywords: \[/ { keywords = substr($0, length("    keywords: [") + 1); sub(/]$/, "", keywords) }
+    END { emit() }
+  ' "$external_capability_file" | sort -rn -k1,1 -k2,2)"
+
+  [[ -n "$matches" ]] || return 0
+  printf '可复用的外部能力候选（仍需当前会话作语义判断）：\n'
+  while IFS=$'\t' read -r score capability_id title adoption availability status matched; do
+    printf '%s\n' "- ${capability_id}（匹配 ${score}，${status}）"
+    printf '  能力：%s｜采用：%s｜可用性：%s\n' "$title" "$adoption" "$availability"
+    printf '  命中关键词：%s\n' "$matched"
+    printf '  下一步：'
+    external_next_step "$adoption" "$capability_id"
+  done <<< "$matches"
 }
 
 normalise_query() {
@@ -149,24 +283,25 @@ resolve_routes() {
     END { emit() }
   ' "$route_file" | sort -rn -k1,1 -k4,4)"
 
-  if [[ -z "$matches" ]]; then
-    printf '未命中已登记的 Skill。请补充目标、约束或所需证据；不要据此自动新建或安装 Skill。\n'
-    return 0
+  if [[ -n "$matches" ]]; then
+    printf '候选本地 Skill（按关键词匹配度排序）：\n'
+    while IFS=$'\t' read -r score route_id title skill_id source path status install auto_install matched; do
+      printf '%s\n' "- ${skill_id}（匹配 ${score}，${status}）"
+      printf '  场景：%s\n' "$title"
+      printf '  命中关键词：%s\n' "$matched"
+      if [[ "$source" == local ]]; then
+        printf '  下一步：读取 %s/SKILL.md；该命令不会替你执行 Skill。\n' "$path"
+      elif [[ "$auto_install" == true && "$status" == active ]]; then
+        printf '  安装：当前会话确认后运行 wtbp install %s；该查询不会自动安装。\n' "$skill_id"
+      else
+        printf '  下一步：核对来源、版本、权限和安装方式：%s；未经确认不得安装。\n' "$install"
+      fi
+    done <<< "$matches"
+  else
+    printf '未命中已登记的本地 Skill；这不等于应新建或安装 Skill。\n'
   fi
 
-  printf '候选 Skill（按关键词匹配度排序）：\n'
-  while IFS=$'\t' read -r score route_id title skill_id source path status install auto_install matched; do
-    printf '%s\n' "- ${skill_id}（匹配 ${score}，${status}）"
-    printf '  场景：%s\n' "$title"
-    printf '  命中关键词：%s\n' "$matched"
-    if [[ "$source" == local ]]; then
-      printf '  下一步：读取 %s/SKILL.md；该命令不会替你执行 Skill。\n' "$path"
-    elif [[ "$auto_install" == true && "$status" == active ]]; then
-      printf '  安装：当前会话确认后运行 wtbp install %s；该查询不会自动安装。\n' "$skill_id"
-    else
-      printf '  下一步：核对来源、版本、权限和安装方式：%s；未经确认不得安装。\n' "$install"
-    fi
-  done <<< "$matches"
+  resolve_external_capabilities "$query"
 }
 
 case "${1:-}" in
@@ -179,6 +314,16 @@ case "${1:-}" in
       list_skills
     elif [[ $# -eq 3 && "$2" == --domain ]]; then
       list_skills "$3"
+    else
+      usage >&2
+      exit 2
+    fi
+    ;;
+  external)
+    if [[ $# -eq 1 ]]; then
+      list_external_capabilities
+    elif [[ $# -eq 3 && "$2" == --domain ]]; then
+      list_external_capabilities "$3"
     else
       usage >&2
       exit 2
