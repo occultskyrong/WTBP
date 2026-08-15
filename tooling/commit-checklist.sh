@@ -62,6 +62,11 @@ for file in "${changed_files[@]}"; do
       [[ -n "$skill_id" ]] || fail "$file 无法读取 Skill name"
       skill_ids+=("$skill_id")
       ;;
+    knowledge/evals/*/EVAL.md|knowledge/evals/*/cases.yaml|knowledge/evals/*/skill-up/eval.yaml|knowledge/evals/*/skill-up/cases/*.yaml)
+      skill_id="$(printf '%s\n' "$file" | cut -d/ -f3)"
+      [[ -f "knowledge/evals/${skill_id}/EVAL.md" ]] || fail "$file 无法定位对应 Skill Eval：knowledge/evals/${skill_id}/EVAL.md"
+      skill_ids+=("$skill_id")
+      ;;
   esac
 done
 

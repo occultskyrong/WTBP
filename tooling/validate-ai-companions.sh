@@ -31,6 +31,7 @@ ai_files=(
   "$repo_root/knowledge/templates/project-design-contract-template.md"
   "$repo_root/knowledge/templates/icon-asset-inventory-template.md"
   "$repo_root/knowledge/templates/action-group-contract-template.md"
+  "$repo_root/knowledge/templates/page-specification-template.md"
   "$repo_root/knowledge/templates/skill-template/SKILL.md"
 )
 

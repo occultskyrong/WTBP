@@ -52,6 +52,8 @@ required_paths=(
   "knowledge/templates/icon-asset-inventory-template.zh-CN.md"
   "knowledge/templates/action-group-contract-template.md"
   "knowledge/templates/action-group-contract-template.zh-CN.md"
+  "knowledge/templates/page-specification-template.md"
+  "knowledge/templates/page-specification-template.zh-CN.md"
   "knowledge/skill-framework.md"
   "knowledge/skill-framework.zh-CN.md"
   "knowledge/templates/practice-template.md"
@@ -188,9 +190,11 @@ for design_link in \
   'knowledge/design-workflow.md:templates/project-design-contract-template.md' \
   'knowledge/design-workflow.md:templates/icon-asset-inventory-template.md' \
   'knowledge/design-workflow.md:templates/action-group-contract-template.md' \
+  'knowledge/design-workflow.md:templates/page-specification-template.md' \
   'knowledge/design-workflow.zh-CN.md:templates/project-design-contract-template.zh-CN.md' \
   'knowledge/design-workflow.zh-CN.md:templates/icon-asset-inventory-template.zh-CN.md' \
-  'knowledge/design-workflow.zh-CN.md:templates/action-group-contract-template.zh-CN.md'; do
+  'knowledge/design-workflow.zh-CN.md:templates/action-group-contract-template.zh-CN.md' \
+  'knowledge/design-workflow.zh-CN.md:templates/page-specification-template.zh-CN.md'; do
   source_file="${design_link%%:*}"
   target_path="${design_link#*:}"
   if ! rg -Fq "](${target_path})" "$repo_root/$source_file"; then

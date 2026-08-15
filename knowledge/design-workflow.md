@@ -24,7 +24,7 @@ Before visual mutation, establish:
 
 Use the terminal and actor labels defined by the target product or project. If a shared taxonomy is needed, record the explicit mapping in the cognition record before using it; never import roles from another project, example, or repository name. Determine ownership from routes, authentication, permissions, callers, and product copy; do not infer a terminal from the fact that a screen is mobile.
 
-Before composition, define the terminal shell contract from the declared target and evidence: shell type, viewport/frame dimensions, device chrome, safe areas, navigation bars, status areas, and any embedded browser or host constraints. Do not invent a generic phone frame. For `miniapp`, explicitly show the mini-program viewport and its applicable device/status/navigation/tab-bar shell; for `app-ios` or `app-android`, show the declared device and safe-area chrome; for `web`, show the approved browser/viewport or responsive canvas without adding browser chrome unless it is part of the product contract. Record the source and dimensions in the inventory and acceptance matrix.
+Before composition, define the terminal shell contract from the declared target and evidence: shell type, viewport/frame dimensions, device chrome, safe areas, navigation bars, status areas, and any embedded browser or host constraints. Every Figma product page must visibly show the selected shell or viewport boundary around its complete page; do not deliver a bare canvas. Do not invent a generic phone frame. For `miniapp`, explicitly show the mini-program viewport and its applicable device/status/navigation/tab-bar shell; for `app-ios` or `app-android`, show the declared device and safe-area chrome; for `web`, show the approved browser shell or a named, visibly bounded browser/viewport container. Browser chrome may be omitted only when it is outside the product contract, but the viewport container and page range must remain visible. Record the source and dimensions in the inventory and acceptance matrix.
 
 For overlapping designs, also require source design timestamps and the user-selected authoritative baseline. If either is missing, record `Unverified` and stop composition until the collision can be resolved.
 
@@ -105,6 +105,36 @@ Each inventory row includes feature name, status, terminal/user, expected pages,
 - `Unverified`: current evidence cannot establish the state.
 
 Always include a visible conflict/decision section, even when it says no material conflict was found. Ask the user to approve the named inventory version. Approval covers only that version and its rows; separately listed unresolved blocking decisions remain unresolved. Any scope, row, conflict resolution, or blocking-decision change creates a new inventory revision. Do not mutate a visual artifact until the current inventory is approved and all blocking decisions are resolved.
+
+### Page specification gate
+
+After the inventory is approved and before extracting page-level foundations, constructing a base frame, or implementing
+target code, create one `PS-YYYYMMDD-VNN` **Page Design and Implementation Specification** for every approved page/state.
+Use the [page specification template](templates/page-specification-template.md). The page specification is the required
+bridge from a project-level `PDC`/`ARC`/`INV` record to a concrete page; it is not an annotation paragraph and it must
+not place explanatory text inside product UI.
+
+The blocking page-specification gate is:
+
+1. **Page explanation and boundary (`PS-01`)** — record the user outcome, entry, primary task, exit/recovery,
+   approved feature/page/state scope, exclusions, unresolved facts, evidence locators, and required right-side annotation.
+2. **Element inventory and hierarchy (`PS-02`)** — enumerate every visible or interactive element exactly once with
+   semantic role, parent/region, content/data source, state, layout role, Figma node/target owner, and evidence. Ordinary
+   elements require a normal-flow/Auto Layout owner; overlays require a containing parent, anchor, and reason.
+3. **Foundation and component reuse (`PS-03`)** — decide `reuse`, `extend`, `new`, or `Unverified` for every element,
+   then map reusable component/variant, token/type/Icon/asset, Code Connect or project mapping, and allowed extension.
+   Page-local component clones, arbitrary CSS, and visually similar assets cannot fill a missing mapping.
+4. **Layer plan (`PS-04`)** — approve the ordered L0 structural base, L1 shared foundations, L2 page composition/state,
+   and L3 scoped finish plan for both Figma and target implementation. A later layer cannot start before the preceding
+   layer has its required proof or a named approved exception.
+5. **Design-to-code handoff (`PS-05`)** — map every element to Figma and target component/file, layout owner,
+   viewport/state, and acceptance evidence. The implementation target must use this map; a Figma-only page records the
+   target mapping as `Unverified`, not as completed code.
+
+Missing page explanation, incomplete element inventory, unresolved reuse decision, absent layer plan, or unmapped
+design-to-code boundary blocks page-specific styling, code implementation, and acceptance. A narrow patch may reuse a
+current page specification only when the page outcome, element hierarchy, component mapping, and layer plan remain
+unchanged; otherwise revise and approve it.
 
 ### Action-group contract gate
 
@@ -207,26 +237,26 @@ The annotation follows this order and omits genuinely inapplicable sections: `Id
 
 ### Base-frame-first construction checkpoint
 
-Before adding page-specific components, content styling, state decoration, or visual polish, construct the **base frame batch** for every approved page/state in the inventory. Each base frame must contain only the shared structural skeleton: the declared terminal shell, page root, navigation/status surfaces, safe-area behavior, content regions, Auto Layout/normal-flow parents, named overlay parents where needed, state slots, and the right-side annotation sibling. Use neutral placeholders; do not hide unresolved geometry behind decorative styles or final copy.
+Before adding page-specific components, content styling, state decoration, or visual polish, confirm the approved `PS-YYYYMMDD-VNN` for every page/state, then construct the **base frame batch** for every approved page/state in the inventory. Each base frame must contain only the shared structural skeleton from L0: the declared terminal shell, page root, navigation/status surfaces, safe-area behavior, content regions, Auto Layout/normal-flow parents, named overlay parents where needed, state slots, and the right-side annotation sibling. Use neutral placeholders; do not hide unresolved geometry behind decorative styles or final copy.
 
 Run the following blocking checkpoint across the complete base-frame batch:
 
 1. **Page coverage (`BF-01`)** — every approved page/state ID has exactly one base frame, and no unapproved frame is introduced.
-2. **Shell contract (`BF-02`)** — every base frame uses the declared terminal shell, viewport/device dimensions, safe areas, and navigation/status surfaces.
+2. **Shell contract (`BF-02`)** — every base frame uses the declared terminal shell, viewport/device dimensions, safe areas, and navigation/status surfaces, with a visible outer boundary around the complete page. A generic phone frame, bare canvas, or cropped page cannot satisfy a different declared terminal.
 3. **Root geometry (`BF-03`)** — page roots, content regions, and primary gaps have explicit dimensions/constraints and a recorded layout owner; no unexplained coordinates or overflow exist.
 4. **Flow hierarchy (`BF-04`)** — ordinary regions use Auto Layout/normal flow, and every intentional overlay has a named containing parent, anchor, and reason.
 5. **State skeleton (`BF-05`)** — all material states and transition slots in the approved matrix are represented without inventing behavior or polishing only one page.
 6. **Review separation (`BF-06`)** — every base frame already has its standalone right-side annotation sibling, and the product frame contains no design/project/technical/acceptance commentary.
 
-Record the base-frame IDs, shell dimensions, layout-owner evidence, neutral screenshots, and all `BF-01`–`BF-06` results. A failed, partial, or unverified checkpoint blocks upper-layer styling. Once it passes, layer approved shared components, approved action-group entries, approved Icon inventory entries, verified/proposed product copy, state visuals, and page-specific styling in separate write batches; rerun the applicable base and shared gates after structural changes.
+Record the page-specification IDs, base-frame IDs, shell dimensions, layout-owner evidence, neutral screenshots, and all `BF-01`–`BF-06` results. A failed, partial, or unverified checkpoint blocks upper-layer styling. Once it passes, implement L1 shared components, L2 page composition/states, and L3 page-specific styling in separate write batches; every write must remain within the approved PS-03 reuse matrix and PS-04 layer plan. Rerun the applicable page, base, and shared gates after structural changes.
 
 After every visual write batch, run the post-write structural gate across **all** product page/state frames in the target artifact, not only the frames that were edited. Do not perform another write or report completion until the gate passes or an approved exception is recorded:
 
-1. **Layout owner and distribution (`G-01`)** — inspect and record each page/frame's Figma `layoutMode` (or the equivalent DOM layout owner). Ordinary content must remain in Auto Layout/normal flow. `NONE` is allowed only when the frame is an intentional overlay, canvas, or fixed-control container and the reason is recorded; ordinary children must not be converted to absolute positioning for alignment. Re-run the applicable `AGC-01`–`AGC-06` geometry: equal-weight navigation, TabBar, tabs, or segmented controls record distribution, item weights/basis, partition centers, and tolerance; `symmetric-navigation` records equal edge target dimensions and the middle-to-parent-center tolerance. Hand-placed coordinates, `space-between` used as centering proof, or a visibly non-equal partition fail this gate unless an approved product rule explains it.
+1. **Layout owner and distribution (`G-01`)** — inspect and record each page/frame's Figma `layoutMode` (or the equivalent DOM layout owner). Ordinary content must remain in Auto Layout/normal flow. `NONE` is allowed only when the frame is an intentional overlay, canvas, or fixed-control container and the reason is recorded; ordinary children must not be converted to absolute positioning for alignment. Re-run the applicable `AGC-01`–`AGC-06` geometry: equal-weight navigation, TabBar, tabs, or segmented controls record distribution, item weights/basis, partition centers, and tolerance; `symmetric-navigation` records equal edge target dimensions and the middle-to-parent-center tolerance. When review migrates nodes, adds or removes a page, or changes a section's column count, recalculate every affected Section boundary from its actual content bounds plus the declared fixed padding; do not reuse the old fixed width or height. Record the triggering change, child/column inputs, fixed padding, and recomputed geometry. Hand-placed coordinates, `space-between` used as centering proof, a stale fixed Section dimension, or a visibly non-equal partition fail this gate unless an approved product rule explains it.
 2. **Annotation pairing (`G-02`)** — enumerate every product page/state frame and prove a one-to-one mapping to a standalone annotation sibling. The annotation must be outside the product UI, on the right, top-aligned, and use the default `48px` gap unless an approved exception states the alternative.
 3. **Recursive text and component containment (`G-03`)** — traverse every descendant text node, component instance, asset, and nested container under each product page/state, including descendants inside shared instances. Compare each node with its direct parent and trace material overflow through the ancestor chain after fonts/assets load. Record node, parent, ancestor, and geometry; no child may cross a required parent/ancestor boundary or be hidden by clipping/overflow to conceal a failure. A page-level bounding-box check alone never passes this gate.
 4. **Instance/master scale (`G-04`)** — for every shared component instance, inspect its master/component geometry and record `instance width / master width` and `instance height / master height`. Ratios must remain `1.0` unless a documented responsive, variant, or constraint rule and its approval explain the deviation; unexplained distortion blocks acceptance.
-5. **Terminal shell and fidelity (`G-05`)** — record the declared target, shell type, dimensions, device/browser chrome, safe areas, and navigation surfaces. The full shell and product page must be visible in the capture; miniapp frames must show the applicable mini-program shell, and any deviation from the target contract blocks acceptance.
+5. **Terminal shell and fidelity (`G-05`)** — record the declared target, selected shell type, dimensions, visible outer boundary, device/browser chrome, safe areas, and navigation surfaces. The full shell and product page must be visible in the capture; miniapp frames must show the applicable mini-program shell, app frames the declared device/safe-area chrome, and web frames a declared browser or visibly bounded viewport container. A bare canvas, generic device frame, or any deviation from the target contract blocks acceptance.
 6. **Product-content isolation (`G-06`)** — inspect every visible text node in the product frame. Only verified or explicitly marked proposed product copy may remain; design/project descriptions and technical or acceptance commentary must be absent from the product frame and present, when needed, in the right-side annotation sibling.
 
 The gate record must include the artifact revision, inspected page/frame IDs, target shell contract, base-frame IDs and `BF-01`–`BF-06` results, `AGC-01`–`AGC-06` results, `G-01`–`G-06` results, geometry sources, screenshots, exceptions, and the rerun result. A node-write success, static check, or single screenshot cannot satisfy this gate.

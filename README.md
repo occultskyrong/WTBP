@@ -68,7 +68,7 @@ make install-hooks     # 启用提交门禁（每个克隆仓库一次）
 make review-staged     # 审查暂存内容
 ```
 
-提交前必须通过 `make commit-checklist`；它会统一执行 `make validate`、内容审查、变更 Skill 的
+提交前必须通过 `make commit-checklist`；它会统一执行 `make validate`、内容审查、变更 Skill 或已登记 Eval 资产对应的
 `ske` 契约评测、质量门禁和 `VERSION` 检查。详细规则见 [`docs/commit-checklist.md`](docs/commit-checklist.md)。
 提交、PR 和 GitHub 治理细节见：
 

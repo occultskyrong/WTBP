@@ -1,5 +1,5 @@
 input:
-  prompt: "将这个多页面 Figma 设计实现到 miniapp。先检查实际目标仓库，建立并确认 PDC-YYYYMMDD-VNN（PDC-01 至 PDC-06），形成 ARC-YYYYMMDD-VNN 并根据契约完成架构和组件映射；契约冲突或关键字段未确认时必须阻断。页面样式前，必须确认 AGC-YYYYMMDD-VNN、通过 AGC-01 至 AGC-06，并为每个动作组建立语义、共享组件、宽度/插槽、可见尺寸与触达目标映射；对称导航必须左右等大且中部相对父级居中。再确认 ICON-YYYYMMDD-VNN、通过 IA-01 至 IA-07，并把每个 Icon 映射到语义组件、尺寸、风格、状态、精确来源和目标实现；缺失 Icon 必须独立设计。然后构造所有页面/状态的中性结构底层并通过 BF-01 至 BF-06，再逐页检查源 Figma 的 layoutMode 或 DOM 布局责任层、TabBar 等权分布、右侧 annotation、文字父容器边界、嵌套组件递归边界、共享组件实例与 master 的尺寸比例、小程序外框高保真，并确认产品 UI 没有设计说明。"
+  prompt: "将这个多页面 Figma 设计实现到 miniapp。先检查实际目标仓库，建立并确认 PDC-YYYYMMDD-VNN（PDC-01 至 PDC-06），形成 ARC-YYYYMMDD-VNN 并根据契约完成架构和组件映射；契约冲突或关键字段未确认时必须阻断。编辑前，为每个页面/状态建立 PS-YYYYMMDD-VNN：先写页面说明和边界、完整盘点元素层级，明确公共组件/Token/Icon/资产的 reuse、extend 或 new 映射，并写出 L0 至 L3 分层计划与设计到代码映射。页面样式前，必须确认 AGC-YYYYMMDD-VNN、通过 AGC-01 至 AGC-06，并为每个动作组建立语义、共享组件、宽度/插槽、可见尺寸与触达目标映射；对称导航必须左右等大且中部相对父级居中。再确认 ICON-YYYYMMDD-VNN、通过 IA-01 至 IA-07，并把每个 Icon 映射到语义组件、尺寸、风格、状态、精确来源和目标实现；缺失 Icon 必须独立设计。然后构造所有页面/状态的中性结构底层并通过 BF-01 至 BF-06，再逐页检查源 Figma 的 layoutMode 或 DOM 布局责任层、TabBar 等权分布、右侧 annotation、文字父容器边界、嵌套组件递归边界、共享组件实例与 master 的尺寸比例、由可见边界完整包围页面的小程序外框高保真，并确认产品 UI 没有设计说明；不得用通用手机框或裸画布代替小程序外框。"
 
 expect:
   must_contain:
@@ -16,6 +16,12 @@ expect:
     - "PDC-05"
     - "PDC-06"
     - "ARC-YYYYMMDD-VNN"
+    - "PS-YYYYMMDD-VNN"
+    - "PS-01"
+    - "PS-02"
+    - "PS-03"
+    - "PS-04"
+    - "PS-05"
     - "AGC-YYYYMMDD-VNN"
     - "AGC-01"
     - "AGC-02"
@@ -40,5 +46,7 @@ expect:
     - "G-05"
     - "G-06"
     - "所有页面"
+    - "小程序外框"
+    - "可见边界"
   must_not_contain:
     - "只检查变更组件"

@@ -31,6 +31,16 @@ count_indented_field() {
   awk -v field="$field" 'index($0, "    " field ":") == 1 { count++ } END { print count + 0 }' "$file"
 }
 
+skill_requires_adversarial_case() {
+  local skill_id="$1"
+  awk -v skill_id="$skill_id" '
+    $0 == "  - id: " skill_id { found = 1; next }
+    found && /^    side_effects: / { exit($2 == "[none]" ? 1 : 0) }
+    found && /^  - id: / { exit 1 }
+    END { if (!found) exit 1 }
+  ' "$repo_root/knowledge/skill-index.yaml"
+}
+
 validate_cases() {
   local file="$1"
   local skill_id="$2"
@@ -49,6 +59,9 @@ validate_cases() {
   for category in positive negative boundary; do
     rg -q "^    category: ${category}$" "$file" || fail "${file#$repo_root/} 缺少 ${category} 用例"
   done
+  if skill_requires_adversarial_case "$skill_id"; then
+    rg -q '^    category: adversarial$' "$file" || fail "${file#$repo_root/} 的 ${skill_id} 声明了副作用，必须包含 adversarial 用例"
+  fi
 
   local field_count
   for field in category prompt expect_skill assertions; do

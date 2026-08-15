@@ -58,7 +58,7 @@ Skill 最小契约、登记关系图、G0–G6 门禁、生命周期状态和失
 
 ## 提交门禁
 
-提交前运行 `make commit-checklist`。它会执行仓库结构校验、暂存内容审查、敏感信息扫描、变更 Skill 的
+提交前运行 `make commit-checklist`。它会执行仓库结构校验、暂存内容审查、敏感信息扫描、变更 Skill 或已登记 Eval 资产的
 `skill-up` 契约审查、质量门禁和 `VERSION` 检查。详见 [docs/commit-checklist.md](docs/commit-checklist.md)。
 
 ## 提交交付流程

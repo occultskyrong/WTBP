@@ -1,0 +1,134 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="980" viewBox="0 0 1600 980" role="img" aria-labelledby="title desc">
+  <title id="title">WTBP Figma 设计流程泳道图</title>
+  <desc id="desc">从项目契约、页面规格和终端外框，到 Figma 分层构建、代码实现及验收闭环的四泳道流程图。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#526275"/>
+    </marker>
+    <marker id="returnArrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#B45309"/>
+    </marker>
+    <style>
+      .bg { fill: #F8FAFC; }
+      .title { font: 700 30px -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; fill: #10233F; }
+      .subtitle { font: 400 16px -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; fill: #526275; }
+      .lane { rx: 18; }
+      .laneTitle { font: 700 18px -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; fill: #10233F; }
+      .laneDesc { font: 400 13px -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; fill: #526275; }
+      .node { rx: 12; stroke-width: 1.5; }
+      .nodeTitle { font: 700 16px -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; fill: #10233F; }
+      .nodeText { font: 400 13px -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; fill: #34445A; }
+      .gate { font: 700 13px -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; fill: #7C2D12; }
+      .flow { fill: none; stroke: #526275; stroke-width: 2; marker-end: url(#arrow); }
+      .return { fill: none; stroke: #B45309; stroke-width: 2; stroke-dasharray: 6 6; marker-end: url(#returnArrow); }
+      .label { font: 600 12px -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; fill: #9A3412; }
+      .legend { font: 400 13px -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; fill: #526275; }
+    </style>
+  </defs>
+
+  <rect class="bg" width="1600" height="980"/>
+  <text class="title" x="56" y="58">WTBP · Figma 设计与实现泳道图</text>
+  <text class="subtitle" x="56" y="86">先以项目契约限定目标终端和页面边界，再分层构建、实现并以结构与真实夹具验收。</text>
+
+  <rect class="lane" x="40" y="120" width="1520" height="170" fill="#EAF2FF" stroke="#B8D2FF"/>
+  <text class="laneTitle" x="70" y="154">01 · 项目契约与页级规格</text>
+  <text class="laneDesc" x="70" y="178">确认什么页面要为谁、在哪个终端、以何种边界被设计和验收。</text>
+
+  <rect class="node" x="70" y="202" width="210" height="62" fill="#FFFFFF" stroke="#8AB5FF"/>
+  <text class="nodeTitle" x="92" y="229">PDC</text>
+  <text class="nodeText" x="92" y="250">项目、目标终端与证据</text>
+
+  <rect class="node" x="335" y="202" width="210" height="62" fill="#FFFFFF" stroke="#8AB5FF"/>
+  <text class="nodeTitle" x="357" y="229">ARC</text>
+  <text class="nodeText" x="357" y="250">页面、路由与外框架构</text>
+
+  <rect class="node" x="600" y="202" width="210" height="62" fill="#FFFFFF" stroke="#8AB5FF"/>
+  <text class="nodeTitle" x="622" y="229">INV</text>
+  <text class="nodeText" x="622" y="250">批准页面与状态范围</text>
+
+  <rect class="node" x="865" y="202" width="275" height="62" fill="#FFFFFF" stroke="#8AB5FF"/>
+  <text class="nodeTitle" x="887" y="229">PS</text>
+  <text class="nodeText" x="887" y="250">说明、元素、复用、L0–L3</text>
+
+  <rect class="node" x="1195" y="192" width="315" height="82" fill="#FFF7ED" stroke="#FDBA74"/>
+  <text class="nodeTitle" x="1217" y="220">终端外框选择</text>
+  <text class="nodeText" x="1217" y="241">Web / 小程序 / App</text>
+  <text class="gate" x="1217" y="261">完整页面必须有可见边界</text>
+
+  <path class="flow" d="M280 233 H335"/>
+  <path class="flow" d="M545 233 H600"/>
+  <path class="flow" d="M810 233 H865"/>
+  <path class="flow" d="M1140 233 H1195"/>
+
+  <rect class="lane" x="40" y="320" width="1520" height="170" fill="#ECFDF5" stroke="#A7E8C6"/>
+  <text class="laneTitle" x="70" y="354">02 · Figma 构建（prd-to-figma / figma-evolve）</text>
+  <text class="laneDesc" x="70" y="378">先构造中性底层，再逐层增加可复用组件、页面内容和视觉完成度。</text>
+
+  <rect class="node" x="70" y="402" width="210" height="62" fill="#FFFFFF" stroke="#86D7B0"/>
+  <text class="nodeTitle" x="92" y="429">AGC</text>
+  <text class="nodeText" x="92" y="450">动作组与布局策略</text>
+
+  <rect class="node" x="335" y="402" width="210" height="62" fill="#FFFFFF" stroke="#86D7B0"/>
+  <text class="nodeTitle" x="357" y="429">ICON</text>
+  <text class="nodeText" x="357" y="450">语义资产与尺寸映射</text>
+
+  <rect class="node" x="600" y="392" width="300" height="82" fill="#FFFFFF" stroke="#34B879"/>
+  <text class="nodeTitle" x="622" y="420">L0 · 中性底层窗体</text>
+  <text class="nodeText" x="622" y="441">可见终端外框、页面根、状态槽</text>
+  <text class="gate" x="622" y="461">先完成全部页面 / 状态</text>
+
+  <rect class="node" x="955" y="392" width="220" height="82" fill="#FFF7ED" stroke="#FDBA74"/>
+  <text class="nodeTitle" x="977" y="420">BF-01 ～ BF-06</text>
+  <text class="nodeText" x="977" y="441">底层窗体批次门禁</text>
+  <text class="gate" x="977" y="461">未通过，不得叠加样式</text>
+
+  <rect class="node" x="1230" y="402" width="280" height="62" fill="#FFFFFF" stroke="#86D7B0"/>
+  <text class="nodeTitle" x="1252" y="429">L1 ～ L3</text>
+  <text class="nodeText" x="1252" y="450">组件、页面内容与视觉完成度</text>
+
+  <path class="flow" d="M280 433 H335"/>
+  <path class="flow" d="M545 433 H600"/>
+  <path class="flow" d="M900 433 H955"/>
+  <path class="flow" d="M1175 433 H1230"/>
+  <path class="flow" d="M1350 274 V350 H705 V392"/>
+
+  <rect class="lane" x="40" y="520" width="1520" height="165" fill="#F5F3FF" stroke="#C9BEFF"/>
+  <text class="laneTitle" x="70" y="554">03 · 产品实现（figma-to-product）</text>
+  <text class="laneDesc" x="70" y="578">按页面规格映射到目标仓库，保持同一 target、同一可见边界和同一状态矩阵。</text>
+
+  <rect class="node" x="355" y="602" width="350" height="58" fill="#FFFFFF" stroke="#AA9CFF"/>
+  <text class="nodeTitle" x="377" y="628">按 PS 映射实现</text>
+  <text class="nodeText" x="377" y="648">组件、布局责任层、运行状态</text>
+
+  <rect class="node" x="890" y="602" width="350" height="58" fill="#FFFFFF" stroke="#AA9CFF"/>
+  <text class="nodeTitle" x="912" y="628">运行矩阵与完整外框截图</text>
+  <text class="nodeText" x="912" y="648">同一 target / viewport / 状态</text>
+
+  <path class="flow" d="M1065 474 V535 H530 V602"/>
+  <path class="flow" d="M705 631 H890"/>
+
+  <rect class="lane" x="40" y="715" width="1520" height="185" fill="#FFF7ED" stroke="#FBCB92"/>
+  <text class="laneTitle" x="70" y="749">04 · 验收与闭环（figma-verify）</text>
+  <text class="laneDesc" x="70" y="773">以结构门禁和真实夹具确认保真度；发现漂移，回到相应规格重新决策。</text>
+
+  <rect class="node" x="355" y="797" width="350" height="76" fill="#FFFFFF" stroke="#F59E0B"/>
+  <text class="nodeTitle" x="377" y="825">G-01 ～ G-06</text>
+  <text class="nodeText" x="377" y="846">布局、标注、边界、比例、外框、内容隔离</text>
+  <text class="gate" x="377" y="866">含 BF-02 / G-05 的外框核验</text>
+
+  <rect class="node" x="890" y="797" width="350" height="76" fill="#FFFFFF" stroke="#F59E0B"/>
+  <text class="nodeTitle" x="912" y="825">真实夹具验收</text>
+  <text class="nodeText" x="912" y="846">差异归因、修复复跑、人工复核</text>
+  <text class="gate" x="912" y="866">静态检查或单张截图不足以通过</text>
+
+  <path class="flow" d="M1065 660 V730 H530 V797"/>
+  <path class="flow" d="M705 835 H890"/>
+  <path class="return" d="M1240 835 H1430 V305 H1335"/>
+  <text class="label" x="1300" y="700">页面、外框或证据漂移</text>
+  <text class="label" x="1392" y="720">回到 PS</text>
+
+  <line x1="70" y1="942" x2="106" y2="942" stroke="#526275" stroke-width="2" marker-end="url(#arrow)"/>
+  <text class="legend" x="120" y="947">必经流程</text>
+  <line x1="280" y1="942" x2="316" y2="942" stroke="#B45309" stroke-width="2" stroke-dasharray="6 6" marker-end="url(#returnArrow)"/>
+  <text class="legend" x="330" y="947">发现漂移后的回流</text>
+</svg>
