@@ -21,6 +21,12 @@ Skill 应引用 Practice，不复制 Practice 的完整内容。
 
 涉及 Figma 时，先阅读 [`docs/figma-skill-architecture.md`](docs/figma-skill-architecture.md)，按创建、演进、
 单终端实现和验收选择唯一阶段；不要把四段流程合并为一次操作。
+
+![WTBP Figma 设计与实现泳道图](docs/assets/figma-workflow-swimlane.svg)
+
+泳道图的门禁定义、终端外框选择和可维护 Mermaid 源码见
+[`docs/figma-skill-architecture.md`](docs/figma-skill-architecture.md)。
+
 官方 Figma 能力、Code Connect 与可选第三方审计的采用边界见
 [`docs/external-design-capabilities.md`](docs/external-design-capabilities.md)。
 
