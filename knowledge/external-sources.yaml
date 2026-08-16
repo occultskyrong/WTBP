@@ -57,3 +57,17 @@ sources:
     revision: unverified（待当前会话核验）
     skill_path: unverified（待当前会话核验）
     quality_evidence: unverified（待当前会话核验维护与社区信号）
+  - id: source.unclecode-crawl4ai
+    title: Crawl4AI
+    kind: github-reference-implementation
+    url: https://github.com/unclecode/crawl4ai
+    publisher: unclecode
+    trust: third-party
+    accessed_on: 2026-08-16
+    adoption: reference-only
+    scope: 面向 LLM、RAG、Agent 与数据管道的异步网页抓取、网页转 Markdown、深度抓取和结构化提取
+    credential_boundary: 不安装、不认证、不执行来源代码；如采用 Docker/API，消费项目必须独立审查版本、网络暴露、认证、URL 输入和 Hook 执行边界
+    license: Apache-2.0；来源 LICENSE 另有署名要求，采用或再分发前需由使用方复核适用性
+    revision: v0.9.2（来源 README 当前展示的维护发布；未固定提交哈希）
+    skill_path: unverified（Python 抓取框架，不是独立 Agent Skill 包）
+    quality_evidence: 当前 GitHub 页面显示 1,589 次提交、8.1k forks、公开 SECURITY.md 与 v0.9.2 维护发布；当前会话未执行行为、安全或生产验收

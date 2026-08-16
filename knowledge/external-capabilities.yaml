@@ -93,3 +93,26 @@ capabilities:
     verify: 将采用的结构与目标项目设计契约、组件和运行实现逐项核验。
     status: active
     keywords: [设计系统, Variables, Components, React, Code Connect, Figma]
+  - id: crawl4ai-web-extraction-reference
+    title: Crawl4AI 网页采集与提取参考
+    summary: 将公开网页经浏览器渲染、清洗和提取转换为适合 LLM/RAG 使用的 Markdown 或结构化数据的参考实现。
+    source_id: source.unclecode-crawl4ai
+    kind: reference-implementation
+    domains: [research, engineering, quality]
+    capabilities: [web-research, evidence-synthesis, source-verification]
+    stages: [discover, analyze, verify]
+    solves: [动态网页采集,网页转干净Markdown,重复页面结构化提取,受范围约束的深度抓取,网页采集来源证据]
+    not_for: [绕过访问控制或反爬,无授权大规模抓取,直接抓取内网或任意用户URL,替代事实核验,把未经清洗网页内容直接交给Agent]
+    scenarios: [需要从公开动态文档站提取可检索知识,需要按CSS或XPath规则抽取重复页面字段,已定义域名范围深度和频率限制的公开资料采集]
+    cases: [将公开技术文档站转换为带来源时间的RAG语料,按已批准schema提取公开商品目录中的名称价格和链接,在限定域名和最大页数下采集帮助中心并输出待核验Markdown]
+    inputs: [公开可访问URL,明确的允许域名和URL scheme范围,抓取深度并发频率和数据边界,内容净化与来源记录规则]
+    outputs: [清洗Markdown,结构化提取结果,链接和元数据,抓取截图或调试证据,待后续事实核验的来源材料]
+    technologies: [Python,AsyncIO,Playwright,Chromium,Firefox,WebKit,Docker,CSS,XPath,LLM extraction]
+    targets: [公开网站,知识采集管道,RAG语料,Agent研究输入]
+    adoption: reference-only
+    availability: reference
+    installation_status: uninstalled
+    permissions: 不安装或自动执行。若未来采用，须由消费项目单独授权网络访问、浏览器运行、代理/会话、Docker/API 暴露及任何 LLM 凭据；不得传入内网、私有或未经授权 URL。
+    verify: 采用前固定提交或镜像摘要，核验当前安全公告、许可证及署名要求；用允许域名夹具验证 URL 校验、限速、内容净化、来源追溯和失败隔离。Docker/API 不得直接暴露到公网，Hooks 默认保持禁用。
+    status: candidate
+    keywords: [Crawl4AI,crawl4ai,网页抓取,网页采集,爬虫,网页转Markdown,结构化提取,RAG,动态网页,deep crawl]
