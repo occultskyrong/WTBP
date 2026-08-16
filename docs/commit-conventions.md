@@ -42,10 +42,11 @@ ci: 校验提交标题格式
 2. 运行 `make commit-checklist`；该入口会统一执行 `make validate`、`make review-staged`、变更 Skill 或已登记 Eval
    资产对应的 `ske` 契约评测、质量门禁和三段式版本检查。
 3. 不使用 `--no-verify` 绕过 Hook。
-4. 提交后通过 PR 审查和 CI，再合并到 `master`。
+4. “提交”完成后只推送任务分支。只有用户明确要求“创建 PR”时，才创建中文 PR 并使用下文的比较规则；PR
+   合并始终需要单独授权。
 
 ## CI 审查范围
 
-本地 Hook 审查暂存内容。CI 不依赖空工作区中的暂存区，而是比较 PR
+本地 Hook 审查暂存内容。CI 不依赖空工作区中的暂存区，而是比较 PR（如有）的
 base 与待合并提交，或比较 push 前后提交；因此同一套审查会覆盖实际进入
 `master` 的 Practice、Skill、参考实现、目录和删除操作。

@@ -23,7 +23,8 @@ when the task requires them.
 - Do not use `stale` or `deprecated` content as a default recommendation.
 - Modify, stage, commit, push, create a PR, and merge a PR remain separate action boundaries. In this repository,
   an explicit user instruction to “commit” authorizes the complete commit-delivery workflow below: run the checklist,
-  commit only after it passes, push the branch, and create a PR. Merging the PR always remains a separate authorization.
+  commit only after it passes, and push the branch. Creating or merging a PR always requires a separate explicit
+  authorization.
 - Protect unrelated changes, unknown commits, and remote divergence. Do not force-push, auto-rebase, auto-stash,
   use `git reset --hard`, or use `--no-verify`.
 - Use one task branch per independent task. Continue the same branch for incremental commits within that task; never
@@ -45,7 +46,8 @@ inspection and diagnostics. Provide commands for the user to run and continue on
 | High-impact technical or product decision | `skills/practice-search/SKILL.md` | `knowledge/catalog.yaml`, context schema, target Practice and evidence |
 | Add or change a Practice | `CONTRIBUTING.md` | Practice template, catalog, relationships |
 | Use, install, add, or change a Skill | `wtbp "<request>"`, `knowledge/skill-index.yaml`, `knowledge/external-capabilities.yaml` | Capability comparison, reuse decision, target Skill, installation boundary, and contribution guidance |
-| Commit, push, or create a PR | `docs/commit-conventions.md` | GitHub governance and PR template |
+| Commit or push | `docs/commit-conventions.md` | Compliant Git delivery |
+| Create or merge a PR | `docs/commit-conventions.md` | GitHub governance and PR template |
 | Validation, hook, or CI issue | `Makefile` | Validation scripts and repository workflow |
 
 Use the catalog, local Skill index, external capability register, or route index before expanding files. The local
@@ -76,14 +78,13 @@ When the user says “commit” (or an equivalent Chinese instruction such as �
 
 1. Inspect the worktree, staged scope, current branch, task scope, remote divergence, and the intended Conventional Commit message.
 2. If the current branch is the default branch or its task scope is unclear, stop before staging/committing and create a clean task branch with `tooling/new-task-branch.sh`. Never auto-stash or migrate existing changes.
-3. Run `make commit-checklist`. If any check fails, stop; do not create a commit, push, or PR.
+3. Run `make commit-checklist`. If any check fails, stop; do not create a commit or push.
 4. Create the commit with the validated scope and a Chinese Conventional Commit summary.
 5. Push the current task branch to its configured remote without force-push or history rewriting.
-6. Create a PR to the repository's configured default/base branch with a Chinese title and body that state the change,
-   affected Skills or practices, validation results, dry-run boundaries, and unresolved risks.
-7. Verify the remote branch and PR URL/state, then report the commit, push, and PR results separately.
+6. Verify the remote branch, then report the commit and push results separately. Creating a PR is not part of this
+   workflow and occurs only on a separate explicit instruction.
 
-If commit, push, or PR creation fails because of conflicts, permissions, missing credentials, or remote divergence, stop
-at that step and report the exact blocker and the next user-authorized action. Never bypass a failed gate, use `--no-verify`,
-force-push, auto-rebase, or merge the PR as part of this workflow. An instruction to “run the commit checklist” alone
-authorizes validation only; it does not authorize commit, push, or PR creation.
+If commit or push fails because of conflicts, permissions, missing credentials, or remote divergence, stop at that step and
+report the exact blocker and the next user-authorized action. Never bypass a failed gate, use `--no-verify`, force-push,
+or auto-rebase. An instruction to “run the commit checklist” alone authorizes validation only; it does not authorize a
+commit or push.

@@ -19,7 +19,8 @@
 | 比较技术、成本、安全或合规方案 | `skills/practice-search/SKILL.md` | 有场景边界的建议与证据边界 |
 | 使用、安装、新增或修改 Skill | `wtbp "<请求>"`、`knowledge/skill-index.yaml`、`knowledge/external-capabilities.yaml` | 能力比较、复用判断、安装边界或 Skill/Eval 贡献 |
 | 调整仓库规则或自动化 | 相关中文 `docs/` 和源文件 | 改动范围、影响和验证 |
-| 提交、推送或创建 PR | `docs/commit-conventions.md` | 符合规范的 Git 交付 |
+| 提交或推送 | `docs/commit-conventions.md` | 符合规范的 Git 交付 |
+| 创建或合并 PR | `docs/commit-conventions.md` | GitHub 治理和 PR 模板 |
 | 排查校验、Hook 或 CI | `Makefile` 和相关 `tooling/` | 可复现的定位与验证 |
 
 高影响决策从 `knowledge/catalog.yaml` 开始，只加载目标 Practice、证据、参考实现或 Skill。发现 Skill 时先看
