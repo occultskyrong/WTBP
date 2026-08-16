@@ -73,10 +73,12 @@ make commit-checklist  # 执行完整提交清单
 make install-hooks     # 启用提交门禁（每个克隆仓库一次）
 make review-staged     # 审查暂存内容
 make verify-mergeability # 刷新默认分支并检查任务分支可合并性
+make return-to-default # 任务分支推送成功后，安全切回并同步默认分支
 ```
 
 提交前必须通过 `make commit-checklist`；它会先刷新默认分支并检查可合并性，再执行 `make validate`、内容审查、变更 Skill
 或已登记 Eval 资产对应的 `ske` 契约评测、质量门禁和 `VERSION` 检查。详细规则见 [`docs/commit-checklist.md`](docs/commit-checklist.md)。
+任务分支推送成功后执行 `make return-to-default`，可避免后续工作继续落在旧分支；多工作树中默认分支已被另一工作树使用时会安全跳过。
 版本变更进入 `master` 且仓库验证通过后，工作流会自动发布不可变 `vX.Y.Z` Tag；可选 PR 的比较规则与版本规则见
 [`docs/commit-conventions.md`](docs/commit-conventions.md)。
 提交、推送、可选 PR 和 GitHub 治理细节见：

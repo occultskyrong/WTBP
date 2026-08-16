@@ -84,9 +84,14 @@ When the user says “commit” (or an equivalent Chinese instruction such as �
 4. Create the commit with the validated scope and a Chinese Conventional Commit summary.
 5. Push the current task branch to its configured remote without force-push or history rewriting. The `pre-push` hook repeats
    the mergeability preflight after refreshing the default branch.
-6. Verify the remote branch, then report the commit and push results separately. Creating a PR is not part of this workflow
-   and occurs only on a separate explicit instruction. After a version-changing update is merged to `master`, the successful
-   repository-check workflow creates and pushes the immutable `vX.Y.Z` tag; do not create a release tag from a task branch.
+6. After a successful push, run `make return-to-default`. It returns a clean, fully pushed task worktree to the latest default
+   branch only when that branch is not checked out by another worktree; otherwise it reports a safe skip. This is branch hygiene,
+   not a substitute for the mergeability preflight. The next independent task must start from a clean, current default-branch
+   worktree.
+7. Verify the remote branch and branch-return result, then report the commit and push results separately. Creating a PR is not
+   part of this workflow and occurs only on a separate explicit instruction. After a version-changing update is merged to
+   `master`, the successful repository-check workflow creates and pushes the immutable `vX.Y.Z` tag; do not create a release
+   tag from a task branch.
 
 If commit or push fails because of conflicts, permissions, missing credentials, or remote divergence, stop at that step and
 report the exact blocker and the next user-authorized action. Never bypass a failed gate, use `--no-verify`, force-push, or
