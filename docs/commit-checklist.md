@@ -14,21 +14,23 @@ Git Hook 会自动调用该入口；CI 在检查提交范围时也使用同一�
 
 执行顺序如下：
 
-1. `make validate`：检查仓库结构、目录登记、模式、模板和 Skill Eval 契约。
-2. `make review-staged`：只审查本次暂存内容，检查对象字段、章节、目录关系、补充 Eval 和安全边界。
-3. `tooling/scan-secrets.sh`：扫描新增内容中的私钥、云访问密钥、GitHub/Slack/Google Token、JWT、带凭据连接串、
+1. `make verify-mergeability`：刷新默认分支，以 `git merge-tree` 无落盘检查当前任务分支能否与最新默认分支合并；
+   网络、凭据、基线解析或合并性检查失败都必须停止。该检查也会在 `pre-push` Hook 中重复执行。
+2. `make validate`：检查仓库结构、目录登记、模式、模板和 Skill Eval 契约。
+3. `make review-staged`：只审查本次暂存内容，检查对象字段、章节、目录关系、补充 Eval 和安全边界。
+4. `tooling/scan-secrets.sh`：扫描新增内容中的私钥、云访问密钥、GitHub/Slack/Google Token、JWT、带凭据连接串、
    疑似密码/密钥赋值和高风险凭据文件名。扫描器只输出文件和命中类型，不输出敏感值；示例凭据必须使用明确的
    `example`、`sample`、`placeholder` 等占位词。二进制变更默认不能通过文本扫描，需改为可审查的文本或单独评估。
-4. Skill/Eval 变更检查：发现新增或修改 `skills/*/SKILL.md`，或修改 `knowledge/evals/<skill-id>/` 下已登记的
+5. Skill/Eval 变更检查：发现新增或修改 `skills/*/SKILL.md`，或修改 `knowledge/evals/<skill-id>/` 下已登记的
    Eval、通用用例或 Skill-up 原生用例/配置时，必须对受影响 Skill 执行 `make ske SKILL_ID=<skill-id>`。Skill 变更
    仍必须同步修改对应 Eval；Eval 的 `runner` 必须为 `skill-up`，行为门槛不得低于 `0.90`。默认 dry-run 也必须由
    skill-up 加载 Runner 配置、Skill、用例和断言。
-5. 质量门禁检查：Skill Eval 的契约覆盖率必须为 100%；用例至少 3 次运行，并包含正向、反向和边界，
+6. 质量门禁检查：Skill Eval 的契约覆盖率必须为 100%；用例至少 3 次运行，并包含正向、反向和边界，
    涉及副作用时还必须包含对抗用例。真实行为评测的默认通过率门槛为 90%。
-6. 版本、提交消息和范围一致性检查：核对根目录 `VERSION` 是否符合三段式版本和本次变更级别；范围模式还会
+7. 版本、提交消息和范围一致性检查：核对根目录 `VERSION` 是否符合三段式版本和本次变更级别；范围模式还会
    检查提交标题、长度和 MAJOR 变更说明。
-7. 版本 Tag 发布计划：版本未变则不发布；版本变更时，清单记录预期 `vX.Y.Z`。Tag 不在本地 Hook、任务分支或 PR
-   阶段创建；PR 合并到 `master` 且仓库验证通过后，由 GitHub Action 创建并推送不可变注释 Tag。
+8. 版本 Tag 发布计划：版本未变则不发布；版本变更时，清单记录预期 `vX.Y.Z`。Tag 不在本地 Hook 或任务分支
+   阶段创建；版本变更合并到 `master` 且仓库验证通过后，由 GitHub Action 创建并推送不可变注释 Tag。
 
 执行清单检查的是“命令确实执行并通过”，不依赖人工勾选。评测结果、凭据、缓存和报告仍保留在本机，
 不得提交到仓库。
@@ -85,10 +87,10 @@ make commit-checklist
 目录、Eval、Hook、CI 或本清单覆盖的规范，应按 PATCH、MINOR 或 MAJOR 判断，不能用“改动很小”规避版本检查。
 一次提交只应选择一个最高变更级别；若同时包含多个级别，按最高级别升级，并在提交说明中写明取舍。
 
-版本 Tag 是合并后的发布快照，不是 PR 进度标记。版本比较使用显式 `tags/v旧版...tags/v新版`；PR 比较仍使用
-`master...任务分支`。同名 Tag 已存在且不指向当前 `master` 提交时，发布工作流必须失败，禁止移动、删除或重打 Tag。
+版本 Tag 是合并后的发布快照，不是任务分支进度标记。版本比较使用显式 `tags/v旧版...tags/v新版`；创建 PR 时，比较
+仍使用 `master...任务分支`。同名 Tag 已存在且不指向当前 `master` 提交时，发布工作流必须失败，禁止移动、删除或重打 Tag。
 
-范围模式（CI 的 Pull Request 检查）还会复核每个非合并提交的 Conventional Commit 标题和 72 字符限制；
+范围模式（CI 的 PR 检查，如创建 PR）还会复核每个非合并提交的 Conventional Commit 标题和 72 字符限制；
 引入 MAJOR 版本的提交必须使用 `!` 或在正文声明 `BREAKING CHANGE:`。
 
 ## 提交前人工确认
@@ -98,5 +100,5 @@ make commit-checklist
 - 暂存区没有无关文件、密钥、令牌、缓存、报告或生成物。
 - 敏感信息扫描没有发现高风险文件名或疑似凭据；新增二进制文件已单独确认用途和来源。
 - 变更范围与 Issue、分支和提交标题表达的是同一个意图。
-- 真实行为评测若未执行，PR 说明中明确写出“仅完成契约/dry-run，未完成外部模型评测”。
+- 真实行为评测若未执行，在提交正文或变更说明中明确写出“仅完成契约/dry-run，未完成外部模型评测”；创建 PR 时同步写入 PR 说明。
 - 版本升级与上表级别一致；不变更版本时，确认确实没有改变对外规则或可发现内容。
