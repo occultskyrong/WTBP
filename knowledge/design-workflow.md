@@ -26,6 +26,25 @@ Use the terminal and actor labels defined by the target product or project. If a
 
 Before composition, define the terminal shell contract from the declared target and evidence: shell type, viewport/frame dimensions, device chrome, safe areas, navigation bars, status areas, and any embedded browser or host constraints. Every Figma product page must visibly show the selected shell or viewport boundary around its complete page; do not deliver a bare canvas. Do not invent a generic phone frame. For `miniapp`, explicitly show the mini-program viewport and its applicable device/status/navigation/tab-bar shell; for `app-ios` or `app-android`, show the declared device and safe-area chrome; for `web`, show the approved browser shell or a named, visibly bounded browser/viewport container. Browser chrome may be omitted only when it is outside the product contract, but the viewport container and page range must remain visible. Record the source and dimensions in the inventory and acceptance matrix.
 
+### Boundary ownership and visual proof
+
+The following layers are different objects and must never be used as proof for one another:
+
+| Layer | Owns | Never proves |
+|---|---|---|
+| Canvas | Figma workspace backdrop only | A product page, terminal shell, or viewport boundary |
+| Figma selection outline | Editor-only transient selection state | Any delivered visual boundary or acceptance evidence |
+| Terminal shell | The target-terminal envelope, chrome, and outer page range | A Section or the product-content hierarchy |
+| Product root Frame | All product content and product navigation such as TabBar | System chrome that belongs to the shell, or the right-side annotation |
+| Section | A product-root descendant containing only its real content plus declared padding | The product root or terminal shell boundary |
+| Annotation sibling | Review explanation and evidence outside the product UI | Product content or part of the product root |
+
+The shell contains the product root and any declared system chrome. Product content and product TabBar must remain inside the product root; system chrome such as an iOS Home Indicator may sit inside the shell but outside the product root only when its safe-area relationship is declared. Every Section is a descendant of the product root and cannot substitute for the root or shell. The annotation is a right-side sibling, never a child of the product root.
+
+For every shell, declare a target-authentic visual-boundary recipe: fill/surface, stroke (or `N/A` with reason), radius (or `N/A`), shadow or terminal chrome, and contrast against the canvas. Do not impose a rounded card or stroke that the target does not have. The recipe must provide enough target-authentic separation for a reviewer to distinguish the shell from the canvas and Sections without relying on selection styling.
+
+Visual-boundary evidence is a fixed viewport/scale capture with the shell and product root **unselected**. It records target, state, data/capture conditions, shell/root node IDs and bounds, recipe, and independent outcomes for the top, right, bottom, and left shell edges; a small canvas margin outside each edge must be visible. Figma selection lines, handles, rulers, cropped captures, a Section edge, or the canvas background never satisfy an edge outcome. A structural pass without this evidence is not a visual pass and cannot be called complete.
+
 For overlapping designs, also require source design timestamps and the user-selected authoritative baseline. If either is missing, record `Unverified` and stop composition until the collision can be resolved.
 
 ## 3. Requirement and evidence gates
@@ -242,7 +261,7 @@ Before adding page-specific components, content styling, state decoration, or vi
 Run the following blocking checkpoint across the complete base-frame batch:
 
 1. **Page coverage (`BF-01`)** — every approved page/state ID has exactly one base frame, and no unapproved frame is introduced.
-2. **Shell contract (`BF-02`)** — every base frame uses the declared terminal shell, viewport/device dimensions, safe areas, and navigation/status surfaces, with a visible outer boundary around the complete page. A generic phone frame, bare canvas, or cropped page cannot satisfy a different declared terminal.
+2. **Shell contract (`BF-02`)** — record both required sub-results: **structure (`BF-02S`)** proves the declared shell node, product-root node, exact viewport/device dimensions, safe areas, navigation/status surfaces, and containment ownership; **visual boundary (`BF-02V`)** proves the declared target-authentic recipe in an unselected, fixed viewport/scale full-shell capture with a visible canvas margin and independent top/right/bottom/left edge outcomes. A generic phone frame, bare canvas, Section edge, selection outline, or cropped page cannot satisfy either sub-result. `BF-02` passes only when both sub-results pass.
 3. **Root geometry (`BF-03`)** — page roots, content regions, and primary gaps have explicit dimensions/constraints and a recorded layout owner; no unexplained coordinates or overflow exist.
 4. **Flow hierarchy (`BF-04`)** — ordinary regions use Auto Layout/normal flow, and every intentional overlay has a named containing parent, anchor, and reason.
 5. **State skeleton (`BF-05`)** — all material states and transition slots in the approved matrix are represented without inventing behavior or polishing only one page.
@@ -256,10 +275,10 @@ After every visual write batch, run the post-write structural gate across **all*
 2. **Annotation pairing (`G-02`)** — enumerate every product page/state frame and prove a one-to-one mapping to a standalone annotation sibling. The annotation must be outside the product UI, on the right, top-aligned, and use the default `48px` gap unless an approved exception states the alternative.
 3. **Recursive text and component containment (`G-03`)** — traverse every descendant text node, component instance, asset, and nested container under each product page/state, including descendants inside shared instances. Compare each node with its direct parent and trace material overflow through the ancestor chain after fonts/assets load. Record node, parent, ancestor, and geometry; no child may cross a required parent/ancestor boundary or be hidden by clipping/overflow to conceal a failure. A page-level bounding-box check alone never passes this gate.
 4. **Instance/master scale (`G-04`)** — for every shared component instance, inspect its master/component geometry and record `instance width / master width` and `instance height / master height`. Ratios must remain `1.0` unless a documented responsive, variant, or constraint rule and its approval explain the deviation; unexplained distortion blocks acceptance.
-5. **Terminal shell and fidelity (`G-05`)** — record the declared target, selected shell type, dimensions, visible outer boundary, device/browser chrome, safe areas, and navigation surfaces. The full shell and product page must be visible in the capture; miniapp frames must show the applicable mini-program shell, app frames the declared device/safe-area chrome, and web frames a declared browser or visibly bounded viewport container. A bare canvas, generic device frame, or any deviation from the target contract blocks acceptance.
+5. **Terminal shell and fidelity (`G-05`)** — record both required sub-results: **structure (`G-05S`)** verifies the declared target, shell/product-root nodes, exact dimensions, device/browser chrome, safe areas, navigation surfaces, and that product content/TabBar remain inside the product root while declared system chrome remains inside the shell; **visual boundary (`G-05V`)** verifies the target-authentic visual recipe in an unselected, fixed viewport/scale full-shell capture, with canvas margin and independent visible top/right/bottom/left edges. Miniapp frames must show the applicable mini-program shell, app frames the declared device/safe-area chrome, and web frames a declared browser or visibly bounded viewport container. A bare canvas, generic device frame, Section edge, selection outline, cropped capture, or any deviation from the target contract blocks acceptance. `G-05` passes only when both sub-results pass; a `G-05V` failure leaves the artifact incomplete even when `G-05S` passes.
 6. **Product-content isolation (`G-06`)** — inspect every visible text node in the product frame. Only verified or explicitly marked proposed product copy may remain; design/project descriptions and technical or acceptance commentary must be absent from the product frame and present, when needed, in the right-side annotation sibling.
 
-The gate record must include the artifact revision, inspected page/frame IDs, target shell contract, base-frame IDs and `BF-01`–`BF-06` results, `AGC-01`–`AGC-06` results, `G-01`–`G-06` results, geometry sources, screenshots, exceptions, and the rerun result. A node-write success, static check, or single screenshot cannot satisfy this gate.
+The gate record must include the artifact revision, inspected page/frame IDs, target shell contract, shell/product-root IDs and bounds, boundary recipe, fixed capture conditions, four-edge outcomes, base-frame IDs and `BF-01`–`BF-06` results (including `BF-02S`/`BF-02V`), `AGC-01`–`AGC-06` results, `G-01`–`G-06` results (including `G-05S`/`G-05V`), geometry sources, screenshots, exceptions, and the rerun result. A node-write success, static check, selection-state screenshot, or single cropped screenshot cannot satisfy this gate.
 
 ## 7. Text and state rules
 
@@ -284,7 +303,7 @@ Acceptance requires structural, rendered, and provenance evidence for the actual
 4. run and record `G-02` for one-to-one annotation pairing, right-side placement, top alignment, and the default `48px` gap;
 5. run and record `G-03` by recursively traversing every descendant text/component/container and checking direct-parent and ancestor containment after fonts/assets load; a page-only overflow check is insufficient;
 6. run and record `G-04` for every shared component instance/master width and height ratio, including approved deviations;
-7. run and record `G-05` for the target shell, exact dimensions, device/browser chrome, safe areas, and full-frame capture;
+7. run and record `G-05S` and `G-05V`: target shell/product-root ownership, exact dimensions, device/browser chrome and safe areas; then the declared visual recipe and an unselected fixed capture with visible canvas margin and independent top/right/bottom/left edge outcomes;
 8. run and record `G-06` for product-content isolation and the absence of descriptive/technical/review text in the product frame;
 9. run and record `AGC-01`–`AGC-06` for every approved interactive group, including target geometry and declared slot/partition behavior;
 10. run and record `IA-01`–`IA-07` for every Icon and coupled visual asset used by the approved scope;

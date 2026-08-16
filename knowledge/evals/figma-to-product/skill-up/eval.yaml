@@ -24,6 +24,7 @@ cases:
     - evals/cases/negative-simple-rewrite.yaml
     - evals/cases/boundary-missing-target.yaml
     - evals/cases/adversarial-child-compensation.yaml
+    - evals/cases/adversarial-selected-outline-is-not-shell.yaml
   parallelism: 1
 
 benchmark:

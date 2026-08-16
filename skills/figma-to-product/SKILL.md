@@ -25,6 +25,10 @@ Read [`../../knowledge/design-principles.md`](../../knowledge/design-principles.
 Ask for a missing target, repository, or project-contract evidence. If a Figma design contradicts a supplied PRD or
 the project design contract, report the conflict and route it to `figma-evolve`; do not silently choose in code.
 
+## Boundary Gate
+
+Use the shared boundary model in `design-workflow.md`. Record the terminal shell, product root Frame, declared system chrome, product TabBar, Sections, and right-side annotation as separate owners. `Canvas` and Figma selection styling are editor artifacts, never delivery evidence; a Section cannot substitute for the shell or root. Before styling, `BF-02S` must prove the shell/root hierarchy, dimensions, and containment. Before handoff, `G-05V` must prove the target-authentic fill/stroke-or-reason/radius-or-reason/shadow-or-chrome/canvas-contrast recipe in an **unselected**, fixed viewport/scale full-shell capture with a canvas margin and visible top/right/bottom/left edges. A `G-05S` structural pass without `G-05V` leaves the implementation handoff incomplete.
+
 ## Design Evidence Gate
 
 1. Record `EX-01`, then load the official `figma:figma-design-to-code` before `get_design_context`; load `figma:figma-use` for Figma inspection when needed. If an official capability is unavailable, mark the evidence `Unverified`; do not install a third-party substitute.
@@ -34,9 +38,9 @@ the project design contract, report the conflict and route it to `figma-evolve`;
 5. Derive or confirm `ARC-YYYYMMDD-VNN` from the approved project design contract before editing. Map modules, routes, shells, reuse boundaries, states/transitions, and the complete base-frame batch; then create or confirm `PS-YYYYMMDD-VNN` with `PS-01`–`PS-05` for every declared page/state. Use its element inventory and reuse matrix to choose project components, Code Connect mappings, tokens, Icons, assets, layout owners, and the L0–L3 implementation order. If the requested implementation changes scope, behavior, component contract, target constraint, page outcome, element hierarchy, or mapping, return to the earliest affected contract gate and do not infer the change.
 6. Before implementation styling, build or confirm `AGC-YYYYMMDD-VNN` and pass `AGC-01`–`AGC-06`. Map each action group to a project component and declared width/slot policy. For symmetric navigation, use equal edge target slots and a middle child anchored to the parent center; `space-between` alone is not centering proof.
 7. Before implementation styling, build or confirm `ICON-YYYYMMDD-VNN` and `IA-01`–`IA-07`. Map every Figma Icon instance to its semantic component, size, style, state, exact source/export, and target implementation. Reuse the project library first; independently design a missing Icon in the approved family before use, never as a page-local substitute.
-8. Before styling any page, confirm every page specification and implement the L0 structural base-frame batch for every declared page/state: the selected visible target shell/viewport boundary around the complete page, page root, content regions, normal-flow/Auto Layout parents, state slots, and right-side annotation sibling. Use neutral content and keep page-specific decoration out of this pass.
+8. Before styling any page, confirm every page specification and implement the L0 structural base-frame batch for every declared page/state: the selected visible target shell/viewport boundary around the complete page, page root, declared system chrome, product TabBar, content regions, normal-flow/Auto Layout parents, state slots, and right-side annotation sibling. Record their ownership; use neutral content and keep page-specific decoration out of this pass.
 9. Run and record the blocking base-frame checkpoint (`BF-01`–`BF-06`) across the complete batch. A failed or partial base pass blocks component styling and content polish.
-10. After each implementation write, run the shared structural gate (`G-01`–`G-06`) across every declared page/state: record source Figma `layoutMode` or DOM layout owner, navigation distribution, one-to-one right-side annotation, recursive descendant containment, shared component instance/master width and height ratios, target shell fidelity, and product-content isolation. A missing result blocks handoff to `figma-verify`.
+10. After each implementation write, run the shared structural gate (`G-01`–`G-06`) across every declared page/state: record source Figma `layoutMode` or DOM layout owner, navigation distribution, one-to-one right-side annotation, recursive descendant containment, shared component instance/master width and height ratios, and both `G-05S` (shell/root containment) and `G-05V` (unselected fixed full-shell capture, visual recipe, canvas margin, four edges). A missing result blocks handoff to `figma-verify`.
 
 ## Layout Provenance Gate
 
@@ -117,5 +121,5 @@ Node-to-code links for figma-verify
 ## Completion Gate
 
 - The target, repository, project design contract (`PDC-01`–`PDC-06`), derived architecture (`ARC-YYYYMMDD-VNN`), page specifications (`PS-YYYYMMDD-VNN` with `PS-01`–`PS-05`), action-group contract (`AGC-YYYYMMDD-VNN` with `AGC-01`–`AGC-06`), Icon inventory (`ICON-YYYYMMDD-VNN` with `IA-01`–`IA-07`), inventory, and applicable I-01–I-10 cases are explicit.
-- Every declared page/state passes `BF-01` through `BF-06` before styling; runtime evidence covers every declared viewport/state inside the target shell, and the post-write G-01 through G-06 record is complete.
+- Every declared page/state passes `BF-01` through `BF-06`, including `BF-02S`/`BF-02V`, before styling; runtime evidence covers every declared viewport/state inside the target shell, and the post-write G-01 through G-06 record includes `G-05S`/`G-05V` and unselected four-edge full-shell evidence.
 - No unlisted target or unproven coordinate compensation is claimed; missing evidence blocks handoff.

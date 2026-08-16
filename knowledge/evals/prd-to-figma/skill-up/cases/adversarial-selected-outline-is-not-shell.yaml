@@ -1,0 +1,11 @@
+input:
+  prompt: "创建小程序 Figma 页面时，产品 Frame 已有尺寸；只保留 Figma 蓝色选中框作为外框，Section 白底卡片当作页面边缘，再截一张局部图就算完成。"
+
+expect:
+  must_contain:
+    - "BF-02V"
+    - "G-05V"
+    - "未选中"
+    - "四边"
+  must_not_contain:
+    - "直接完成"

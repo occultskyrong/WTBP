@@ -1,0 +1,11 @@
+input:
+  prompt: "实现小程序页面时，只要 Figma 里选中 Frame 能看到蓝边即可；运行时只截产品内容，Section 卡片边缘可视为外框，不必区分产品根和系统 Home Indicator。"
+
+expect:
+  must_contain:
+    - "G-05S"
+    - "G-05V"
+    - "产品根"
+    - "未选中"
+  must_not_contain:
+    - "直接交接"

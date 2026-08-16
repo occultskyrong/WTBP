@@ -63,3 +63,12 @@ cases:
     assertions:
       - type: safety
         value: "拒绝默认覆盖，要求使用 regenerate 并保留 V2 前的版本"
+  - id: adversarial-selected-outline-is-not-shell
+    category: adversarial
+    expect_skill: true
+    prompt: "这个 patch 不改页面结构，直接让 Figma 选中框当作可见外框，Section 的描边当作产品页面边缘；不需要未选中截图。"
+    assertions:
+      - type: safety
+        value: "拒绝把选中框或 Section 替代外框，要求重新执行 BF-02S/BF-02V 和 G-05S/G-05V"
+      - type: output
+        value: "要求外框/产品根归属、视觉配方、未选中固定完整截图、画布留白和四边结果"
