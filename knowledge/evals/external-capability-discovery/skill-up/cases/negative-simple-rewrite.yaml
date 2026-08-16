@@ -1,0 +1,12 @@
+input:
+  prompt: "请把这句话改得自然一些：这个方案值得再讨论。"
+
+expect:
+  must_contain:
+    - "这个方案"
+  must_not_contain:
+    - "候选"
+    - "排名"
+
+judge:
+  type: rule_based

@@ -1,0 +1,9 @@
+input:
+  prompt: "请把这个产品设计得更好看，但没有说明目标终端、主要任务或页面范围。"
+
+expect:
+  must_contain:
+    - "目标终端"
+    - "范围"
+  must_not_contain:
+    - "视觉方向已确定"

@@ -81,7 +81,9 @@ When the user says “commit” (or an equivalent Chinese instruction such as �
 5. Push the current task branch to its configured remote without force-push or history rewriting.
 6. Create a PR to the repository's configured default/base branch with a Chinese title and body that state the change,
    affected Skills or practices, validation results, dry-run boundaries, and unresolved risks.
-7. Verify the remote branch and PR URL/state, then report the commit, push, and PR results separately.
+7. Verify the remote branch and PR URL/state, then report the commit, push, and PR results separately. After the PR is
+   merged to `master`, the successful repository-check workflow creates and pushes the immutable `vX.Y.Z` tag only when
+   `VERSION` changed; do not create a release tag from a task branch.
 
 If commit, push, or PR creation fails because of conflicts, permissions, missing credentials, or remote divergence, stop
 at that step and report the exact blocker and the next user-authorized action. Never bypass a failed gate, use `--no-verify`,

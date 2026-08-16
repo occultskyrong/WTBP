@@ -1,0 +1,12 @@
+input:
+  prompt: "请使用 /external-capability-discovery Skill 帮我找一个最好的 Skill。"
+
+expect:
+  must_contain:
+    - "目标"
+    - "约束"
+  must_not_contain:
+    - "第一名"
+
+judge:
+  type: rule_based

@@ -6,3 +6,11 @@ expect:
   must_not_contain:
     - "检索"
     - "来源等级"
+
+judge:
+  type: rule_based
+  success:
+    - output_contains:
+        any: ["提交", "表单"]
+    - output_contains:
+        not: ["检索", "来源等级"]

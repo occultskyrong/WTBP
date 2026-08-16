@@ -35,6 +35,7 @@ required_paths=(
   "knowledge/schemas/relationship-schema.yaml"
   "knowledge/schemas/eval-schema.yaml"
   "knowledge/schemas/skill-index-schema.yaml"
+  "knowledge/schemas/external-source-schema.yaml"
   "knowledge/schemas/external-capability-schema.yaml"
   "knowledge/skill-routes.yaml"
   "knowledge/skill-index.yaml"
@@ -74,6 +75,7 @@ required_paths=(
   "tooling/validate-skill-evals.sh"
   "tooling/validate-skill-routes.sh"
   "tooling/validate-skill-index.sh"
+  "tooling/validate-external-sources.sh"
   "tooling/validate-external-capabilities.sh"
   "tooling/generate-skill-catalog.sh"
   "tooling/test-wtbp-router.sh"
@@ -81,6 +83,7 @@ required_paths=(
   "tooling/test-secret-scan.sh"
   "tooling/run-skill-eval.sh"
   "tooling/commit-checklist.sh"
+  "tooling/publish-version-tag.sh"
   "tooling/new-task-branch.sh"
 )
 
@@ -99,6 +102,7 @@ bash -n "$repo_root/tooling/validate-repository.sh"
 bash -n "$repo_root/tooling/validate-skill-evals.sh"
 bash -n "$repo_root/tooling/validate-skill-routes.sh"
 bash -n "$repo_root/tooling/validate-skill-index.sh"
+bash -n "$repo_root/tooling/validate-external-sources.sh"
 bash -n "$repo_root/tooling/validate-external-capabilities.sh"
 bash -n "$repo_root/tooling/validate-ai-companions.sh"
 bash -n "$repo_root/tooling/generate-skill-catalog.sh"
@@ -110,6 +114,7 @@ bash -n "$repo_root/tooling/install-wtbp.sh"
 bash -n "$repo_root/tooling/install-skill.sh"
 bash -n "$repo_root/tooling/run-skill-eval.sh"
 bash -n "$repo_root/tooling/commit-checklist.sh"
+bash -n "$repo_root/tooling/publish-version-tag.sh"
 bash -n "$repo_root/tooling/new-task-branch.sh"
 
 if ! rg -q '^[0-9]+\.[0-9]+\.[0-9]+$' "$repo_root/VERSION"; then
@@ -137,6 +142,16 @@ fi
 
 if ! rg -U -q '^permissions:\n  contents: read$' "$repo_root/.github/workflows/repository-check.yml"; then
   printf '仓库工作流必须使用只读的 contents 权限。\n' >&2
+  exit 1
+fi
+
+if ! rg -U -q '^  publish-version-tag:\n    name: 发布版本 Tag\n    needs: validate\n    if: github.event_name == '\''push'\'' && github.ref == '\''refs/heads/master'\''\n    runs-on: ubuntu-latest\n    permissions:\n      contents: write$' "$repo_root/.github/workflows/repository-check.yml"; then
+  printf '版本 Tag 工作流必须只在 master 推送且仓库验证通过后使用 contents: write。\n' >&2
+  exit 1
+fi
+
+if ! rg -Fq 'run: ./tooling/publish-version-tag.sh "$GITHUB_SHA"' "$repo_root/.github/workflows/repository-check.yml"; then
+  printf '版本 Tag 工作流必须调用受控发布脚本。\n' >&2
   exit 1
 fi
 

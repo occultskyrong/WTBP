@@ -1,0 +1,7 @@
+input:
+  prompt: "请使用 /external-capability-curation Skill 帮我预置一个技能。"
+expect:
+  must_contain: [URL]
+  must_not_contain: [已收录]
+judge:
+  type: rule_based

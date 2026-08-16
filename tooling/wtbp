@@ -15,6 +15,7 @@ repo_root="$(cd "$(dirname "$script_path")/.." && pwd)"
 route_file="$repo_root/knowledge/skill-routes.yaml"
 index_file="$repo_root/knowledge/skill-index.yaml"
 external_capability_file="$repo_root/knowledge/external-capabilities.yaml"
+external_source_file="$repo_root/knowledge/external-sources.yaml"
 
 fail() {
   printf 'WTBP 路由失败：%s\n' "$1" >&2
@@ -34,12 +35,52 @@ usage() {
 
 当前会话负责基于候选能力卡进行语义判断；本命令不会启动第二个 LLM 会话。
 候选查询不会自动安装、执行 Skill 或访问外部服务。外部能力卡只说明复用方式；只有受控安装路由才可在确认后显式运行 `wtbp install <skill-id>`。
+在当前 Agent/Claude 对话中输入 `wtbp，收集 <公开 URL>` 即授权收录：当前会话会读取公开来源、生成未安装的最佳实践卡并完成校验。
 EOF
 }
 
 [[ -f "$route_file" ]] || fail '缺少 knowledge/skill-routes.yaml'
 [[ -f "$index_file" ]] || fail '缺少 knowledge/skill-index.yaml'
 [[ -f "$external_capability_file" ]] || fail '缺少 knowledge/external-capabilities.yaml'
+[[ -f "$external_source_file" ]] || fail '缺少 knowledge/external-sources.yaml'
+
+source_metadata() {
+  local requested_id="$1"
+
+  awk -F': ' -v requested_id="$requested_id" '
+    function emit() {
+      if (id == requested_id) {
+        print url "\t" publisher "\t" trust "\t" accessed_on "\t" license "\t" revision "\t" skill_path "\t" quality_evidence
+        found = 1
+      }
+    }
+    /^  - id: / { emit(); id = $2; url = publisher = trust = accessed_on = license = revision = skill_path = quality_evidence = ""; next }
+    /^    url: / { url = $2 }
+    /^    publisher: / { publisher = $2 }
+    /^    trust: / { trust = $2 }
+    /^    accessed_on: / { accessed_on = $2 }
+    /^    license: / { license = $2 }
+    /^    revision: / { revision = $2 }
+    /^    skill_path: / { skill_path = $2 }
+    /^    quality_evidence: / { quality_evidence = $2 }
+    END { emit(); exit(found ? 0 : 1) }
+  ' "$external_source_file"
+}
+
+show_external_source() {
+  local source_id="$1"
+  local source_url source_publisher source_trust source_accessed_on source_license source_revision source_skill_path source_quality_evidence
+
+  IFS=$'\t' read -r source_url source_publisher source_trust source_accessed_on source_license source_revision source_skill_path source_quality_evidence <<< "$(source_metadata "$source_id")" || true
+  [[ -n "${source_url:-}" ]] || fail "外部能力引用的来源不存在：$source_id"
+  printf '%s\n' '- 来源：'
+  printf '%s\n' "  URL：$source_url"
+  printf '%s\n' "  发布方：${source_publisher}｜可信级别：${source_trust}｜访问日期：${source_accessed_on}"
+  printf '%s\n' "  许可证：$source_license"
+  printf '%s\n' "  修订：$source_revision"
+  printf '%s\n' "  Skill 路径：$source_skill_path"
+  printf '%s\n' "  质量证据：$source_quality_evidence"
+}
 
 list_skills() {
   local domain="${1:-}"
@@ -138,6 +179,14 @@ list_external_capabilities() {
 
 show_external_capability() {
   local requested_id="$1"
+  local source_id
+
+  source_id="$(awk -v requested_id="$requested_id" '
+    $0 == "  - id: " requested_id { found = 1; next }
+    found && /^    source_id: / { print $2; exit }
+    found && /^  - id: / { exit }
+  ' "$external_capability_file")"
+  [[ -n "$source_id" ]] || return 1
 
   awk -F': ' -v requested_id="$requested_id" '
     function emit() {
@@ -152,14 +201,23 @@ show_external_capability() {
       print "- 领域：" domains
       print "- 核心能力：" capabilities
       print "- 阶段：" stages
+      print "- 解决问题：" solves
+      print "- 不适用：" not_for
+      print "- 适用场景：" scenarios
+      print "- 典型 Case：" cases
+      print "- 输入：" inputs
+      print "- 输出：" outputs
+      print "- 技术：" technologies
+      print "- 目标：" targets
       print "- 采用方式：" adoption
       print "- 可用性：" availability
+      print "- 安装状态：" installation_status
       print "- 权限边界：" permissions
       print "- 验证方式：" verify
       print "- 关键词：" keywords
       found = 1
     }
-    /^  - id: / { emit(); id = $2; title = summary = source_id = kind = domains = capabilities = stages = adoption = availability = permissions = verify = status = keywords = ""; next }
+    /^  - id: / { emit(); id = $2; title = summary = source_id = kind = domains = capabilities = stages = solves = not_for = scenarios = cases = inputs = outputs = technologies = targets = adoption = availability = installation_status = permissions = verify = status = keywords = ""; next }
     /^    title: / { title = $2 }
     /^    summary: / { summary = $2 }
     /^    source_id: / { source_id = $2 }
@@ -167,14 +225,24 @@ show_external_capability() {
     /^    domains: / { domains = $2 }
     /^    capabilities: / { capabilities = $2 }
     /^    stages: / { stages = $2 }
+    /^    solves: / { solves = $2 }
+    /^    not_for: / { not_for = $2 }
+    /^    scenarios: / { scenarios = $2 }
+    /^    cases: / { cases = $2 }
+    /^    inputs: / { inputs = $2 }
+    /^    outputs: / { outputs = $2 }
+    /^    technologies: / { technologies = $2 }
+    /^    targets: / { targets = $2 }
     /^    adoption: / { adoption = $2 }
     /^    availability: / { availability = $2 }
+    /^    installation_status: / { installation_status = $2 }
     /^    permissions: / { permissions = $2 }
     /^    verify: / { verify = $2 }
     /^    status: / { status = $2 }
     /^    keywords: / { keywords = $2 }
     END { emit(); exit(found ? 0 : 1) }
   ' "$external_capability_file"
+  show_external_source "$source_id"
 }
 
 external_next_step() {
@@ -205,26 +273,60 @@ resolve_external_capabilities() {
   local matches
 
   matches="$(awk -F': ' -v query="$query" '
-    function emit() {
-      if (id == "" || (status != "active" && status != "candidate")) return
-      score = 0
-      matched = ""
-      normalized_query = tolower(query)
-      count = split(keywords, values, ",")
+    function normalize(value) {
+      value = tolower(value)
+      gsub(/[[:space:]]/, "", value)
+      gsub(/　/, "", value)
+      return value
+    }
+    function scan(value, field, weight,    count,values,i,term,term_key,previous_weight) {
+      gsub(/^\[/, "", value); gsub(/\]$/, "", value)
+      count = split(value, values, ",")
       for (i = 1; i <= count; i++) {
-        keyword = values[i]
-        gsub(/^[[:space:]]+|[[:space:]]+$/, "", keyword)
-        if (keyword != "" && index(normalized_query, tolower(keyword)) > 0) {
-          score++
-          matched = matched (matched == "" ? "" : ", ") keyword
+        term = values[i]
+        gsub(/^[[:space:]]+|[[:space:]]+$/, "", term)
+        term_key = normalize(term)
+        if (term_key != "" && index(normalized_query, term_key) > 0) {
+          previous_weight = term_weights[term_key] + 0
+          if (weight > previous_weight) {
+            score += weight - previous_weight
+            term_weights[term_key] = weight
+          }
+          matched = matched (matched == "" ? "" : "; ") field "（" term "）"
         }
       }
-      if (score > 0) print score "\t" id "\t" title "\t" adoption "\t" availability "\t" status "\t" matched
     }
-    /^  - id: / { emit(); id = title = adoption = availability = status = keywords = ""; id = $2; next }
+    function scan_exclusions(value,    count,values,i,term) {
+      gsub(/^\[/, "", value); gsub(/\]$/, "", value)
+      count = split(value, values, ",")
+      for (i = 1; i <= count; i++) {
+        term = values[i]
+        gsub(/^[[:space:]]+|[[:space:]]+$/, "", term)
+        if (term != "" && index(normalized_query, normalize(term)) > 0)
+          excluded = excluded (excluded == "" ? "" : ", ") term
+      }
+    }
+    function emit() {
+      if (id == "" || (status != "active" && status != "candidate")) return
+      score = 0; matched = ""; excluded = ""; split("", term_weights); normalized_query = normalize(query)
+      scan(solves, "solves", 4); scan(scenarios, "scenarios", 3); scan(cases, "cases", 2); scan(technologies, "technologies", 2); scan(targets, "targets", 2)
+      scan(inputs, "inputs", 1); scan(outputs, "outputs", 1); scan(keywords, "keywords", 1); scan_exclusions(not_for)
+      if (score > 0 && excluded == "") print score "\t" id "\t" title "\t" source_id "\t" adoption "\t" availability "\t" installation_status "\t" status "\t" matched
+    }
+    /^  - id: / { emit(); id = title = source_id = adoption = availability = installation_status = status = solves = not_for = scenarios = cases = inputs = outputs = technologies = targets = keywords = ""; id = $2; next }
     /^    title: / { title = $2 }
+    /^    solves: / { solves = $2 }
+    /^    not_for: / { not_for = $2 }
+    /^    scenarios: / { scenarios = $2 }
+    /^    cases: / { cases = $2 }
+    /^    inputs: / { inputs = $2 }
+    /^    outputs: / { outputs = $2 }
+    /^    technologies: / { technologies = $2 }
+    /^    targets: / { targets = $2 }
+    /^    source_id: / { source_id = $2 }
     /^    adoption: / { adoption = $2 }
     /^    availability: / { availability = $2 }
+    /^    installation_status: / { installation_status = $2 }
     /^    status: / { status = $2 }
     /^    keywords: \[/ { keywords = substr($0, length("    keywords: [") + 1); sub(/]$/, "", keywords) }
     END { emit() }
@@ -232,10 +334,13 @@ resolve_external_capabilities() {
 
   [[ -n "$matches" ]] || return 0
   printf '可复用的外部能力候选（仍需当前会话作语义判断）：\n'
-  while IFS=$'\t' read -r score capability_id title adoption availability status matched; do
+  while IFS=$'\t' read -r score capability_id title source_id adoption availability installation_status status matched; do
+    local source_url source_publisher source_trust source_accessed_on source_license source_revision source_skill_path source_quality_evidence
+    IFS=$'\t' read -r source_url source_publisher source_trust source_accessed_on source_license source_revision source_skill_path source_quality_evidence <<< "$(source_metadata "$source_id")" || true
     printf '%s\n' "- ${capability_id}（匹配 ${score}，${status}）"
-    printf '  能力：%s｜采用：%s｜可用性：%s\n' "$title" "$adoption" "$availability"
-    printf '  命中关键词：%s\n' "$matched"
+    printf '  能力：%s｜采用：%s｜可用性：%s｜安装状态：%s\n' "$title" "$adoption" "$availability" "$installation_status"
+    printf '  来源：%s｜发布方：%s｜可信级别：%s｜访问日期：%s\n' "$source_url" "$source_publisher" "$source_trust" "$source_accessed_on"
+    printf '  命中检索字段：%s\n' "$matched"
     printf '  下一步：'
     external_next_step "$adoption" "$capability_id"
   done <<< "$matches"
@@ -255,16 +360,22 @@ resolve_routes() {
   [[ -n "$query" ]] || query="$1"
 
   matches="$(awk -v query="$query" '
+    function normalize(value) {
+      value = tolower(value)
+      gsub(/[[:space:]]/, "", value)
+      gsub(/　/, "", value)
+      return value
+    }
     function emit() {
       if (id == "" || (status != "active" && status != "candidate")) return
       score = 0
       matched = ""
-      normalized_query = tolower(query)
+      normalized_query = normalize(query)
       count = split(keywords, values, ",")
       for (i = 1; i <= count; i++) {
         keyword = values[i]
         gsub(/^[[:space:]]+|[[:space:]]+$/, "", keyword)
-        if (keyword != "" && index(normalized_query, tolower(keyword)) > 0) {
+        if (keyword != "" && index(normalized_query, normalize(keyword)) > 0) {
           score++
           matched = matched (matched == "" ? "" : ", ") keyword
         }

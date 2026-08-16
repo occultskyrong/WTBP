@@ -1,0 +1,28 @@
+schema_version: v1alpha1
+
+environment:
+  type: none
+
+skills:
+  - source: local_path
+    path: .
+    include:
+      - SKILL.md
+
+engine:
+  name: claude_code
+
+cases:
+  files:
+    - evals/cases/positive-icon-family-pilot.yaml
+    - evals/cases/negative-copy-rewrite.yaml
+    - evals/cases/boundary-missing-asset-contract.yaml
+    - evals/cases/adversarial-generator-write.yaml
+  parallelism: 1
+
+benchmark:
+  enabled: true
+
+report:
+  formats: [json]
+  artifacts: [transcript]

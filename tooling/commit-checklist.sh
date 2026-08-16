@@ -153,7 +153,7 @@ is_semantic_path() {
 
 is_new_capability_path() {
   case "$1" in
-    skills/*/SKILL.md|knowledge/practices/*/PRACTICE.md|knowledge/evals/*/EVAL.md) return 0 ;;
+    skills/*/SKILL.md|knowledge/practices/*/PRACTICE.md|knowledge/evals/*/EVAL.md|tooling/publish-version-tag.sh) return 0 ;;
     *) return 1 ;;
   esac
 }
@@ -217,7 +217,7 @@ check_range_version_history() {
       if [[ "$next_major" -gt "$previous_major" ]]; then
         [[ "$next_major" -eq $((previous_major + 1)) && "$next_minor" -eq 0 && "$next_patch" -eq 0 ]] || fail "提交 ${commit} 的 MAJOR 版本跳跃或未归零"
       elif [[ "$next_minor" -gt "$previous_minor" ]]; then
-        [[ "$next_major" -eq "$previous_major" && "$next_minor" -eq $((previous_minor + 1)) && "$next_patch" -eq 0 && "$commit_new_capability" -eq 1 ]] || fail "提交 ${commit} 的 MINOR 版本必须只递增一级并包含新增能力"
+      [[ "$next_major" -eq "$previous_major" && "$next_minor" -eq $((previous_minor + 1)) && "$next_patch" -eq 0 && "$commit_new_capability" -eq 1 ]] || fail "提交 ${commit} 的 MINOR 版本必须只递增一级并包含新增 Practice、Skill、Eval 或发布能力"
       else
         [[ "$next_major" -eq "$previous_major" && "$next_minor" -eq "$previous_minor" && "$next_patch" -eq $((previous_patch + 1)) ]] || fail "提交 ${commit} 的 PATCH 版本必须只递增一级"
       fi
@@ -265,7 +265,7 @@ check_commit_messages() {
   done < <(git rev-list --no-merges "$base_ref..$head_ref")
 }
 
-printf '%s\n' '提交执行清单：6/6 版本、提交消息与范围一致性检查'
+printf '%s\n' '提交执行清单：6/7 版本、提交消息与范围一致性检查'
 if [[ "$mode" == range ]] && git rev-parse --verify "${base_ref}^{commit}" >/dev/null 2>&1; then
   check_range_version_history
   printf '  - 范围版本历史：通过（%s -> %s）\n' "$base_version" "$current_version"
@@ -282,7 +282,7 @@ else
       printf '  - MAJOR：%s -> %s（提交标题和正文必须说明不兼容变更）\n' "$base_version" "$current_version"
     elif [[ "$current_minor" -gt "$base_minor" ]]; then
       [[ "$current_major" -eq "$base_major" && "$current_minor" -eq $((base_minor + 1)) && "$current_patch" -eq 0 ]] || fail 'MINOR 版本必须只递增一级并归零 PATCH'
-      [[ "$new_capability" -eq 1 ]] || fail 'MINOR 升级必须包含新增 Practice、Skill 或 Eval 等能力'
+      [[ "$new_capability" -eq 1 ]] || fail 'MINOR 升级必须包含新增 Practice、Skill、Eval 或发布能力'
       printf '  - MINOR：%s -> %s\n' "$base_version" "$current_version"
     else
       [[ "$current_major" -eq "$base_major" && "$current_minor" -eq "$base_minor" && "$current_patch" -eq $((base_patch + 1)) ]] || fail 'PATCH 版本必须只递增一级'
@@ -292,5 +292,12 @@ else
 fi
 
 check_commit_messages
+
+printf '%s\n' '提交执行清单：7/7 版本 Tag 发布计划'
+if [[ "$current_version" == "$base_version" ]]; then
+  printf '  - VERSION 未变化，不计划发布 Tag\n'
+else
+  printf '  - 预期发布 Tag：v%s（仅在合并到 master 且仓库验证通过后由 GitHub Action 创建）\n' "$current_version"
+fi
 
 printf '提交执行清单：通过（模式=%s，变更文件=%s）\n' "$mode" "${#changed_files[@]}"

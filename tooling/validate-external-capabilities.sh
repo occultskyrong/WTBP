@@ -55,6 +55,7 @@ source_exists() {
 [[ -f "$capability_file" ]] || fail '缺少 knowledge/external-capabilities.yaml'
 [[ -f "$schema_file" ]] || fail '缺少 knowledge/schemas/external-capability-schema.yaml'
 [[ -f "$source_file" ]] || fail '缺少 knowledge/external-sources.yaml'
+bash "$repo_root/tooling/validate-external-sources.sh"
 rg -q '^version: 1$' "$capability_file" || fail 'external-capabilities.yaml 必须声明 version: 1'
 rg -q '^capabilities:$' "$capability_file" || fail 'external-capabilities.yaml 缺少 capabilities'
 
@@ -64,10 +65,11 @@ stages="$(schema_value stages)"
 kinds="$(schema_value kinds)"
 adoptions="$(schema_value adoption_values)"
 availability_values="$(schema_value availability_values)"
+installation_status_values="$(schema_value installation_status_values)"
 statuses="$(schema_value status_values)"
 
 ids=()
-while IFS="$separator" read -r capability_id title summary source_id kind card_domains card_capabilities card_stages adoption availability permissions verify status keywords; do
+while IFS="$separator" read -r capability_id title summary source_id kind card_domains card_capabilities card_stages solves not_for scenarios cases inputs outputs technologies targets adoption availability installation_status permissions verify status keywords; do
   [[ -n "$capability_id" ]] || continue
   ids+=("$capability_id")
   [[ "$capability_id" =~ ^[a-z0-9][a-z0-9-]*$ ]] || fail "外部能力 ID 无效：$capability_id"
@@ -78,17 +80,25 @@ while IFS="$separator" read -r capability_id title summary source_id kind card_d
   enum_contains "$kind" "$kinds" || fail "$capability_id 的 kind 无效：$kind"
   enum_contains "$adoption" "$adoptions" || fail "$capability_id 的 adoption 无效：$adoption"
   enum_contains "$availability" "$availability_values" || fail "$capability_id 的 availability 无效：$availability"
+  enum_contains "$installation_status" "$installation_status_values" || fail "$capability_id 的 installation_status 无效：$installation_status"
   enum_contains "$status" "$statuses" || fail "$capability_id 的 status 无效：$status"
   list_contains_only "$card_domains" "$domains" domains "$capability_id"
   list_contains_only "$card_capabilities" "$capabilities" capabilities "$capability_id"
   list_contains_only "$card_stages" "$stages" stages "$capability_id"
+  for field in solves not_for scenarios cases inputs outputs technologies targets; do
+    value="${!field}"
+    [[ "$value" == \[*\] && "$value" != '[]' ]] || fail "$capability_id 的 $field 必须是非空单行列表"
+  done
   [[ "$keywords" == \[*\] && "$keywords" != '[]' ]] || fail "$capability_id 的 keywords 必须是非空单行列表"
   [[ "$adoption" != direct-use || "$availability" == client-provided ]] || fail "$capability_id 的 direct-use 必须是 client-provided"
   [[ "$adoption" != manual-optional || "$availability" == manual-install ]] || fail "$capability_id 的 manual-optional 必须是 manual-install"
   [[ "$adoption" != reference-only || "$availability" == reference ]] || fail "$capability_id 的 reference-only 必须是 reference"
+  [[ "$availability" != client-provided || "$installation_status" == client-provided ]] || fail "$capability_id 的 client-provided 必须使用 client-provided 安装状态"
+  [[ "$availability" != manual-install || "$installation_status" == uninstalled ]] || fail "$capability_id 的 manual-install 必须使用 uninstalled 安装状态"
+  [[ "$availability" != reference || "$installation_status" == uninstalled ]] || fail "$capability_id 的 reference 必须使用 uninstalled 安装状态"
 done < <(awk -F': ' -v sep="$separator" '
-  function emit() { if (id != "") print id sep title sep summary sep source_id sep kind sep domains sep capabilities sep stages sep adoption sep availability sep permissions sep verify sep status sep keywords }
-  /^  - id: / { emit(); id = $2; title = summary = source_id = kind = domains = capabilities = stages = adoption = availability = permissions = verify = status = keywords = ""; next }
+  function emit() { if (id != "") print id sep title sep summary sep source_id sep kind sep domains sep capabilities sep stages sep solves sep not_for sep scenarios sep cases sep inputs sep outputs sep technologies sep targets sep adoption sep availability sep installation_status sep permissions sep verify sep status sep keywords }
+  /^  - id: / { emit(); id = $2; title = summary = source_id = kind = domains = capabilities = stages = solves = not_for = scenarios = cases = inputs = outputs = technologies = targets = adoption = availability = installation_status = permissions = verify = status = keywords = ""; next }
   /^    title: / { title = $2 }
   /^    summary: / { summary = $2 }
   /^    source_id: / { source_id = $2 }
@@ -96,8 +106,17 @@ done < <(awk -F': ' -v sep="$separator" '
   /^    domains: / { domains = $2 }
   /^    capabilities: / { capabilities = $2 }
   /^    stages: / { stages = $2 }
+  /^    solves: / { solves = $2 }
+  /^    not_for: / { not_for = $2 }
+  /^    scenarios: / { scenarios = $2 }
+  /^    cases: / { cases = $2 }
+  /^    inputs: / { inputs = $2 }
+  /^    outputs: / { outputs = $2 }
+  /^    technologies: / { technologies = $2 }
+  /^    targets: / { targets = $2 }
   /^    adoption: / { adoption = $2 }
   /^    availability: / { availability = $2 }
+  /^    installation_status: / { installation_status = $2 }
   /^    permissions: / { permissions = $2 }
   /^    verify: / { verify = $2 }
   /^    status: / { status = $2 }

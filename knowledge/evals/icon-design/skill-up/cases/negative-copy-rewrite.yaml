@@ -1,0 +1,8 @@
+input:
+  prompt: "把这句空状态文案改得更简洁：还没有任务。"
+
+expect:
+  must_contain:
+    - "任务"
+  must_not_contain:
+    - "ICON-YYYYMMDD-VNN"

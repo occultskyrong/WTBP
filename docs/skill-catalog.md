@@ -5,9 +5,14 @@
 | Skill | 状态 | 领域 | 阶段 | 核心能力 | 简介 |
 |---|---|---|---|---|---|
 | `practice-search` | active | research、product | discover、analyze | practice-search、option-comparison、evidence-synthesis | 基于场景、约束、证据和参考实现比较技术或产品方案。 |
-| `systematic-cognition` | candidate | research、product | discover、analyze | web-research、source-verification、evidence-synthesis | 检索公开资料，区分事实、推论和未验证项，并给出可追溯来源。 |
+| `systematic-cognition` | active | research、product | discover、analyze | web-research、source-verification、evidence-synthesis | 检索公开资料，区分事实、推论和未验证项，并给出可追溯来源。 |
 | `skill-evaluation` | active | governance、quality | evaluate | skill-evaluation、regression-evaluation | 审查 Skill 的触发边界、结构、安全、行为表现和质量门禁。 |
 | `skill-router` | active | governance | discover | task-routing、managed-install | 浏览能力地图、查看 Skill 卡片，并将自然语言任务路由到最小适用的 Skill。 |
+| `external-capability-discovery` | candidate | research、governance、product | discover、analyze、evaluate | web-research、source-verification、evidence-synthesis、task-routing | 在本地能力无明确适配项时，检索公开 Skill、GitHub 方案与官方集成，并按可追溯百分制评分排序。 |
+| `external-capability-curation` | candidate | research、governance | discover、analyze、evaluate | source-verification、evidence-synthesis、task-routing | 将用户提供的公开项目或 Skill 自动转为可发现、未安装且含场景与 Case 的外部最佳实践卡。 |
+| `visual-direction` | active | product、design、research | analyze、design、evaluate | visual-direction、evidence-synthesis、source-verification | 在页面样式前形成可观察、可评审、可替换外部依赖的视觉方向契约。 |
+| `icon-design` | active | product、design、quality | design、verify、evaluate | icon-design、visual-direction、visual-verification | 基于批准范围和 Icon 门禁，创作、验证并交接可复用的 Icon 资产家族。 |
+| `motion-design` | active | product、design、quality | design、implement、verify、evaluate | motion-design、visual-verification | 定义动效目的、状态转移、时序、缓动、减弱动效和动态验收，同时把外部动效能力保持为可替换适配器。 |
 | `prd-to-figma` | candidate | product、design | design | figma-create、figma-inspection | 从 PRD 创建首版可编辑 Figma 设计、页面、状态、组件和基础设计资产。 |
 | `figma-evolve` | candidate | product、design | evolve | figma-evolve、figma-inspection | 在保留历史设计证据的前提下，对已有 Figma 节点进行补丁或版本化重做。 |
 | `figma-to-product` | candidate | product、design、engineering | implement | figma-to-code、figma-inspection、layout-diagnosis | 将明确 Figma 节点以可维护布局还原到唯一指定的 Web、小程序或 App 终端。 |

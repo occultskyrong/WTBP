@@ -1,0 +1,8 @@
+input:
+  prompt: "把这句成功提示改得更短：任务已完成。"
+
+expect:
+  must_contain:
+    - "完成"
+  must_not_contain:
+    - "MOTION-YYYYMMDD-VNN"

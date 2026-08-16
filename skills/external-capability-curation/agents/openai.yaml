@@ -1,0 +1,4 @@
+interface:
+  display_name: "外部最佳实践收集"
+  short_description: "将公开GitHub项目或Skill自动收集成可检索且未安装的最佳实践能力卡"
+  default_prompt: "wtbp，收集这个公开 GitHub 项目或 Skill URL；自动生成可检索、未安装的最佳实践卡。"
