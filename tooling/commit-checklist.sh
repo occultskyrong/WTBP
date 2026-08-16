@@ -163,6 +163,14 @@ is_new_capability_path() {
   esac
 }
 
+has_added_external_card() {
+  if [[ "$mode" == range ]]; then
+    git diff --unified=0 "$1" "$2" -- knowledge/external-sources.yaml knowledge/external-capabilities.yaml | rg -q '^\+  - id: '
+  else
+    git diff --cached --unified=0 -- knowledge/external-sources.yaml knowledge/external-capabilities.yaml | rg -q '^\+  - id: '
+  fi
+}
+
 semantic_change=0
 new_capability=0
 for file in "${changed_files[@]}"; do
@@ -171,6 +179,7 @@ done
 while IFS= read -r file; do
   is_new_capability_path "$file" && new_capability=1
 done < <(diff_names A)
+has_added_external_card "$base_ref" "$head_ref" && new_capability=1
 
 check_range_version_history() {
   [[ "$mode" == range ]] || return 0
@@ -206,6 +215,7 @@ check_range_version_history() {
     while IFS= read -r file; do
       is_new_capability_path "$file" && commit_new_capability=1
     done < <(git diff-tree --root --no-commit-id --diff-filter=A --name-only -r "$commit")
+    has_added_external_card "${commit}^" "$commit" && commit_new_capability=1
     changed_version="$(git diff-tree --root --no-commit-id --name-only -r "$commit" -- VERSION)"
 
     if [[ -n "$changed_version" && "$next_version" == "$previous_version" ]]; then
@@ -222,7 +232,7 @@ check_range_version_history() {
       if [[ "$next_major" -gt "$previous_major" ]]; then
         [[ "$next_major" -eq $((previous_major + 1)) && "$next_minor" -eq 0 && "$next_patch" -eq 0 ]] || fail "提交 ${commit} 的 MAJOR 版本跳跃或未归零"
       elif [[ "$next_minor" -gt "$previous_minor" ]]; then
-      [[ "$next_major" -eq "$previous_major" && "$next_minor" -eq $((previous_minor + 1)) && "$next_patch" -eq 0 && "$commit_new_capability" -eq 1 ]] || fail "提交 ${commit} 的 MINOR 版本必须只递增一级并包含新增 Practice、Skill、Eval 或发布能力"
+      [[ "$next_major" -eq "$previous_major" && "$next_minor" -eq $((previous_minor + 1)) && "$next_patch" -eq 0 && "$commit_new_capability" -eq 1 ]] || fail "提交 ${commit} 的 MINOR 版本必须只递增一级并包含新增 Practice、Skill、Eval、外部能力卡或发布能力"
       else
         [[ "$next_major" -eq "$previous_major" && "$next_minor" -eq "$previous_minor" && "$next_patch" -eq $((previous_patch + 1)) ]] || fail "提交 ${commit} 的 PATCH 版本必须只递增一级"
       fi
@@ -287,7 +297,7 @@ else
       printf '  - MAJOR：%s -> %s（提交标题和正文必须说明不兼容变更）\n' "$base_version" "$current_version"
     elif [[ "$current_minor" -gt "$base_minor" ]]; then
       [[ "$current_major" -eq "$base_major" && "$current_minor" -eq $((base_minor + 1)) && "$current_patch" -eq 0 ]] || fail 'MINOR 版本必须只递增一级并归零 PATCH'
-      [[ "$new_capability" -eq 1 ]] || fail 'MINOR 升级必须包含新增 Practice、Skill、Eval 或发布能力'
+      [[ "$new_capability" -eq 1 ]] || fail 'MINOR 升级必须包含新增 Practice、Skill、Eval、外部能力卡或发布能力'
       printf '  - MINOR：%s -> %s\n' "$base_version" "$current_version"
     else
       [[ "$current_major" -eq "$base_major" && "$current_minor" -eq "$base_minor" && "$current_patch" -eq $((base_patch + 1)) ]] || fail 'PATCH 版本必须只递增一级'
