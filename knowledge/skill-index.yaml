@@ -28,7 +28,7 @@ skills:
     inputs: [研究主题, 范围, 时间要求]
     outputs: [核心认知, 证据表, 不确定性, 下一步问题]
     side_effects: [network-read]
-    status: candidate
+    status: active
     install: builtin
     aliases: []
     route_ids: [route.systematic-cognition]
@@ -58,6 +58,32 @@ skills:
     install: builtin
     aliases: [wtbp]
     route_ids: [route.skill-router]
+  - id: external-capability-discovery
+    title: 外部能力在线发现与排名
+    summary: 在本地能力无明确适配项时，检索公开 Skill、GitHub 方案与官方集成，并按可追溯百分制评分排序。
+    domains: [research, governance, product]
+    capabilities: [web-research, source-verification, evidence-synthesis, task-routing]
+    stages: [discover, analyze, evaluate]
+    inputs: [任务目标, 技术或终端约束, 采用边界]
+    outputs: [候选能力卡, 百分制排名, 证据置信度, 采用建议]
+    side_effects: [network-read, filesystem-read]
+    status: candidate
+    install: builtin
+    aliases: []
+    route_ids: [route.external-capability-discovery]
+  - id: external-capability-curation
+    title: 外部能力收录与可检索记忆
+    summary: 将用户提供的公开项目或 Skill 自动转为可发现、未安装且含场景与 Case 的外部最佳实践卡。
+    domains: [research, governance]
+    capabilities: [source-verification, evidence-synthesis, task-routing]
+    stages: [discover, analyze, evaluate]
+    inputs: [公开来源URL, 收集授权, 可选使用场景]
+    outputs: [来源记录, 未安装最佳实践卡, 场景与Case, 命中信号, 去重结论]
+    side_effects: [network-read, filesystem-read, filesystem-write]
+    status: candidate
+    install: builtin
+    aliases: []
+    route_ids: [route.external-capability-curation]
   - id: prd-to-figma
     title: PRD 到可编辑 Figma 设计
     summary: 从 PRD 创建首版可编辑 Figma 设计、页面、状态、组件和基础设计资产。

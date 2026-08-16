@@ -22,7 +22,9 @@ Route first; do not merge every Skill into this Skill or load every `SKILL.md`.
 6. If exactly one active local route clearly matches, read only that route's `SKILL.md` from `<wtbp-root>` and follow it. A `local-adapter` external capability is never a replacement for the selected local Skill's contract.
 7. If several routes or capability cards match, present their boundaries and the recommended ordering. Ask for a choice before running a high-impact workflow.
 8. If exactly one active external installation route matches and it is separately registered with `auto_install: true`, confirm the semantic match and installation boundary, then explicitly run `wtbp install <skill-id>`. Capability-card discovery itself never installs; `manual-optional` cards always require an explicit authorization and separate source, pin, license, permission, credential, and environment review.
-9. If no registered capability matches, explain why and route the evidence search to `practice-search` or `systematic-cognition` before proposing `build-local`. Propose `build-local` only after existing sources were assessed, the task is repeated and stable, and positive, negative, boundary, and necessary adversarial Eval cases can be written.
+9. When the user says `wtbp, collect <public URL>`, treat it as explicit authorization for one new, uninstalled best-practice record. Load `external-capability-curation` immediately: it reads the public source, deduplicates it, extracts scenarios and at least two cases, then writes the source record and capability card. It never creates an install route. Existing-record overwrite or revision replacement still needs separate approval.
+10. If no registered local or external capability clearly fits after semantic comparison, select `external-capability-discovery` before proposing `build-local`. It first records the local `no_match`, then uses `find-skills`/skills.sh, GitHub, and primary public sources to rank temporary candidates. Use `systematic-cognition` for claim-level public-web evidence within that discovery. Do not invoke online discovery when a local Skill is clearly sufficient.
+11. Propose `build-local` only after external discovery assessed existing sources, the task is repeated and stable, and positive, negative, boundary, and necessary adversarial Eval cases can be written.
 
 ## Boundaries
 
@@ -33,7 +35,8 @@ Route first; do not merge every Skill into this Skill or load every `SKILL.md`.
 - Keep route matching explainable: state the matched keywords and any missing context.
 - Treat `skill-index.yaml` as the only source for local Skill tags and cards, and `external-capabilities.yaml` as the only source for external capability cards. Do not manually reconstruct either from route keywords.
 - Do not recommend a local Skill merely because no keyword matched. For a possible new capability, search/reuse evidence first and load `references/external-capability-selection.md`.
-- The current session's semantic decision is only a recommendation until the selected Skill is loaded and its scope is confirmed. Never let the routing step install, execute, write to Figma, or expand permissions.
+- Do not treat the router's keyword count as semantic fit. Only after the current session rules out a clear local selection may it load `external-capability-discovery`; the router itself never performs network search.
+- The current session's semantic decision is only a recommendation until the selected Skill is loaded and its scope is confirmed. Never let the routing step install, execute, write to Figma, or expand permissions. The only retained-metadata exception is a new `wtbp, collect <public URL>` record, whose write boundary is defined by `external-capability-curation`.
 
 ## Output Contract
 
@@ -44,6 +47,7 @@ User goal and context
 Capability view used: list / show / recommend
 Matched local Skill and external capability candidates with matched keywords
 Recommended route, adoption decision, and boundary
+Whether online discovery is deferred or selected after the local-first decision
 Required next read or command
 Installation or authorization requirement, if any
 Unmatched or missing context
@@ -53,4 +57,5 @@ Unmatched or missing context
 
 - The result is `select`, `clarify`, or `no_match` with matched evidence, one adoption decision, boundaries, and the next read/command.
 - No keyword match is treated as semantic execution; no Skill is installed or run during discovery, and no external capability card is treated as an installation instruction.
+- Online external discovery is selected only after the local-first semantic decision and returns ranked candidates only; it does not install, execute, or register external content.
 - Installation is only reported after explicit authorization and the registered source, pin, permissions, and verification pass.

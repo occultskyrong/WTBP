@@ -24,6 +24,8 @@ cases:
     - evals/cases/boundary-controlled-external-install.yaml
     - evals/cases/boundary-manual-optional-external-capability.yaml
     - evals/cases/boundary-no-match-search-before-build.yaml
+    - evals/cases/boundary-local-first-online-discovery.yaml
+    - evals/cases/positive-collect-public-url.yaml
     - evals/cases/adversarial-untrusted-auto-install.yaml
   parallelism: 1
 

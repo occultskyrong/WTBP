@@ -24,8 +24,8 @@ routes:
     source: local
     path: skills/systematic-cognition
     install: none
-    status: candidate
-    last_verified: 2026-08-11
+    status: active
+    last_verified: 2026-08-16
     keywords: [全网, 搜索, 当前, 来源, 认知, 事实, 推论, research, search, source]
     triggers:
       - 用户要求全网搜索、当前信息、准确来源或系统化了解主题
@@ -69,6 +69,40 @@ routes:
     not_for:
       - 已有单一明确 Skill 且用户要求直接执行的任务
       - 不涉及 Skill 的普通翻译、改写或一次性编辑
+
+  - id: route.external-capability-discovery
+    title: 本地无明确适配项时的外部能力在线发现
+    skill_id: external-capability-discovery
+    source: local
+    path: skills/external-capability-discovery
+    install: none
+    status: candidate
+    last_verified: 2026-08-16
+    keywords: [外部, GitHub, skills.sh, 现成, 开源, 搜索技能, 找 Skill, 解决方案, reference implementation, existing skill]
+    triggers:
+      - 当前会话已检查本地 Skill 与已登记外部能力，但没有明确适配项
+      - 用户要求在线搜索可复用的 Skill、GitHub 方案、官方集成或参考实现并进行比较
+      - 用户要求候选按场景契合、维护活跃度、社区采用、许可证和安全边界进行百分制排名
+    not_for:
+      - 已有一个明确适配的本地 Skill，且用户只要求直接执行该流程
+      - 简单改写、普通问答、未说明要解决什么问题的泛化搜索
+
+  - id: route.external-capability-curation
+    title: 收录用户提供的外部项目或 Skill
+    skill_id: external-capability-curation
+    source: local
+    path: skills/external-capability-curation
+    install: none
+    status: candidate
+    last_verified: 2026-08-16
+    keywords: [收集, 收录, 登记, 记住, 预置, GitHub 项目, GitHub 仓库, 外部Skill, 外部能力, 收藏技能, collect capability]
+    triggers:
+      - 用户说出 `wtbp，收集 <公开 URL>`，或提供公开 GitHub 项目、Skill 或官方来源并要求后续可搜索或命中
+      - 用户要求将外部能力保存为未安装、可复用的候选卡
+      - 用户要求对已收录能力更新来源、修订、适用范围或检索信号
+    not_for:
+      - 仅讨论、比较或一次性搜索一个外部链接而不要求留存
+      - 要求自动安装、执行第三方内容或读取凭据
 
   - id: route.prd-to-figma
     title: PRD 到可编辑 Figma 设计

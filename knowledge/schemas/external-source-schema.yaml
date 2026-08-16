@@ -1,0 +1,5 @@
+version: 1
+artifact: external-sources.yaml
+required_fields: [id, title, kind, url, publisher, trust, accessed_on, adoption, scope, credential_boundary, license, revision, skill_path, quality_evidence]
+trust_values: [first-party, third-party, community, unverified]
+adoption_values: [default-capability-source, preferred-component-mapping, optional-explicit-authorization, reference-only]

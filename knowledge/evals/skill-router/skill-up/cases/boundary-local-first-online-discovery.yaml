@@ -1,0 +1,12 @@
+input:
+  prompt: |
+    请使用 /skill-router Skill。本地与已登记外部能力均无明确适配项。
+    请用 wtbp 为 Playwright 找 GitHub 上可复用的 Skill 或开源解决方案，并按分数排序。
+expect:
+  must_contain:
+    - no_match
+    - external-capability-discovery
+    - 百分制
+  must_not_contain:
+    - 已自动安装
+    - 已自动登记

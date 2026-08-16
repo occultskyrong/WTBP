@@ -41,6 +41,17 @@ skill_requires_adversarial_case() {
   ' "$repo_root/knowledge/skill-index.yaml"
 }
 
+skill_has_capability() {
+  local skill_id="$1"
+  local capability="$2"
+  awk -v skill_id="$skill_id" -v capability="$capability" '
+    $0 == "  - id: " skill_id { found = 1; next }
+    found && /^    capabilities: / { exit(index($0, capability) ? 0 : 1) }
+    found && /^  - id: / { exit 1 }
+    END { if (!found) exit 1 }
+  ' "$repo_root/knowledge/skill-index.yaml"
+}
+
 validate_cases() {
   local file="$1"
   local skill_id="$2"
@@ -121,6 +132,18 @@ validate_eval() {
   catalog_has "$eval_id" "knowledge/evals/${skill_id}" || fail "${file#$repo_root/} 未在 knowledge/catalog.yaml 登记"
 
   validate_cases "$eval_dir/cases.yaml" "$skill_id"
+
+  if skill_has_capability "$skill_id" source-verification; then
+    local source_judge_found=false
+    local judge_case
+    while IFS= read -r judge_case; do
+      if rg -q '^\s*type: agent_judge$' "$judge_case" && rg -qi '来源|引用|source|citation|URL' "$judge_case"; then
+        source_judge_found=true
+        break
+      fi
+    done < <(rg --files "$eval_dir/skill-up/cases" -g '*.yaml' | sort)
+    [[ "$source_judge_found" == true ]] || fail "${file#$repo_root/} 声明 source-verification，至少一个用例必须使用检查来源对应性的 agent_judge"
+  fi
 }
 
 [[ -f "$repo_root/knowledge/catalog.yaml" ]] || fail '缺少 knowledge/catalog.yaml'

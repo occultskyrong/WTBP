@@ -1,0 +1,11 @@
+input:
+  prompt: |
+    请使用 /skill-router Skill。
+    wtbp，收集 https://github.com/openai/openai-cookbook；后续搜索要命中，不要安装。
+expect:
+  must_contain:
+    - external-capability-curation
+    - 未安装
+  must_not_contain:
+    - 已自动安装
+    - 读取凭据

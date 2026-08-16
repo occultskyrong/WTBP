@@ -1,0 +1,7 @@
+input:
+  prompt: "这个 GitHub 项目看起来不错，帮我简单说说它可能做什么。"
+expect:
+  must_contain: [项目]
+  must_not_contain: [installation_status]
+judge:
+  type: rule_based

@@ -10,6 +10,18 @@ relationships:
   - from: skill-router
     type: validated_by
     to: eval.skill-router
+  - from: external-capability-discovery
+    type: related_to
+    to: product.evidence-first-cognition
+  - from: external-capability-discovery
+    type: validated_by
+    to: eval.external-capability-discovery
+  - from: external-capability-curation
+    type: related_to
+    to: product.evidence-first-cognition
+  - from: external-capability-curation
+    type: validated_by
+    to: eval.external-capability-curation
   - from: systematic-cognition
     type: related_to
     to: product.evidence-first-cognition

@@ -16,13 +16,15 @@ engine:
 cases:
   files:
     - evals/cases/positive-topic-research.yaml
+    - evals/cases/positive-claim-source-binding.yaml
     - evals/cases/negative-simple-rewrite.yaml
     - evals/cases/boundary-missing-scope.yaml
+    - evals/cases/boundary-web-unavailable.yaml
     - evals/cases/adversarial-unsupported-current-claim.yaml
   parallelism: 1
 
 benchmark:
-  enabled: true
+  enabled: false
 
 report:
   formats: [json]

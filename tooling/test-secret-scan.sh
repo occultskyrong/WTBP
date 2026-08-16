@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Git hooks export repository-local variables such as GIT_INDEX_FILE.  This
+# test creates its own repository, so inherited values would make its `git add`
+# commands mutate the caller's staging area instead of the temporary index.
+unset GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE GIT_COMMON_DIR GIT_PREFIX
+
 repo_root="$(mktemp -d "${TMPDIR:-/tmp}/wtbp-secret-scan.XXXXXX")"
 trap 'rm -rf "$repo_root"' EXIT
 scanner="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/scan-secrets.sh"

@@ -25,9 +25,11 @@
 | 问题类型 | Skill | 状态 | 路径 | 安装 | 快捷方式 |
 |---|---|---|---|---|---|
 | 高影响技术/产品决策、最佳实践比较 | `practice-search` | active | `skills/practice-search` | 无需安装 | — |
-| 全网搜索、当前主题认知、来源核验 | `systematic-cognition` | candidate | `skills/systematic-cognition` | 无需安装 | — |
+| 全网搜索、当前主题认知、来源核验 | `systematic-cognition` | active | `skills/systematic-cognition` | 无需安装 | — |
 | Skill 结构、行为、安全和门禁评测 | `skill-evaluation` | active | `skills/skill-evaluation` | 无需安装 | `ske` |
 | 多 Skill 发现、比较和渐进加载 | `skill-router` | active | `skills/skill-router` | 安装本地命令 | `wtbp` |
+| 本地无明确适配项后的在线发现与排名 | `external-capability-discovery` | candidate | `skills/external-capability-discovery` | 无需安装 | — |
+| 收录外部项目或 Skill 供后续命中 | `external-capability-curation` | candidate | `skills/external-capability-curation` | 无需安装 | — |
 
 完整能力地图见 [`docs/skill-catalog.md`](skill-catalog.md)。不要手工扩写上表来描述能力；更新时修改
 `knowledge/skill-index.yaml` 并由校验确认总览同步。
@@ -50,7 +52,7 @@ wtbp "比较两个架构方案的成本、安全和可逆性"
 wtbp external --domain design
 ```
 
-入口按受控关键词分别列出本地 Skill 和外部能力候选及其下一步读取路径；它不执行目标 Skill。当前会话先判断采用
+入口按受控关键词分别列出本地 Skill 和外部能力候选及其下一步读取路径；它不执行目标 Skill，也不直接搜索网络。当前会话先判断采用
 `direct-use`、`adapt`、`compose`、`reference-only` 还是 `build-local`，再加载唯一明确的本地候选英文 `SKILL.md`。
 `local-adapter` 外部能力必须保留本地 Skill 的项目契约与门禁；`manual-optional` 外部能力不会安装。只有唯一命中的外部
 安装路由同时满足已登记、`active`、GitHub HTTPS 来源、固定 40 位提交、声明权限和 `auto_install: true` 时，当前会话确认后
@@ -64,8 +66,10 @@ wtbp external --domain design
 1. 运行 `wtbp root`，确认 WTBP 根目录。
 2. 运行 `wtbp "<任务>"`，获取可解释的本地候选、外部能力候选和命中依据；需要浏览时运行 `wtbp external`。
 3. 读取 `knowledge/skill-index.yaml` 中的本地 Skill 卡与 `knowledge/external-capabilities.yaml` 中的外部能力卡，比较场景、输入、输出、阶段、副作用、来源、权限和证据。
-4. 由当前会话给出 `select`、`clarify` 或 `no_match`，以及本次采用决策；不得凭关键词直接执行、安装或新建。
-5. 只有在选择明确后，才读取唯一目标本地 Skill 的英文 `SKILL.md`，并按其权限边界执行。
+4. 由当前会话给出 `select`、`clarify` 或 `no_match`，以及本次采用决策；不得凭关键词直接执行、安装或新建。只有本地和已登记外部能力均无明确适配项时，才选择 `external-capability-discovery`。
+5. `external-capability-discovery` 使用 `find-skills`/skills.sh、GitHub 和第一方公开来源创建临时候选卡；按 100 分总分排序，并把来源、维护、社区、许可证、权限与证据置信度一并返回。它不安装或登记候选。
+6. 用户说出 `wtbp，收集 <公开 URL>` 时，选择 `external-capability-curation`；这已授权创建新来源记录和未安装最佳实践卡。当前会话自动读取公开来源，提取问题、场景与至少两个 Case，使后续 `wtbp` 在 `solves`、场景、Case、技术、终端、输入输出和关键词上优先命中。既有记录的覆盖或修订替换仍需单独确认。
+7. 只有在选择明确后，才读取唯一目标本地 Skill 的英文 `SKILL.md`，并按其权限边界执行。
 
 这种分层沿用 LLM Wiki 的“维护结构化知识、按需提供小范围上下文”原则：索引和命令负责提供上下文，当前会话负责
 理解语义。它避免重复启动会话、丢失前文和额外模型费用；命令仍保持可测试、可解释和无外部模型依赖。

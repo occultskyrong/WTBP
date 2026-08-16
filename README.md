@@ -45,7 +45,7 @@ Skill 必须同时维护对应的 Eval，具体规则见 [`docs/skill-evaluation
 4. [`docs/skill-catalog.md`](docs/skill-catalog.md)：面向人类的中文本地 Skill 能力地图；网络优先复用规则见 [`docs/network-first-capability-governance.md`](docs/network-first-capability-governance.md)。
 5. [`knowledge/skill-index.yaml`](knowledge/skill-index.yaml)：本地 Skill 的能力、标签、输入输出和副作用规范源；[`knowledge/external-capabilities.yaml`](knowledge/external-capabilities.yaml) 登记外部能力的来源和采用边界。
 6. [`knowledge/catalog.yaml`](knowledge/catalog.yaml)：可发现对象索引；[`knowledge/skill-routes.yaml`](knowledge/skill-routes.yaml) 只负责将问题场景路由到本地 Skill 或受控安装路由。
-7. 不确定应使用哪个 Skill 时，先运行 `wtbp "<问题>"`；想浏览外部能力时使用 `wtbp external --domain <领域>`，想核对单项能力时使用 `wtbp show <id>`。
+7. 不确定应使用哪个 Skill 时，先运行 `wtbp "<问题>"`；想浏览外部能力时使用 `wtbp external --domain <领域>`，想核对单项能力时使用 `wtbp show <id>`。若本地没有明确适配项，再使用 `external-capability-discovery` 在线搜索并按 100 分总分比较候选；在当前 Agent/Claude 对话中输入 `wtbp，收集 <公开 URL>`，即可自动收录为未安装、可搜索且含场景与 Case 的外部最佳实践卡。
 8. 只加载目录指向的目标 Practice、证据、参考实现或 Skill；不要一次性读取全部模式和模板。
 9. 需要执行流程时，再读取目标 Skill 的英文 `SKILL.md` 及其按需引用的内容；同路径的 `SKILL.zh-CN.md` 是同步中文对照。完整命名约定见 [`docs/document-language-policy.md`](docs/document-language-policy.md)。
 

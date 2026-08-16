@@ -1,0 +1,4 @@
+interface:
+  display_name: "外部能力发现"
+  short_description: "在线发现外部 Skill、方案与参考实现，并输出可核验百分制排名"
+  default_prompt: "使用 $external-capability-discovery 搜索可解决此问题的外部 Skill 或方案，并给出评分排名与证据。"

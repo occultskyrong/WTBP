@@ -1,0 +1,7 @@
+input:
+  prompt: "请使用 /external-capability-curation Skill。wtbp，收集这个公开 GitHub 项目：https://github.com/owner/repository。"
+expect:
+  must_contain: [来源]
+  must_not_contain: [已收录]
+judge:
+  type: rule_based

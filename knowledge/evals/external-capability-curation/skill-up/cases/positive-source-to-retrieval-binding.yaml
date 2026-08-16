@@ -1,0 +1,13 @@
+input:
+  prompt: "请使用 /external-capability-curation Skill。wtbp，收集这个公开 GitHub 项目：https://github.com/openai/openai-cookbook。它的 solves、not_for、场景、Case、输入输出、技术、终端和关键词必须直接来自当前会话打开的 README 或官方来源；缺失项标记 unverified。"
+expect:
+  must_contain: [来源, unverified]
+  must_not_contain: [已安装]
+judge:
+  type: agent_judge
+  model: anthropic/claude-sonnet-4-6
+  criteria:
+    - "来源与能力抽取字段、场景和 Case 存在直接对应；无法核验时没有补造字段。"
+    - "给出未来 wtbp 检索信号、去重边界和 candidate/uninstalled 状态。"
+  pass_threshold: 0.90
+  timeout_seconds: 180

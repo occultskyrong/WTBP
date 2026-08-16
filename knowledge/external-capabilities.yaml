@@ -1,5 +1,5 @@
 version: 1
-description: 外部能力登记。它只记录可发现、可追溯的外部能力；不替代本地 Skill 的能力索引、路由、Eval 或安装授权。
+description: 外部最佳实践卡清单。它记录可发现、可追溯的外部能力、适用场景和典型 Case；不替代本地 Skill 的能力索引、路由、Eval 或安装授权。
 capabilities:
   - id: figma-official-mcp
     title: Figma 官方 MCP 能力
@@ -9,8 +9,17 @@ capabilities:
     domains: [product, design, engineering]
     capabilities: [figma-create, figma-evolve, figma-inspection, figma-to-code]
     stages: [design, evolve, implement, verify]
+    solves: [Figma设计稿读写,组件变量读取,设计节点检查]
+    not_for: [替代项目视觉验收,自动安装第三方Skill]
+    scenarios: [已获授权的Figma设计协作,需要读取或写入真实设计节点]
+    cases: [读取指定页面的组件变量,在已授权文件中写入设计节点]
+    inputs: [已授权Figma文件,明确设计目标]
+    outputs: [Figma节点,组件变量,设计检查结果]
+    technologies: [Figma,MCP]
+    targets: [Figma设计稿,设计系统]
     adoption: local-adapter
     availability: client-provided
+    installation_status: client-provided
     permissions: 受当前客户端 Figma OAuth、文件访问权限和目标项目授权约束。
     verify: 由当前会话确认 Figma 工具可用、目标文件可访问；不可用时记录为 Unverified。
     status: active
@@ -23,8 +32,17 @@ capabilities:
     domains: [design, engineering]
     capabilities: [figma-to-code, figma-inspection]
     stages: [design, implement, verify]
+    solves: [Figma组件映射,设计系统代码连接,组件属性同步]
+    not_for: [自动生成完整产品,替代代码运行验收]
+    scenarios: [已有Figma组件且需映射真实代码组件,需要核验设计变体与组件属性]
+    cases: [为按钮组件建立Code Connect映射,核验Figma变体与React属性一致]
+    inputs: [Figma组件,目标代码组件,项目配置]
+    outputs: [组件映射,属性映射,代码连接证据]
+    technologies: [Figma,Code Connect,React]
+    targets: [设计系统,前端代码]
     adoption: local-adapter
     availability: client-provided
+    installation_status: client-provided
     permissions: 受 Figma 计划、消费项目仓库权限和项目配置约束；不得由 WTBP 代管。
     verify: 核对目标组件、属性和代码映射；无法访问时标记为 Unverified，不得虚构映射。
     status: active
@@ -37,8 +55,17 @@ capabilities:
     domains: [design, quality]
     capabilities: [figma-inspection, visual-verification]
     stages: [verify, evaluate]
+    solves: [Figma Token审计,组件树检查,WCAG审计,目标尺寸检查]
+    not_for: [替代WTBP视觉验收,自动读取Figma PAT]
+    scenarios: [已获得第三方工具与Figma访问授权,需要补充设计静态审计]
+    cases: [检查颜色Token一致性,审计组件目标尺寸与WCAG问题]
+    inputs: [用户授权,Figma访问令牌,目标文件]
+    outputs: [设计审计报告,Token问题,尺寸问题]
+    technologies: [Figma,WCAG,design lint]
+    targets: [Figma设计稿,设计质量]
     adoption: manual-optional
     availability: manual-install
+    installation_status: uninstalled
     permissions: 需要使用方明确授权、Figma PAT、命令执行环境和第三方代码审查；不得自动安装或读取凭据。
     verify: 核对固定来源、许可、提交版本、权限范围和实际审计输出；不能替代 WTBP 的几何和视觉验收。
     status: candidate
@@ -51,8 +78,17 @@ capabilities:
     domains: [design, engineering]
     capabilities: [figma-create, figma-to-code]
     stages: [discover, design, implement]
+    solves: [Figma设计系统参考,Variables组件结构参考,Code Connect结构参考]
+    not_for: [直接复制项目设计,替代项目设计契约]
+    scenarios: [需要设计系统结构参考,正在制定项目自己的组件与变量契约]
+    cases: [比较Variables组织方式,参考组件与React映射的拆分方式]
+    inputs: [设计系统问题,目标项目约束]
+    outputs: [设计系统结构参考,组件映射思路]
+    technologies: [Figma,Variables,Components,React]
+    targets: [设计系统,Figma设计稿,前端代码]
     adoption: reference-only
     availability: reference
+    installation_status: uninstalled
     permissions: 仅阅读和评估其许可证与适用性；不复制为项目事实或自动执行方案。
     verify: 将采用的结构与目标项目设计契约、组件和运行实现逐项核验。
     status: active

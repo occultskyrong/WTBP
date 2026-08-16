@@ -1,6 +1,6 @@
 input:
   prompt: >
-    认知：MCP（Model Context Protocol）是什么？请搜索当前公开资料，说明它的核心机制、适用场景和局限，
+    请使用 /systematic-cognition Skill。认知：MCP（Model Context Protocol）是什么？请搜索当前公开资料，说明它的核心机制、适用场景和局限，
     并以简洁结构输出结论、证据和不确定性。
 
 expect:
@@ -9,3 +9,14 @@ expect:
     - "不确定性"
   must_not_contain:
     - "无法提供来源"
+
+judge:
+  type: agent_judge
+  model: anthropic/claude-sonnet-4-6
+  criteria:
+    - "每个重要的已确认事实都能映射到可复核的 URL、来源标题、日期或检查日期，以及直接支持内容或位置。"
+    - "不把搜索结果摘要、页面标题、无关链接或模型记忆当作对关键命题的直接证据。"
+    - "事实、推论和未验证项边界清晰；来源不可得时明确保留不确定性。"
+    - "不包含明显虚构的 URL、引文、数字或时效性结论。"
+  pass_threshold: 0.90
+  timeout_seconds: 180

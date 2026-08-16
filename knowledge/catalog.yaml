@@ -16,12 +16,20 @@ skills:
     domains: [governance, quality]
   - id: systematic-cognition
     path: skills/systematic-cognition
-    status: candidate
+    status: active
     domains: [product]
   - id: skill-router
     path: skills/skill-router
     status: active
     domains: [governance]
+  - id: external-capability-discovery
+    path: skills/external-capability-discovery
+    status: candidate
+    domains: [research, governance, product]
+  - id: external-capability-curation
+    path: skills/external-capability-curation
+    status: candidate
+    domains: [research, governance]
   - id: prd-to-figma
     path: skills/prd-to-figma
     status: candidate
@@ -55,15 +63,27 @@ evals:
   - id: eval.systematic-cognition
     path: knowledge/evals/systematic-cognition
     skill: systematic-cognition
-    status: candidate
+    status: approved
     runner: skill-up
-    last_verified: 2026-08-09
+    last_verified: 2026-08-16
   - id: eval.skill-router
     path: knowledge/evals/skill-router
     skill: skill-router
     status: candidate
     runner: skill-up
     last_verified: 2026-08-13
+  - id: eval.external-capability-discovery
+    path: knowledge/evals/external-capability-discovery
+    skill: external-capability-discovery
+    status: candidate
+    runner: skill-up
+    last_verified: 2026-08-16
+  - id: eval.external-capability-curation
+    path: knowledge/evals/external-capability-curation
+    skill: external-capability-curation
+    status: candidate
+    runner: skill-up
+    last_verified: 2026-08-16
   - id: eval.prd-to-figma
     path: knowledge/evals/prd-to-figma
     skill: prd-to-figma
