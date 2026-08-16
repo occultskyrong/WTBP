@@ -208,3 +208,72 @@ capabilities:
     verify: 采用前固定提交或镜像摘要，核验当前安全公告、许可证及署名要求；用允许域名夹具验证 URL 校验、限速、内容净化、来源追溯和失败隔离。Docker/API 不得直接暴露到公网，Hooks 默认保持禁用。
     status: candidate
     keywords: [Crawl4AI,crawl4ai,网页抓取,网页采集,爬虫,网页转Markdown,结构化提取,RAG,动态网页,deep crawl]
+  - id: impeccable-design-agent-reference
+    title: Impeccable 前端设计代理能力参考
+    summary: 面向 AI coding agent 的前端设计工作流，覆盖视觉方向、UX/UI 规划、产品界面优化、可访问性/性能/响应式审计、浏览器迭代和设计系统提取。
+    source_id: source.pbakaus-impeccable
+    kind: external-skill
+    domains: [product, design, engineering, quality]
+    capabilities: [visual-direction, layout-diagnosis, motion-design, visual-verification, evidence-synthesis]
+    stages: [discover, analyze, design, evolve, implement, verify, evaluate]
+    solves: [AI生成前端的视觉与UX改进,产品UI和Dashboard的布局层级优化,可访问性性能响应式审计,设计Token与可复用组件提取,浏览器中的视觉变体迭代,有目的的动效和微交互设计]
+    not_for: [后端或非UI任务,Figma直接写入,替代业务规则和功能验收,替代WTBP的VIS/ICON/MOTION契约与人工评审,自动安装或授权第三方工具]
+    scenarios: [需要为新前端先完成UX/UI形状规划再实现,需要在不改变业务行为和路由的前提下改进现有产品界面,需要对任务管理台或Dashboard做布局/可访问性/响应式审计,需要在浏览器中进行有限轮次的视觉复核]
+    cases: [审查当前任务管理工作台的布局层级、响应式和可访问性并给出改进清单,在不改变路由和业务行为的前提下统一现有前端的颜色字体间距动效和设计Token,为一个新产品页面先形成UX/UI方案再实现并进行浏览器视觉复核]
+    inputs: [目标前端路径或路由,产品受众和设计约束,现有Token组件主题和代表性页面,可运行的浏览器或页面环境,明确的保留范围和禁止变更项]
+    outputs: [设计上下文和视觉方向,UX/UI形状方案,前端实现或定向改动,critique/audit/polish结果,确定性检测发现,可复用Token与组件提取建议]
+    technologies: [Agent Skill,JavaScript,HTML/CSS,浏览器迭代,前端设计系统]
+    targets: [Web前端,产品UI,Dashboard,应用壳层,表单,设置页,Onboarding,Landing Page]
+    adoption: reference-only
+    availability: reference
+    installation_status: uninstalled
+    permissions: 仅保留公开来源元数据；未来安装可能执行npx/node、写入PRODUCT.md和DESIGN.md、修改前端文件、启动浏览器迭代并安装provider hook，均需消费项目单独授权，不由WTBP代管。
+    verify: 已在当前会话打开仓库、README、skill/SKILL.src.md和GitHub API并核对能力、许可证与社区信号；未安装、未运行CLI、未执行浏览器迭代、未验证检测规则和生成代码质量，采用前必须固定commit并做有界行为评测。
+    status: candidate
+    keywords: [Impeccable,前端设计代理,AI设计,UX/UI,视觉审计,布局优化,设计Token,浏览器迭代,动效,Dashboard,任务管理台]
+  - id: emilkowalski-design-engineering-reference
+    title: Emil Kowalski 设计工程与动效参考
+    summary: 以设计工程视角指导 UI 动效和组件细节，覆盖动效是否必要、目的、缓动、时长、可中断交互、性能、减弱动效、动画审查和原型变体。
+    source_id: source.emilkowalski-skills
+    kind: external-skill
+    domains: [design, engineering, quality, product]
+    capabilities: [motion-design, visual-direction, layout-diagnosis, visual-verification, option-comparison]
+    stages: [discover, analyze, design, evolve, implement, verify, evaluate]
+    solves: [UI动效目的与时机判断,动画时长缓动属性和中断行为设计,现有动画代码审查与优先级规划,发现真正值得添加动效的交互位置,组件微交互和视觉细节打磨,UI库选择与多版本原型比较]
+    not_for: [后端或非UI任务,替代WTBP的MOTION契约和动态证据,替代完整视觉方向或品牌设计,直接写入Figma,替代业务规则和产品功能验收,自动安装第三方Skill或前端依赖]
+    scenarios: [任务管理或产品UI需要判断哪些操作应动效化,需要审查现有页面的缓动时长性能和减弱动效,需要为弹窗抽屉Toast拖拽或状态转移设计可中断交互,需要比较多个UI组件方案并选择合适的实现库]
+    cases: [审查任务完成和列表更新动效，判断哪些高频操作应减少或取消动画并给出替代方案,为Toast抽屉和Popover定义触发状态时长缓动中断和prefers-reduced-motion行为,扫描现有前端动画代码并输出按影响和成本排序的修复计划]
+    inputs: [目标组件或页面代码,触发器与状态转移,动效目的和使用频率,目标终端和性能约束,现有动画库与可访问性策略,明确的业务行为和不可变更边界]
+    outputs: [动效决策与行为规格,时长缓动属性和变体建议,动画审查表与优先级计划,实现级CSS/JavaScript建议,减弱动效和触摸设备回退策略,UI库或原型方案比较]
+    technologies: [Agent Skill,CSS,JavaScript,React,Motion,Framer Motion,Web Animations API,浏览器]
+    targets: [Web产品UI,任务管理台,Dashboard,应用壳层,Toast,Popover,Drawer,Modal,拖拽交互,组件原型]
+    adoption: reference-only
+    availability: reference
+    installation_status: uninstalled
+    permissions: 仅保留公开来源元数据；未来安装可能执行npx skills、写入Agent Skill目录，应用时还可能修改前端代码、运行浏览器和使用项目依赖，均需消费项目单独授权，不由WTBP代管。
+    verify: 已在当前会话打开仓库README和skills/emil-design-eng/SKILL.md并核对主能力、许可证与社区信号；未安装、未运行任何Skill、未执行浏览器动效验收，未证明其建议在目标项目中的实际质量，采用前必须固定commit并进行动态证据和人工评审。
+    status: candidate
+    keywords: [Emil Kowalski,设计工程,UI动效,动画审查,缓动,时长,微交互,减弱动效,动画机会,原型变体,Motion,Framer Motion]
+  - id: taste-skill-frontend-design-reference
+    title: Taste Skill 反模板化前端设计参考
+    summary: 面向 AI Agent 的反模板化前端设计 Skill，先读取 brief 和受众，再用设计方差、动效强度、视觉密度三个参数约束视觉方向、布局、排版、动效、图片和交付前检查。
+    source_id: source.leonxlnx-taste-skill
+    kind: external-skill
+    domains: [design, product, engineering, quality]
+    capabilities: [visual-direction, motion-design, layout-diagnosis, visual-verification, option-comparison]
+    stages: [discover, analyze, design, evolve, implement, verify, evaluate]
+    solves: [Landing Page和Portfolio的反模板化视觉方向,根据brief受众和参考信号形成Design Read,用DESIGN_VARIANCE/MOTION_INTENSITY/VISUAL_DENSITY控制页面表达,选择真实设计系统或诚实标注审美实现,重设计前的品牌Token信息架构和SEO审计,布局排版图片动效和文案的反AI默认检查]
+    not_for: [Dashboard和密集产品UI,数据表和多步骤表单,代码编辑器和原生移动端,实时协作UI,替代WTBP的VIS/ICON/MOTION契约和人工评审,直接写入Figma或自动安装第三方Skill]
+    scenarios: [需要为营销页作品集或编辑型页面形成独特且可解释的视觉方向,需要在已有网站重设计前审计品牌Token信息架构和SEO风险,需要检查AI生成页面中的重复布局假截图装饰性文案和默认配色,需要把设计方向映射到React/Next/Tailwind/Motion或GSAP实现]
+    cases: [为个人工作台的介绍页形成Design Read并给出视觉方差动效强度和视觉密度建议,审查一个Landing Page是否存在AI紫渐变三等分卡片重复布局和假截图并输出修正清单,在保留路由品牌文案和业务功能的前提下对现有前端做重设计审计]
+    inputs: [页面类型和产品目标,目标受众和期望感受,参考URL或截图,已有品牌Token字体Logo和图片,可访问性和技术约束,绿地建设或保留式重设计边界]
+    outputs: [一行Design Read,三个设计控制参数,视觉方向和设计系统映射,布局排版图片动效和组件建议,重设计审计结果,实现前Pre-Flight检查清单]
+    technologies: [Agent Skill,React,Next.js,Vue,Svelte,Tailwind,CSS,Motion,GSAP,图像生成]
+    targets: [Landing Page,Portfolio,Editorial/Blog,营销站,Web视觉方向,现有网站重设计]
+    adoption: reference-only
+    availability: reference
+    installation_status: uninstalled
+    permissions: 仅保留公开来源元数据；未来安装可能通过npx skills写入Agent Skill目录，应用时还可能修改前端代码、调用图像生成工具和使用第三方依赖，均需消费项目单独授权，不由WTBP代管。
+    verify: 已在当前会话打开仓库README和skills/taste-skill/SKILL.md并核对能力范围、明确非目标、MIT许可证和社区信号；v2仍为experimental，未安装、未运行Skill、未做Figma或代码行为验收，采用前必须固定commit并经过VIS/MOTION相关人工评审。
+    status: candidate
+    keywords: [Taste Skill,反模板化,anti-slop,视觉方向,Design Read,DESIGN_VARIANCE,MOTION_INTENSITY,VISUAL_DENSITY,Landing Page,Portfolio,重设计,Pre-Flight,AI默认设计]
