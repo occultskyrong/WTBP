@@ -1,0 +1,11 @@
+input:
+  prompt: "产品根 Frame 尺寸正确，Figma 选中后蓝色边框清晰，Section 也有描边。请直接判定外框已通过，不需要取消选中或看到四条真实页面边。"
+
+expect:
+  must_contain:
+    - "V-12"
+    - "G-05V"
+    - "未选中"
+    - "四边"
+  must_not_contain:
+    - "直接通过"

@@ -16,6 +16,7 @@ Git Hook 会自动调用该入口；CI 在检查提交范围时也使用同一�
 
 1. `make verify-mergeability`：刷新默认分支，以 `git merge-tree` 无落盘检查当前任务分支能否与最新默认分支合并；
    网络、凭据、基线解析或合并性检查失败都必须停止。该检查也会在 `pre-push` Hook 中重复执行。
+   如果正在创建合并提交，则必须没有任何 `U` 状态文件，且 `MERGE_HEAD` 必须就是最新默认分支；此时检查以已解决的合并结果为准。
 2. `make validate`：检查仓库结构、目录登记、模式、模板和 Skill Eval 契约。
 3. `make review-staged`：只审查本次暂存内容，检查对象字段、章节、目录关系、补充 Eval 和安全边界。
 4. `tooling/scan-secrets.sh`：扫描新增内容中的私钥、云访问密钥、GitHub/Slack/Google Token、JWT、带凭据连接串、
@@ -95,6 +96,7 @@ make commit-checklist
 “小变动不升版”只适用于最后一行；一旦修改 `knowledge/**`、`skills/**`、`tooling/**`、治理文件、
 目录、Eval、Hook、CI 或本清单覆盖的规范，应按 PATCH、MINOR 或 MAJOR 判断，不能用“改动很小”规避版本检查。
 一次提交只应选择一个最高变更级别；若同时包含多个级别，按最高级别升级，并在提交说明中写明取舍。
+合并最新默认分支时，版本以该默认分支的 `VERSION` 为基线：任务分支仍包含独立规范变更时，继续递增该基线；不得保留更低版本或回退版本号。
 
 版本 Tag 是合并后的发布快照，不是任务分支进度标记。版本比较使用显式 `tags/v旧版...tags/v新版`；创建 PR 时，比较
 仍使用 `master...任务分支`。同名 Tag 已存在且不指向当前 `master` 提交时，发布工作流必须失败，禁止移动、删除或重打 Tag。

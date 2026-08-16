@@ -33,6 +33,14 @@ or visibly bounded viewport container; `miniapp` uses the applicable mini-progra
 device and safe-area chrome. A generic phone frame cannot substitute for another terminal. Browser chrome may be
 omitted only when it is outside the product contract; the viewport boundary still remains visible.
 
+### Boundary ownership and visual proof (required)
+
+| Shell node | Product root Frame | System chrome owner / safe-area relationship | Product TabBar owner | Section ownership rule | Annotation sibling | Visual-boundary recipe | Fixed unselected capture | Four-edge result |
+|---|---|---|---|---|---|---|---|---|
+| | | | | `Section` is a descendant of the product root; it never substitutes for root or shell. | Right-side sibling, outside product root. | Fill/surface; stroke or `N/A` reason; radius or `N/A`; shadow/chrome; canvas contrast. | Target, state, data, viewport/scale, shell/root IDs and bounds; selection hidden. | Top / right / bottom / left, each with visible canvas margin. |
+
+`Canvas` is workspace backdrop only. A Figma selection outline, handles, rulers, a Section edge, or a cropped screenshot is never boundary evidence. The shell contains the product root and declared system chrome. Product content and product TabBar remain inside the root. `BF-02S`/`G-05S` prove hierarchy and geometry; `BF-02V`/`G-05V` prove the unselected visual boundary. Both sub-results are required.
+
 ## 1. Page explanation and boundary (`PS-01`)
 
 - User, outcome, entry, primary task, and exit/recovery:
@@ -74,7 +82,7 @@ exception must name the product rule and approval.
 
 | Layer | Figma construction | Target implementation | Required proof before advancing |
 |---|---|---|---|
-| L0 Structural base | Terminal shell, page root, regions, normal-flow/Auto Layout parents, state slots, annotation sibling | Route/entry, shell, page root, layout owners, state slots | BF-01–BF-06 and page shell evidence |
+| L0 Structural base | Terminal shell, page root, regions, normal-flow/Auto Layout parents, state slots, annotation sibling | Route/entry, shell, page root, layout owners, state slots | BF-01–BF-06, `BF-02S`/`BF-02V`, and page shell evidence |
 | L1 Shared foundations | Approved components, variants, tokens, action groups, Icons, assets | Existing/project components, tokens, Code Connect mappings | PS-03 mappings and AGC/ICON gates |
 | L2 Page composition | Element hierarchy, verified/proposed product copy, data and material states | Page composition, data/state wiring, normal-flow layout | EL coverage and declared states present |
 | L3 Scoped finish | Page-specific visual styling, approved overlays, interaction details | Scoped styles, assets, responsive behavior, interaction details | No local component clone or compensating geometry |
@@ -90,7 +98,10 @@ Do not start a later layer while the preceding layer is missing, failed, or `Unv
 - Target/viewport/state matrix entries:
 - First divergent layout owner when implementation differs:
 - Required full-shell screenshots and annotation evidence:
+- Shell/root ownership, visual recipe, fixed unselected capture, and top/right/bottom/left edge outcomes:
 - Handoff to `figma-to-product` / `figma-verify`:
+
+A page is ready only when both structural (`BF-02S`/`G-05S`) and visual (`BF-02V`/`G-05V`) boundary evidence pass.
 
 ## Approval record
 

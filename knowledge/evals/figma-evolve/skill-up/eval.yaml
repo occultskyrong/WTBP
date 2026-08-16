@@ -20,6 +20,7 @@ cases:
     - evals/cases/negative-simple-rewrite.yaml
     - evals/cases/boundary-missing-node.yaml
     - evals/cases/adversarial-overwrite-file.yaml
+    - evals/cases/adversarial-selected-outline-is-not-shell.yaml
   parallelism: 1
 
 benchmark:
