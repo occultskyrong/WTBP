@@ -20,8 +20,8 @@ WTBP 沉淀的是与场景绑定的软件与产品决策知识，不是通用答
 - 项目专有事实留在使用方项目；只有具备适用范围、反例、可追溯证据和验证方法的知识才贡献到 WTBP。
 - `stale` 或 `deprecated` 内容不得作为默认建议。
 - 修改、暂存、提交、推送、创建 PR、合并 PR 仍是不同的动作边界。但在本仓库中，用户明确说“提交”时，
-  即授权执行下面的完整提交交付流程：先执行提交清单，清单通过后提交、推送当前分支并创建 PR；合并 PR
-  始终需要单独授权。
+  即授权执行下面的完整提交交付流程：先执行提交清单，清单通过后提交并推送当前分支。创建或合并 PR
+  始终需要单独、明确的授权。
 - 保护无关改动、未知提交和远端分歧；不使用强制推送、自动 rebase、自动 stash、`git reset --hard` 或 `--no-verify`。
 - 每个独立任务使用一个任务分支；同一任务的增量提交继续使用该分支，不得把新任务追加到范围不明确的旧分支。
   新任务开始前，必须从干净的默认分支运行 `tooling/new-task-branch.sh` 创建任务分支。
@@ -41,7 +41,8 @@ WTBP 沉淀的是与场景绑定的软件与产品决策知识，不是通用答
 | 高影响技术或产品决策 | `skills/practice-search/SKILL.md` | `knowledge/catalog.yaml`、上下文模式、目标 Practice 和证据 |
 | 新增或修改 Practice | `CONTRIBUTING.md` | Practice 模板、目录、关系 |
 | 使用、安装、新增或修改 Skill | `wtbp "<请求>"`、`knowledge/skill-index.yaml`、`knowledge/external-capabilities.yaml` | 能力比较、复用决策、目标 Skill、安装边界和贡献指南 |
-| 提交、推送或创建 PR | `docs/commit-conventions.md` | GitHub 治理和 PR 模板 |
+| 提交或推送 | `docs/commit-conventions.md` | 符合规范的 Git 交付 |
+| 创建或合并 PR | `docs/commit-conventions.md` | GitHub 治理和 PR 模板 |
 | 校验、Hook 或 CI 问题 | `Makefile` | 校验脚本和仓库工作流 |
 
 先使用目录、本地 Skill 索引、外部能力登记或路由索引确定目标；本地 Skill 索引是本地 Skill 标签和能力卡的唯一来源，外部能力登记是外部能力卡的唯一来源，路由表只负责任务匹配和另行受管的安装；不要因为看到目录就读取全部模板、证据或 Skill 引用。
@@ -58,8 +59,9 @@ Skill 最小契约、登记关系图、G0–G6 门禁、生命周期状态和失
 
 ## 提交门禁
 
-提交前运行 `make commit-checklist`。它会执行仓库结构校验、暂存内容审查、敏感信息扫描、变更 Skill 或已登记 Eval 资产的
-`skill-up` 契约审查、质量门禁和 `VERSION` 检查。详见 [docs/commit-checklist.md](docs/commit-checklist.md)。
+提交前运行 `make commit-checklist`。它会刷新默认分支并检查可合并性，再执行仓库结构校验、暂存内容审查、敏感信息扫描、
+变更 Skill 或已登记 Eval 资产的 `skill-up` 契约审查、质量门禁和 `VERSION` 检查。详见
+[docs/commit-checklist.md](docs/commit-checklist.md)。
 
 ## 提交交付流程
 
@@ -68,14 +70,13 @@ Skill 最小契约、登记关系图、G0–G6 门禁、生命周期状态和失
 1. 检查工作区、暂存范围、当前分支、任务归属、远端分歧和拟使用的 Conventional Commit 提交消息。
 2. 如果当前是默认分支，或无法确认当前分支的任务归属，必须在暂存/提交前停止，使用 `tooling/new-task-branch.sh`
    从干净默认分支创建任务分支；不得自动 stash 或迁移既有改动。
-3. 执行 `make commit-checklist`。任一检查失败都必须停止，不得创建提交、推送或 PR。
+3. 执行 `make commit-checklist`。它会刷新默认分支，并在不修改工作区的前提下检查可合并性；任一检查失败都必须停止，
+   不得创建提交或推送。
 4. 使用已校验的范围创建提交，提交标题使用中文说明的 Conventional Commit 格式。
-5. 将当前任务分支推送到已配置的远端；不得强推或改写历史。
-6. 向仓库配置的默认/目标分支创建 PR，标题和正文使用中文，说明变更、受影响的 Skill 或 Practice、验证结果、
-   dry-run 边界和未解决风险。
-7. 核验远端分支和 PR 的 URL/状态，分别报告提交、推送和 PR 结果。PR 合并到 `master` 后，只有 `VERSION`
-   发生变化且仓库验证成功时，工作流才会创建并推送不可变的 `vX.Y.Z` Tag；不得在任务分支创建发布 Tag。
+5. 将当前任务分支推送到已配置的远端；不得强推或改写历史。`pre-push` Hook 会在刷新默认分支后再次执行可合并性预检。
+6. 核验远端分支，分别报告提交和推送结果。创建 PR 不属于此流程，只有用户另行明确要求时才执行。版本变更后的内容
+   合并到 `master` 时，成功的仓库检查工作流会创建并推送不可变的 `vX.Y.Z` Tag；任务分支不得创建发布 Tag。
 
-如果提交、推送或创建 PR 因冲突、权限、凭据缺失或远端分歧失败，必须停在失败步骤，报告准确阻塞原因和下一步
-需要用户授权的动作。不得绕过失败门禁、使用 `--no-verify`、强制推送、自动 rebase 或顺便合并 PR。用户只说“执行
-提交清单”时，仅授权校验，不授权提交、推送或创建 PR。
+如果提交或推送因冲突、权限、凭据缺失或远端分歧失败，必须停在失败步骤，报告准确阻塞原因和下一步需要用户授权
+的动作。不得绕过失败门禁、使用 `--no-verify`、强制推送或自动 rebase。用户只说“执行提交清单”时，仅授权校验，
+不授权提交或推送。

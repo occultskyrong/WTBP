@@ -39,18 +39,19 @@ ci: 校验提交标题格式
 ## 提交前
 
 1. 精确暂存需要提交的文件，不使用 `git add .` 或 `git add -A`。
-2. 运行 `make commit-checklist`；该入口会统一执行 `make validate`、`make review-staged`、变更 Skill 或已登记 Eval
-   资产对应的 `ske` 契约评测、质量门禁和三段式版本检查。
+2. 运行 `make commit-checklist`；该入口先刷新默认分支并以无落盘方式检查可合并性，再统一执行 `make validate`、
+   `make review-staged`、变更 Skill 或已登记 Eval 资产对应的 `ske` 契约评测、质量门禁和三段式版本检查。
 3. 不使用 `--no-verify` 绕过 Hook。
-4. 提交后通过 PR 审查和 CI，再合并到 `master`。
+4. “提交”完成后只推送任务分支。`pre-push` Hook 会再次刷新默认分支并检查可合并性。只有用户明确要求“创建 PR”时，
+   才创建中文 PR 并使用下文的比较规则；PR 合并始终需要单独授权。
 
 ## 版本 Tag 与比较
 
-任务分支和 PR 阶段不创建发布 Tag。PR 合并到 `master` 后，`WTBP 仓库检查 / 发布版本 Tag` 会在仓库验证成功时检测
+任务分支阶段不创建发布 Tag。版本变更合并到 `master` 后，`WTBP 仓库检查 / 发布版本 Tag` 会在仓库验证成功时检测
 `VERSION`：版本发生变化才创建并推送不可变的注释 Tag `vX.Y.Z`；同名 Tag 已指向当前提交时幂等通过，指向其他提交时失败，
 绝不移动或重打 Tag。
 
-PR 始终使用 `master...任务分支` 的三点比较，不能用版本 Tag 代替 PR 比较。发布或版本变更说明应显式使用
+创建 PR 时始终使用 `master...任务分支` 的三点比较，不能用版本 Tag 代替 PR 比较。发布或版本变更说明应显式使用
 `tags/v旧版...tags/v新版`，例如：
 
 ```text
@@ -61,6 +62,6 @@ https://github.com/<owner>/<repo>/compare/tags/v0.3.7...tags/v0.3.8
 
 ## CI 审查范围
 
-本地 Hook 审查暂存内容。CI 不依赖空工作区中的暂存区，而是比较 PR
+本地 Hook 审查暂存内容。CI 不依赖空工作区中的暂存区，而是比较 PR（如有）的
 base 与待合并提交，或比较 push 前后提交；因此同一套审查会覆盖实际进入
 `master` 的 Practice、Skill、参考实现、目录和删除操作。

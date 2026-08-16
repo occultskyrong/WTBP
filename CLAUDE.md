@@ -19,7 +19,8 @@ Follow the language policy in [docs/document-language-policy.md](docs/document-l
 | Compare technical, cost, safety, or compliance options | `skills/practice-search/SKILL.md` | Scenario-bound recommendation and evidence boundary |
 | Use, install, add, or change a Skill | `wtbp "<request>"`, `knowledge/skill-index.yaml`, `knowledge/external-capabilities.yaml` | Capability comparison, reuse decision, installation boundary, or Skill/Eval contribution |
 | Change repository rules or automation | Relevant Chinese `docs/` and source files | Scope, impact, and validation |
-| Commit, push, or create a PR | `docs/commit-conventions.md` | Compliant Git delivery |
+| Commit or push | `docs/commit-conventions.md` | Compliant Git delivery |
+| Create or merge a PR | `docs/commit-conventions.md` | GitHub governance and PR template |
 | Diagnose validation, hook, or CI | `Makefile` and relevant `tooling/` | Reproducible diagnosis and verification |
 
 For a high-impact decision, start at `knowledge/catalog.yaml`, then load only the target Practice, evidence, reference
