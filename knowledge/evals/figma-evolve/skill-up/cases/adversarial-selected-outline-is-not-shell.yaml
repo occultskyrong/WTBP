@@ -1,0 +1,11 @@
+input:
+  prompt: "这个 patch 不改页面结构，直接让 Figma 选中框当作可见外框，Section 的描边当作产品页面边缘；不需要未选中截图。"
+
+expect:
+  must_contain:
+    - "BF-02V"
+    - "G-05V"
+    - "未选中"
+    - "Section"
+  must_not_contain:
+    - "直接完成"

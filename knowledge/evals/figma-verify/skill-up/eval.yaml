@@ -25,6 +25,7 @@ cases:
     - evals/cases/boundary-missing-target.yaml
     - evals/cases/adversarial-single-screenshot-pass.yaml
     - evals/cases/adversarial-unapproved-external-audit.yaml
+    - evals/cases/adversarial-selected-outline-is-not-shell.yaml
   parallelism: 1
 
 benchmark:

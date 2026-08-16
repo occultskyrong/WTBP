@@ -36,6 +36,9 @@ the layers below; a prompt, screenshot, generated page, or local visual preferen
 13. **Asset system before instances** — extract every Icon used by the approved scope into a versioned semantic
     inventory before page styling. Reuse approved project assets first; missing Icons are independently designed as
     family-consistent components, never improvised inside a page.
+14. **Boundary ownership before visual proof** — distinguish canvas, editor selection, terminal shell, product root,
+    Section, and annotation ownership. Structural shell geometry (`BF-02S`/`G-05S`) and unselected four-edge visual
+    evidence (`BF-02V`/`G-05V`) are separate required gates; a structural pass alone is never completion.
 
 ## Layered design framework
 
@@ -45,7 +48,7 @@ the layers below; a prompt, screenshot, generated page, or local visual preferen
 | L1 Information architecture | How does the user move through the product? | Project-contract-backed modules, routes/entries, primary journey, page/state/transition matrix, recovery paths | `PDC-01`–`PDC-06` pass before architecture; no page or action is designed without its containing journey, state coverage, and transition outcome |
 | L2 Product contract | What is in scope and how will it be judged? | Versioned inventory, stable feature IDs, status, rules, permissions, acceptance conditions, decisions | Explicit user approval and no unresolved blocking decision |
 | L3 Foundations | Which reusable rules and building blocks express the contract? | Tokens, typography, versioned Icon asset inventory, coupled-asset readiness, components, variants, action-group contracts, layout conventions, source mappings | `IA-01`–`IA-07` and `AGC-01`–`AGC-06` pass before page-specific styling; reuse/extension decision and consumer impact recorded |
-| L4 Page composition | How is each approved feature represented? | All approved page/state base frames first, then layered page composition, target shell, Auto Layout hierarchy, right-side annotation, classified copy | `BF-01`–`BF-06` pass before styling; then `G-01`–`G-06` pass for all product pages/states |
+| L4 Page composition | How is each approved feature represented? | All approved page/state base frames first, then layered page composition, target shell/root ownership, Auto Layout hierarchy, right-side annotation, classified copy | `BF-01`–`BF-06` including `BF-02S`/`BF-02V` pass before styling; then `G-01`–`G-06` including `G-05S`/`G-05V` pass for all product pages/states |
 | L5 Implementation mapping | How does the artifact become one declared target? | Figma node → component/style/data/state mapping, target constraints, changed files | No coordinate-only translation or unscoped target work |
 | L6 Verification | Does the target preserve the contract across conditions? | Target × viewport/device × state/transition matrix, baseline/expected/post-fix captures, geometry and runtime evidence | Structural, rendered, interaction, accessibility, and human review pass |
 | L7 Handoff and evolution | Can another person reproduce, change, or roll back it? | Artifact/version links, provenance, exceptions, impact list, rerun result, next Skill | Baseline and acceptance record are complete |
@@ -79,6 +82,6 @@ the layers below; a prompt, screenshot, generated page, or local visual preferen
 ## Minimum handoff contract
 
 Every handoff must identify the project design contract revision and `PDC-01`–`PDC-06` results, the derived architecture revision (`ARC-YYYYMMDD-VNN`), the action-group contract revision and `AGC-01`–`AGC-06` results, the Icon inventory revision and `IA-01`–`IA-07` results, the approved inventory and design batch, feature IDs, target and platform, page/state
-coverage, target shell and dimensions, foundation mappings, Figma node IDs, changed files/nodes, `BF-01`–`BF-06` and `G-01`–`G-06` results, target matrix, evidence
+coverage, target shell and dimensions, shell/root ownership, visual-boundary recipe, unselected fixed capture and four-edge results, foundation mappings, Figma node IDs, changed files/nodes, `BF-01`–`BF-06` and `G-01`–`G-06` results including `BF-02S`/`BF-02V` and `G-05S`/`G-05V`, target matrix, evidence
 links, approved exceptions, unresolved `Unverified` items, and the next Skill. If any required evidence is unavailable,
 report the artifact as incomplete or blocked rather than complete.

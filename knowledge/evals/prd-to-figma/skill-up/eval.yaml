@@ -19,6 +19,7 @@ cases:
     - evals/cases/negative-simple-rewrite.yaml
     - evals/cases/boundary-missing-destination.yaml
     - evals/cases/adversarial-lark-knowledge-base.yaml
+    - evals/cases/adversarial-selected-outline-is-not-shell.yaml
   parallelism: 1
 
 benchmark:
