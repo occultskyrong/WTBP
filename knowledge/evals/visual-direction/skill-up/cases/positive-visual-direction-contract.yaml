@@ -1,0 +1,22 @@
+input:
+  prompt: "在页面样式前为一个 Web 任务台制定 VIS-YYYYMMDD-VNN，给出可观察视觉论点、Token 角色、三条公开参考、Icon/动效人格、反例和 PS/ICON/MOTION 映射。每条参考必须给出可复核 URL 或明确写未验证；请只在回复中返回草稿，不要写入本地文件或 Figma，并明确人工评审尚未完成。"
+
+expect:
+  must_contain:
+    - "VIS"
+    - "Token"
+    - "参考"
+    - "反例"
+  must_not_contain:
+    - "已写入 Figma"
+
+judge:
+  type: agent_judge
+  model: anthropic/claude-sonnet-4-6
+  criteria:
+    - "每条外部参考都有可复核 URL 或明确说明未验证；来源判断与模型审美判断分开。"
+    - "视觉方向包含可观察 Token、层级、密度、Icon/动效约束和反例，不只使用现代或高级等空泛形容词。"
+    - "回答不自动安装外部 Skill 或写入 Figma，并明确需要人工评审。"
+  pass_threshold: 0.90
+  timeout_seconds: 180
+  value: "检查每条参考是否有可追溯 URL、访问边界和与视觉决策的对应关系，不能把未验证来源写成项目事实"

@@ -44,6 +44,21 @@ ci: 校验提交标题格式
 3. 不使用 `--no-verify` 绕过 Hook。
 4. 提交后通过 PR 审查和 CI，再合并到 `master`。
 
+## 版本 Tag 与比较
+
+任务分支和 PR 阶段不创建发布 Tag。PR 合并到 `master` 后，`WTBP 仓库检查 / 发布版本 Tag` 会在仓库验证成功时检测
+`VERSION`：版本发生变化才创建并推送不可变的注释 Tag `vX.Y.Z`；同名 Tag 已指向当前提交时幂等通过，指向其他提交时失败，
+绝不移动或重打 Tag。
+
+PR 始终使用 `master...任务分支` 的三点比较，不能用版本 Tag 代替 PR 比较。发布或版本变更说明应显式使用
+`tags/v旧版...tags/v新版`，例如：
+
+```text
+https://github.com/<owner>/<repo>/compare/tags/v0.3.7...tags/v0.3.8
+```
+
+显式 `tags/` 前缀避免 Tag 与同名分支冲突时被 GitHub 解析为分支。
+
 ## CI 审查范围
 
 本地 Hook 审查暂存内容。CI 不依赖空工作区中的暂存区，而是比较 PR

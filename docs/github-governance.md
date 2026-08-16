@@ -21,6 +21,11 @@ Hook 视为远端保护的替代品。
 工作流仅授予所需的最小权限，并将第三方 Action 固定到完整提交 SHA。保留
 Dependabot 对 GitHub Actions 的版本更新；更新 PR 必须通过同一套校验后才可合并。
 
+`WTBP 仓库检查 / 发布版本 Tag` 是唯一的版本 Tag 发布者：它只在 `master` 的仓库验证成功后、且 `VERSION` 与前一提交
+不同的时候，以 `contents: write` 创建并推送不可变注释 Tag `vX.Y.Z`。其他检查任务保持 `contents: read`。同名 Tag 若
+已指向当前提交则幂等结束；若指向其他提交则失败，禁止覆盖。PR 使用分支三点比较；发布比较使用显式
+`tags/v旧版...tags/v新版`，避免同名分支优先于 Tag 的歧义。
+
 ## Issue 内容审查
 
 Issue 新建或编辑时，`WTBP Issue 内容审查 / Issue 内容验证` 会根据标题前缀识别模板，

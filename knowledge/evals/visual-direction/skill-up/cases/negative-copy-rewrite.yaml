@@ -1,0 +1,8 @@
+input:
+  prompt: "把这句按钮文案改得更自然：立即开始。"
+
+expect:
+  must_contain:
+    - "立即开始"
+  must_not_contain:
+    - "VIS-YYYYMMDD-VNN"

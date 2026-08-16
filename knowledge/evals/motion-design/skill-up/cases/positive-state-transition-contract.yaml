@@ -1,0 +1,11 @@
+input:
+  prompt: "为任务完成后的成功反馈设计 MOTION-YYYYMMDD-VNN，定义触发、状态、目的、元素属性、时长、缓动、中断、减弱动效回退和动态验收证据。"
+
+expect:
+  must_contain:
+    - "MOTION"
+    - "触发"
+    - "缓动"
+    - "动态"
+  must_not_contain:
+    - "静态截图即可验收"

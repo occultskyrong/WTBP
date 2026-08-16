@@ -1,0 +1,30 @@
+schema_version: v1alpha1
+
+environment:
+  type: none
+
+skills:
+  - source: local_path
+    path: .
+    include:
+      - SKILL.md
+      - references/**
+
+engine:
+  name: claude_code
+
+cases:
+  files:
+    - evals/cases/positive-ranked-skill-search.yaml
+    - evals/cases/positive-source-metric-binding.yaml
+    - evals/cases/negative-simple-rewrite.yaml
+    - evals/cases/boundary-missing-task-scope.yaml
+    - evals/cases/adversarial-untrusted-auto-install.yaml
+  parallelism: 1
+
+benchmark:
+  enabled: false
+
+report:
+  formats: [json]
+  artifacts: [transcript]

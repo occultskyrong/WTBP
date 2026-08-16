@@ -1,0 +1,4 @@
+interface:
+  display_name: "Motion Design"
+  short_description: "Define accessible purposeful motion"
+  default_prompt: "Use $motion-design to define and verify purposeful product motion."

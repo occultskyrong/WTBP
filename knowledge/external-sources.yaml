@@ -11,6 +11,10 @@ sources:
     adoption: default-capability-source
     scope: 官方 Figma MCP、设计实现、设计系统规则与组件库工作流
     credential_boundary: 当前客户端的 Figma OAuth/权限；不由 WTBP 安装或代管
+    license: unverified（待当前会话核验）
+    revision: unverified（待当前会话核验）
+    skill_path: unverified（官方指南并非独立 Skill 包）
+    quality_evidence: unverified（待当前会话核验维护与社区信号）
   - id: source.figma-code-connect
     title: Figma Code Connect
     kind: github-reference-implementation
@@ -21,6 +25,10 @@ sources:
     adoption: preferred-component-mapping
     scope: Figma 组件与真实代码组件、属性及设计系统映射
     credential_boundary: 由消费项目和 Figma 计划/权限决定；缺失时记录为 Unverified
+    license: unverified（待当前会话核验）
+    revision: unverified（待当前会话核验）
+    skill_path: unverified（参考实现并非独立 Skill 包）
+    quality_evidence: unverified（待当前会话核验维护与社区信号）
   - id: source.figma-sds
     title: Figma Simple Design System
     kind: github-reference-implementation
@@ -31,6 +39,10 @@ sources:
     adoption: reference-only
     scope: Variables、Components、Code Connect 与 React 的设计系统示例
     credential_boundary: 不安装；仅作结构参考
+    license: unverified（待当前会话核验）
+    revision: unverified（待当前会话核验）
+    skill_path: unverified（参考实现并非独立 Skill 包）
+    quality_evidence: unverified（待当前会话核验维护与社区信号）
   - id: source.figma-console-mcp-skills
     title: Figma Console MCP Skills
     kind: github-optional-skill-source
@@ -41,6 +53,10 @@ sources:
     adoption: optional-explicit-authorization
     scope: 设计 Token、组件树、WCAG、目标尺寸和设计 lint 审计
     credential_boundary: 需要使用方明确授权、Figma PAT 与命令执行环境；不得自动安装或读取凭据
+    license: unverified（待当前会话核验）
+    revision: unverified（待当前会话核验）
+    skill_path: unverified（待当前会话核验）
+    quality_evidence: unverified（待当前会话核验维护与社区信号）
   - id: source.design-lint
     title: Design Lint
     kind: github-reference-implementation
@@ -51,6 +67,10 @@ sources:
     adoption: reference-only
     scope: Figma 节点样式规则和可配置 lint 的实现参考
     credential_boundary: 不安装；不替代 WTBP 几何门禁
+    license: unverified（待当前会话核验）
+    revision: unverified（待当前会话核验）
+    skill_path: unverified（参考实现并非独立 Skill 包）
+    quality_evidence: unverified（待当前会话核验维护与社区信号）
   - id: source.ui-ux-pro-max
     title: UI UX Pro Max Skill
     kind: github-reference-skill
@@ -61,3 +81,49 @@ sources:
     adoption: reference-only
     scope: UI/UX 模式、视觉方向和启发式建议
     credential_boundary: 不作为项目事实或 WTBP 强制规则
+    license: MIT（以来源当前 LICENSE 为准）
+    revision: 未固定；采用前必须固定提交版本
+    skill_path: .claude/skills/design/SKILL.md
+    quality_evidence: GitHub 高采用度与公开提交历史；当前会话未完成行为验收
+  - id: source.refero-skill
+    title: Refero Design Skill
+    kind: github-reference-skill
+    url: https://github.com/referodesign/refero_skill
+    publisher: referodesign
+    trust: third-party
+    accessed_on: 2026-08-16
+    adoption: reference-only
+    scope: 研究优先的视觉方向、真实界面模式、Icon、动效和反 AI 平均化方法
+    credential_boundary: 仅使用公开 Skill 参考；在线 Refero MCP 研究需单独 OAuth 和权限，不由 WTBP 代管
+    license: MIT
+    revision: 未固定；采用前必须固定提交版本
+    skill_path: skills/refero-design/SKILL.md
+    quality_evidence: GitHub 公开提交历史；当前会话未完成 WTBP 行为验收
+  - id: source.custom-icons-skill
+    title: Custom Icons Skill
+    kind: github-reference-skill
+    url: https://github.com/JKc66/custom-icons-skill
+    publisher: jkc66
+    trust: third-party
+    accessed_on: 2026-08-16
+    adoption: reference-only
+    scope: 原生/描摹 SVG、透明栅格 Icon 资产流程和结构/视觉校验
+    credential_boundary: 不安装或认证；依赖和脚本需在本地适配后单独审查
+    license: MIT
+    revision: 未固定；采用前必须固定提交版本
+    skill_path: skills/SKILL.md
+    quality_evidence: GitHub 公开提交历史；当前会话未完成真实资产行为验收
+  - id: source.lottiefiles-motion-design
+    title: LottieFiles Motion Design Skill
+    kind: github-reference-skill
+    url: https://github.com/lottiefiles/motion-design-skill
+    publisher: lottiefiles
+    trust: third-party
+    accessed_on: 2026-08-16
+    adoption: reference-only
+    scope: UI 动效原则、时序、缓动、编排、动效人格和减弱动效
+    credential_boundary: 不安装或认证；实现仍须通过 WTBP 动态证据和人工评审
+    license: MIT
+    revision: 未固定；采用前必须固定提交版本
+    skill_path: skills/motion-design/SKILL.md
+    quality_evidence: GitHub 公开提交历史与社区采用信号；当前会话未完成动态行为验收

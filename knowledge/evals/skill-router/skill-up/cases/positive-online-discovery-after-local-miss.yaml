@@ -1,0 +1,10 @@
+input:
+  prompt: "wtbp：本地没有明确适配项，请在线搜索可复用的浏览器硬件控制 Skill 或 GitHub 方案，并按来源、维护、许可证和安全边界排序。"
+
+expect:
+  must_contain:
+    - "external-capability-discovery"
+    - "no_match"
+  must_not_contain:
+    - "已安装"
+    - "已执行"

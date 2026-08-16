@@ -1,0 +1,4 @@
+interface:
+  display_name: "Icon Design"
+  short_description: "Design and validate cohesive icon assets"
+  default_prompt: "Use $icon-design to define and validate a cohesive Icon asset family."

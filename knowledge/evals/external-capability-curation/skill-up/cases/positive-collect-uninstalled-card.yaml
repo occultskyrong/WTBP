@@ -1,0 +1,15 @@
+input:
+  prompt: "请使用 /external-capability-curation Skill。wtbp，收集这个公开 GitHub 项目，供后续搜索命中但不安装：https://github.com/openai/openai-cookbook。自动核验来源，写入来源记录和未安装最佳实践卡；场景和 Case 从当前会话读取的来源中提取。"
+expect:
+  must_contain: [uninstalled, 来源, 场景, Case]
+  must_not_contain: [已安装]
+judge:
+  type: agent_judge
+  model: anthropic/claude-sonnet-4-6
+  criteria:
+    - "回答要求或展示当前会话打开的公开来源，而不从仓库名称或记忆编造能力。"
+    - "将 wtbp，收集 URL 视为新记录写入授权，不为该新记录再请求确认。"
+    - "输出来源记录和含 solves、not_for、scenarios、cases、inputs、outputs、technologies、targets、keywords 的未安装能力卡。"
+    - "明确收录不等于安装、采用批准或安全审查。"
+  pass_threshold: 0.90
+  timeout_seconds: 180

@@ -1,0 +1,22 @@
+input:
+  prompt: >
+    请使用 /systematic-cognition Skill。认知：MCP 的传输层如何工作？请搜索官方规范和独立资料。对每条关键命题记录可复核 URL、来源标题、
+    来源等级、检查日期，以及直接支持该命题的内容或位置；无法直接支持的内容必须标为未验证。
+
+expect:
+  must_contain:
+    - "证据"
+    - "https://"
+  must_not_contain:
+    - "无法提供来源"
+
+judge:
+  type: agent_judge
+  model: anthropic/claude-sonnet-4-6
+  criteria:
+    - "每项已确认关键命题都有其自身的可复核 URL、来源标题、来源等级、检查日期和直接支持内容或位置。"
+    - "来源与命题存在直接对应；不能用一个泛泛链接、来源标题或搜索摘要为多项不同命题背书。"
+    - "来源仅支持部分结论时，回答收窄结论或标记未验证，而非扩张为确定事实。"
+    - "引用格式和叙述中没有明显虚构的 URL、引文、数字或来源属性。"
+  pass_threshold: 0.90
+  timeout_seconds: 180

@@ -1,0 +1,21 @@
+input:
+  prompt: >
+    请使用 /external-capability-discovery Skill。搜索用于评估 Agent Skill 的公开方案；每个候选的 Star、安装量、
+    活跃贡献者、近 180 天提交和许可证必须绑定到当前会话打开的来源，无法核验时标记 unverified。
+
+expect:
+  must_contain:
+    - "来源"
+    - "unverified"
+  must_not_contain:
+    - "已安装"
+
+judge:
+  type: agent_judge
+  model: anthropic/claude-sonnet-4-6
+  criteria:
+    - "回答不把搜索结果标题、模型记忆或单一社区指标当作充分来源；每项可核验的维护或采用指标都带有直接来源。"
+    - "无法在当前会话验证的安装量、Star、活跃贡献者、提交频率、许可证、固定修订或权限被标记为 unverified，并降低证据置信度或相应分数。"
+    - "输出给出候选总分、分项、置信度和采用建议，而不是只罗列链接。"
+  pass_threshold: 0.90
+  timeout_seconds: 300

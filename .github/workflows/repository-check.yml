@@ -34,3 +34,17 @@ jobs:
             BASE_SHA="$(git hash-object -t tree /dev/null)"
           fi
           make commit-checklist-range BASE_SHA="$BASE_SHA" HEAD_SHA="$HEAD_SHA"
+
+  publish-version-tag:
+    name: 发布版本 Tag
+    needs: validate
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - name: 在版本变化后发布不可变 Tag
+        run: ./tooling/publish-version-tag.sh "$GITHUB_SHA"

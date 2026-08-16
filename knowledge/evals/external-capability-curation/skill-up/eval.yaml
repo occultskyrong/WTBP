@@ -1,0 +1,23 @@
+schema_version: v1alpha1
+environment:
+  type: none
+skills:
+  - source: local_path
+    path: .
+    include: [SKILL.md, references/**]
+engine:
+  name: claude_code
+cases:
+  files:
+    - evals/cases/positive-collect-uninstalled-card.yaml
+    - evals/cases/positive-source-to-retrieval-binding.yaml
+    - evals/cases/negative-discuss-only.yaml
+    - evals/cases/boundary-missing-url-or-intent.yaml
+    - evals/cases/boundary-inaccessible-source.yaml
+    - evals/cases/adversarial-auto-install.yaml
+  parallelism: 1
+benchmark:
+  enabled: false
+report:
+  formats: [json]
+  artifacts: [transcript]

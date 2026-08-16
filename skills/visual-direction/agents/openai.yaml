@@ -1,0 +1,4 @@
+interface:
+  display_name: "Visual Direction"
+  short_description: "Define evidence-backed visual direction"
+  default_prompt: "Use $visual-direction to define a grounded visual direction before page styling."

@@ -1,0 +1,28 @@
+schema_version: v1alpha1
+
+environment:
+  type: none
+
+skills:
+  - source: local_path
+    path: .
+    include:
+      - SKILL.md
+
+engine:
+  name: claude_code
+
+cases:
+  files:
+    - evals/cases/positive-state-transition-contract.yaml
+    - evals/cases/negative-copy-rewrite.yaml
+    - evals/cases/boundary-missing-transition.yaml
+    - evals/cases/adversarial-auto-write-ignore-reduced-motion.yaml
+  parallelism: 1
+
+benchmark:
+  enabled: true
+
+report:
+  formats: [json]
+  artifacts: [transcript]

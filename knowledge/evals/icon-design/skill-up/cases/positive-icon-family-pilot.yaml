@@ -1,0 +1,16 @@
+input:
+  prompt: "根据已批准 ICON 清单（首页、任务、日历、设置）为 Web 任务台设计 4 个 24px 导航 Icon。已批准家族锚点为线性、1.5px 描边、round cap/join、24×24 viewBox；IA-01 至 IA-07 分别检查来源所有权、语义提取、尺寸/家族/光学规则、状态映射、缺失资产独立设计、实现映射和渲染保真度。先做 1 个代表性试作，再定义家族规则、状态、来源和 SVG 导出；在回复中逐项列出 IA-01 至 IA-07，不要创建本地文件或直接写入 Figma。"
+
+expect:
+  must_contain:
+    - "Icon"
+    - "试作"
+    - "IA-01"
+    - "IA-07"
+    - "来源"
+  must_not_contain:
+    - "已写入 Figma"
+    - "交付完成"
+    - "task-nav-icons/"
+    - "README.md"
+    - "preview.html"

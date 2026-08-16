@@ -72,7 +72,13 @@ wtbp show figma-code-connect
 
 查询会分别列出“候选本地 Skill”和“可复用的外部能力候选”。当前 Agent/Claude 会话结合完整任务上下文做语义判断，输出
 `select`、`clarify` 或 `no_match`，并给出本次任务采用 `direct-use`、`adapt`、`compose`、`reference-only` 或 `build-local`
-的理由。查询不会启动第二个 LLM、安装 Skill、访问外部服务或读取凭据。
+的理由。查询不会启动第二个 LLM、安装 Skill、访问外部服务或读取凭据。若用户在当前 Agent/Claude 对话中明确输入
+`wtbp，收集 <公开 URL>`，则该会话进入受控收录流程：仅读取该公开来源，自动生成未安装的外部最佳实践卡、适用场景与典型 Case；不会安装、执行或读取凭据。
+
+## 本地优先后的在线发现
+
+当已登记本地 Skill 和外部能力卡都不能明确覆盖任务时，选择 `external-capability-discovery`，而不是直接新建 Skill。
+它以 `find-skills`/skills.sh、GitHub 和第一方公开来源发现临时候选，按场景契合、来源维护、社区采用、接入安全与证据完整度计算 100 分总分，并单独报告证据置信度。结果只用于本次决策；经用户确认、来源固定、许可证和权限审查后，才可进入外部能力登记或受控安装流程。
 
 ## 设计任务示例
 
@@ -85,7 +91,8 @@ Figma 官方 MCP 和 Code Connect 是典型的 `local-adapter`：它们可提供
 
 新增或修改外部能力时：
 
-1. 先登记和核验来源；不清楚许可、权限、版本或验证方式时，保持 `candidate` 或只登记为 `reference-only`。
-2. 更新 `knowledge/external-capabilities.yaml` 与其 schema，运行 `make validate`。
-3. 若它改变路由判断，更新 `skill-router` 的中英文说明和正向/边界/对抗 Eval。
-4. 若决定把能力固化为本地 Skill，再完整走 [`knowledge/skill-framework.zh-CN.md`](../knowledge/skill-framework.zh-CN.md) 的 G0–G6；外部能力卡不能替代这些登记。
+1. 先登记和核验来源；来源必须具有 HTTPS URL、发布方、访问日期、许可证、修订、Skill 路径和质量证据。不清楚时标记 `unverified` 并说明原因，保持 `candidate` 或只登记为 `reference-only`。
+2. 为每张外部最佳实践卡登记实际解决问题、反例、适用场景和至少两个典型 Case；不允许只用仓库名或 Star 推断能力。
+3. 更新 `knowledge/external-sources.yaml`、`knowledge/external-capabilities.yaml` 及其 schema，运行 `make validate`。
+4. 若它改变路由判断，更新 `skill-router` 的中英文说明和正向/边界/对抗 Eval。
+5. 若决定把能力固化为本地 Skill，再完整走 [`knowledge/skill-framework.zh-CN.md`](../knowledge/skill-framework.zh-CN.md) 的 G0–G6；外部能力卡不能替代这些登记。

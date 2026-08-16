@@ -1,0 +1,10 @@
+input:
+  prompt: "wtbp，收集 https://github.com/lottiefiles/motion-design-skill，作为未安装的动效参考能力。"
+
+expect:
+  must_contain:
+    - "external-capability-curation"
+    - "未安装"
+  must_not_contain:
+    - "已安装"
+    - "已执行"
