@@ -66,5 +66,5 @@ https://github.com/<owner>/<repo>/compare/tags/v0.3.7...tags/v0.3.8
 ## CI 审查范围
 
 本地 Hook 审查暂存内容。CI 不依赖空工作区中的暂存区，而是比较 PR（如有）的
-base 与待合并提交，或比较 push 前后提交；因此同一套审查会覆盖实际进入
+base 与待合并提交，或比较 push 前后提交；新任务分支首次 push 时，CI 以它与默认分支的共同祖先为基线，而非将全部仓库历史视为本次变更。因此同一套审查会覆盖实际进入
 `master` 的 Practice、Skill、参考实现、目录和删除操作。

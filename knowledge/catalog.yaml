@@ -5,6 +5,18 @@ practices:
     path: knowledge/practices/product/evidence-first-cognition
     status: draft
     domains: [product]
+  - id: engineering.workbench-base
+    path: knowledge/practices/engineering/workbench-base
+    status: draft
+    domains: [engineering]
+  - id: engineering.workbench-tokens
+    path: knowledge/practices/engineering/workbench-tokens
+    status: draft
+    domains: [engineering]
+  - id: engineering.workbench-tasks
+    path: knowledge/practices/engineering/workbench-tasks
+    status: draft
+    domains: [engineering]
 skills:
   - id: practice-search
     path: skills/practice-search

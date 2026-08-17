@@ -254,6 +254,98 @@ capabilities:
     verify: 已在当前会话打开仓库README和skills/emil-design-eng/SKILL.md并核对主能力、许可证与社区信号；未安装、未运行任何Skill、未执行浏览器动效验收，未证明其建议在目标项目中的实际质量，采用前必须固定commit并进行动态证据和人工评审。
     status: candidate
     keywords: [Emil Kowalski,设计工程,UI动效,动画审查,缓动,时长,微交互,减弱动效,动画机会,原型变体,Motion,Framer Motion]
+  - id: firecrawl-anydoc-document-markdown-reference
+    title: AnyDoc 多格式文档转 Markdown 参考
+    summary: 使用 AnyDoc 将多种办公文档、电子书、CSV 和 PDF 转为统一 GitHub-Flavored Markdown，并可通过 Agent Skill、CLI、Node、Python、Rust 或 WASM 接入文档认知流程。
+    source_id: source.firecrawl-anydoc
+    kind: external-skill
+    domains: [engineering, research, product, quality]
+    capabilities: [evidence-synthesis]
+    stages: [discover, analyze, implement, verify]
+    solves: [多格式办公文档统一转Markdown,为AI认知提取标题表格脚注列表和交叉引用,在Node/Python/Rust或浏览器WASM中复用文档转换能力,本地读取文档并减少上传外部服务的需要,通过Agent Skill让代理读取原本无法直接读取的文档]
+    not_for: [扫描或图片型PDF的OCR,保持原始页面像素级排版,替代知识库切分索引和事实核验,自动修改原文档,未授权读取或上传用户文件]
+    scenarios: [需要把一批docx/pptx/xlsx/pdf转换成统一Markdown供WTBP认知,需要在本地或浏览器处理文档且文件不应离开设备,需要把文档转换作为Node/Python/Rust管道的一步,需要让Agent读取办公文档并保留结构化内容]
+    cases: [把一批Word、PowerPoint、Excel和PDF转换为统一Markdown后再进行WTBP认知,在不上传文件的前提下读取本地办公文档并保留标题表格脚注和列表结构,为Node或Python文档处理管道选择统一的本地Markdown转换器]
+    inputs: [本地文件路径或字节流,支持的文件格式,CSV标准输入时的显式format,需要输出到stdout或文件的目标,Node环境需Node20以上或对应语言运行时]
+    outputs: [GitHub-Flavored Markdown,统一Document模型和嵌入资产元数据,CLI退出码和可诊断错误,Node/Python/Rust/WASM调用结果,无法转换文件的分类记录]
+    technologies: [Rust,Node.js,Python,WebAssembly,CLI,GitHub-Flavored Markdown,PDF]
+    targets: [本地文档管道,Agent上下文,Node服务,Python脚本,Rust项目,浏览器WASM]
+    adoption: reference-only
+    availability: reference
+    installation_status: uninstalled
+    permissions: 仅保留公开来源元数据；未来安装或执行可能下载二进制、读取本地文档、写入Markdown输出并使用项目依赖，不由WTBP代管，必须由消费项目单独授权。
+    verify: 已打开仓库README、Agent Skill目录和SKILL.md并核对格式、入口、许可证和边界；未安装、未执行CLI、未读取用户文件、未复核基准或转换质量，采用前需固定commit并用代表性文档做确定性验证。
+    status: candidate
+    keywords: [AnyDoc,文档转Markdown,Office,Word,PowerPoint,Excel,PDF,EPUB,CSV,Rust,WASM,Agent Skill,本地文档解析]
+  - id: open-file-viewer-sdk-reference
+    title: Open File Viewer 多格式文件预览 SDK 参考
+    summary: 面向 Web 产品的容器化文件预览基础，使用插件协议统一接入 PDF、Office、图片、音视频、压缩包、邮件、代码、绘图、CAD、3D 和 GIS，并提供多框架适配和产品级状态。
+    source_id: source.xushanpei-open-file-viewer
+    kind: reference-implementation
+    domains: [product, design, engineering, quality]
+    capabilities: [visual-verification, layout-diagnosis, option-comparison]
+    stages: [discover, design, implement, verify, evaluate]
+    solves: [在业务页面内统一预览多种附件格式,为文件预览建立可替换的插件协议,提供加载错误不支持下载回退工具栏主题和多文件队列状态,在Vanilla JS React Vue Svelte中复用同一预览核心,为复杂文件逐步接入WASM专用解析器WebGL或服务端渲染]
+    not_for: [文件存储权限和病毒扫描,文档内容OCR或统一Markdown转换,所有专有格式的像素级高保真渲染,替代业务页面的下载审计和数据访问控制,未经评估直接引入可选GPL依赖]
+    scenarios: [OA/ERP/CRM需要在附件中心预览合同表格邮件和媒体,云盘或知识库需要多文件队列搜索全屏下载和主题适配,低代码系统需要不绑定React的文件预览,工程制造或GIS系统需要渐进增强CAD3D和地理数据预览]
+    cases: [为任务管理台增加合同和附件预览，并覆盖加载错误不支持和下载回退状态,比较一个多格式文件预览SDK的插件边界和React/Vue/Svelte接入方式,为CAD或PDF预览设计本地浏览器渲染与可选服务端高保真回退方案]
+    inputs: [容器元素或选择器,File/Blob/URL/ArrayBuffer文件源,文件名或MIME类型,按顺序配置的插件列表,目标框架和响应式尺寸,PDF Worker或复杂格式可选渲染器及其许可证]
+    outputs: [容器内文件预览组件,插件匹配和支持性检查结果,加载错误不支持下载和多文件队列状态,主题工具栏全屏打印搜索和缩放能力,复杂格式的渐进增强接入边界]
+    technologies: [TypeScript,JavaScript,React,Vue,Svelte,PDF.js,WASM,WebGL,Web Worker]
+    targets: [Web产品UI,OA/ERP/CRM,云盘,知识库,低代码表单,工程制造系统,GIS应用,附件中心]
+    adoption: reference-only
+    availability: reference
+    installation_status: uninstalled
+    permissions: 仅保留公开来源元数据；未来安装可能修改package依赖并在浏览器读取文件、创建Worker/WebGL上下文或加载远程PDF回退，复杂格式可选引擎和GPL依赖必须由消费项目单独审核，不由WTBP代管。
+    verify: 已打开仓库README、安装说明、快速开始、用例和格式边界并核对MIT许可证；未安装npm依赖、未加载用户文件、未运行浏览器预览或验证复杂格式保真度，采用前需固定commit并完成目标格式和安全边界验收。
+    status: candidate
+    keywords: [Open File Viewer,文件预览,附件预览,多格式预览,插件架构,PDF,Office,CAD,3D,GIS,React,Vue,Svelte,WebGL,WASM]
+  - id: greensock-gsap-skills-reference
+    title: GSAP 官方 AI 动效 Skills 参考
+    summary: 面向 AI coding agent 的 GSAP 官方实现参考，覆盖 Tween、Timeline、ScrollTrigger、插件、React/Vue/Svelte 生命周期、性能、响应式和 prefers-reduced-motion。
+    source_id: source.greensock-gsap-skills
+    kind: external-skill
+    domains: [design, engineering, quality]
+    capabilities: [motion-design, visual-verification, layout-diagnosis]
+    stages: [discover, analyze, design, implement, verify, evaluate]
+    solves: [为AI代理提供正确的GSAP核心API和插件用法,实现复杂时序和可控的Timeline动画,实现ScrollTrigger滚动驱动固定和scrub,在React/Vue/Svelte中处理scope清理和SSR,用transform和批处理降低动画性能风险,用gsap.matchMedia处理响应式和prefers-reduced-motion]
+    not_for: [替代动效目的和产品状态转移设计,替代WTBP MOTION契约动态证据和人工评审,直接写入Figma,替代业务交互验收,在未确认项目已选GSAP时强行替换既有动画库]
+    scenarios: [任务管理台需要列表状态或页面转场的可控时序动效,需要实现ScrollTrigger的pin/scrub/refresh和清理,React/Vue/Svelte项目需要安全接入GSAP并避免泄漏,需要审查动画是否错误地修改布局属性或忽略减弱动效]
+    cases: [为任务完成反馈设计GSAP Timeline并提供prefers-reduced-motion回退,审查一个React ScrollTrigger组件的scope清理SSR和布局性能问题,实现一个可中断的拖拽或滚动驱动动画并明确插件和生命周期边界]
+    inputs: [目标框架和现有动画库,动画触发器和状态转移,目标元素与布局约束,是否需要Timeline/ScrollTrigger/插件,响应式断点和reduced-motion策略,可运行的前端代码和动态验收目标]
+    outputs: [GSAP实现代码或修正建议,Timeline/Tween/ScrollTrigger配置,插件和框架接入方案,cleanup和refresh策略,性能与减弱动效建议,待人工验证的动态行为清单]
+    technologies: [GSAP,JavaScript,TypeScript,React,Vue,Svelte,ScrollTrigger,WebGL,SVG,CSS]
+    targets: [Web动效,任务管理台,产品UI,Landing Page,React前端,Vue前端,Svelte前端,Webflow交互]
+    adoption: reference-only
+    availability: reference
+    installation_status: uninstalled
+    permissions: 仅保留公开来源元数据；未来安装可能写入Agent Skill目录、修改前端代码并引入GSAP依赖，浏览器运行、插件使用和项目文件写入均需消费项目单独授权，不由WTBP代管。
+    verify: 已打开仓库README、Skill目录和gsap-core SKILL.md并核对官方归属、能力、MIT许可证和社区信号；未安装、未运行Skill、未修改代码、未做动态或性能验收，采用前需固定commit并通过MOTION契约、动态证据和人工评审。
+    status: candidate
+    keywords: [GSAP,GSAP Skills,GreenSock,Timeline,ScrollTrigger,MotionPath,Flip,React动画,Vue动画,Svelte动画,动画性能,reduced-motion]
+  - id: pixel2style2pixel-stylegan-reference
+    title: pixel2style2pixel StyleGAN 图像翻译参考实现
+    summary: CVPR 2021 pSp 官方实现，通过编码器直接生成 StyleGAN 的 W+ 风格向量，用于图像反演、脸部正面化、草图/分割图到图像、超分辨率和多模态风格混合。
+    source_id: source.eladrich-pixel2style2pixel
+    kind: reference-implementation
+    domains: [research, design, engineering, quality]
+    capabilities: [visual-direction, visual-verification, evidence-synthesis]
+    stages: [discover, analyze, implement, verify, evaluate]
+    solves: [将真实图像编码到StyleGAN的W+潜空间,基于StyleGAN进行人脸正面化和图像反演,从草图或分割图生成条件图像,使用style mixing生成多个候选结果,进行超分辨率和图像翻译研究,为图像生成方案提供可运行的论文参考实现]
+    not_for: [通用产品UI设计或Figma设计,无需GPU和模型权重的在线图像生成服务,未经许可的生产人脸识别或身份处理,任意领域的高质量图像翻译保证,替代现代扩散模型或现成托管API的选型评估]
+    scenarios: [需要研究StyleGAN反演或潜空间编辑,需要从人脸草图或分割图生成候选图像,需要对低分辨率人脸做StyleGAN超分辨率实验,需要复现论文中的训练推理和图像质量指标]
+    cases: [评估pSp是否适合把人脸照片编码为StyleGAN潜向量并进行后续编辑,从人脸草图或分割图生成多种候选结果并比较style mixing效果,为一个图像翻译研究实验准备CUDA环境预训练权重和可复现实验步骤]
+    inputs: [Linux或macOS环境,NVIDIA GPU/CUDA/CuDNN,Python和Anaconda环境,StyleGAN及pSp预训练权重,输入图像或数据集,训练/测试配置和可选W&B账号]
+    outputs: [W+潜向量,反演/正面化/超分辨率图像,草图或分割图生成结果,style mixing多模态候选,训练检查点和TensorBoard/W&B实验记录,ID/LPIPS/L2等指标结果]
+    technologies: [Python,PyTorch,StyleGAN,CUDA,CuDNN,Anaconda,Jupyter,Weights & Biases,LPIPS,ArcFace]
+    targets: [计算机视觉研究,离线图像生成管道,图像翻译实验,StyleGAN潜空间研究,研究性图像处理]
+    adoption: reference-only
+    availability: reference
+    installation_status: uninstalled
+    permissions: 仅保留公开来源元数据；未来运行可能下载模型权重和数据、使用GPU、写入实验输出，并可能向Weights & Biases上传实验信息，任何人脸数据、外部账号和模型许可均需消费项目单独授权，不由WTBP代管。
+    verify: 已打开仓库README、安装前置条件、预训练模型、训练/推理和指标说明并核对MIT仓库许可证；未克隆、未安装依赖、未下载权重、未使用人脸数据或GPU复现，维护状态和各权重/数据许可证仍需采用前单独核验。
+    status: candidate
+    keywords: [pixel2style2pixel,pSp,StyleGAN,W+潜空间,图像反演,人脸正面化,草图生成,分割图生成,超分辨率,style mixing,PyTorch,图像翻译]
   - id: taste-skill-frontend-design-reference
     title: Taste Skill 反模板化前端设计参考
     summary: 面向 AI Agent 的反模板化前端设计 Skill，先读取 brief 和受众，再用设计方差、动效强度、视觉密度三个参数约束视觉方向、布局、排版、动效、图片和交付前检查。

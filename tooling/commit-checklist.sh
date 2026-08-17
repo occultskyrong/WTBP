@@ -140,13 +140,20 @@ parse_version() {
 current_version="$(read_version VERSION)"
 [[ -n "$current_version" ]] || fail '提交范围缺少 VERSION；请先暂存它'
 merge_head=''
+merge_reuses_head_version=false
 if [[ "$mode" == staged ]]; then
   merge_head="$(git rev-parse --verify MERGE_HEAD 2>/dev/null || true)"
 fi
 if [[ "$mode" == range ]]; then
   base_version="$(git show "${base_ref}:VERSION" 2>/dev/null | tr -d '[:space:]' || printf '0.0.0')"
 elif [[ -n "$merge_head" ]]; then
-  base_version="$(git show "${merge_head}:VERSION" 2>/dev/null | tr -d '[:space:]' || printf '0.0.0')"
+  head_version="$(git show 'HEAD:VERSION' 2>/dev/null | tr -d '[:space:]' || printf '0.0.0')"
+  if [[ "$current_version" == "$head_version" ]]; then
+    base_version="$head_version"
+    merge_reuses_head_version=true
+  else
+    base_version="$(git show "${merge_head}:VERSION" 2>/dev/null | tr -d '[:space:]' || printf '0.0.0')"
+  fi
 elif git rev-parse --verify 'HEAD^{commit}' >/dev/null 2>&1; then
   base_version="$(git show 'HEAD:VERSION' 2>/dev/null | tr -d '[:space:]' || printf '0.0.0')"
 else
@@ -299,7 +306,9 @@ if [[ "$mode" == range ]] && git rev-parse --verify "${base_ref}^{commit}" >/dev
   check_range_version_history
   printf '  - 范围版本历史：通过（%s -> %s）\n' "$base_version" "$current_version"
 else
-  if [[ "$base_version" == 0.0.0 && "$current_version" == 0.1.0 ]]; then
+  if [[ "$merge_reuses_head_version" == true ]]; then
+    printf '  - 合并沿用任务分支 VERSION %s；默认分支内容已由其历史提交验证\n' "$current_version"
+  elif [[ "$base_version" == 0.0.0 && "$current_version" == 0.1.0 ]]; then
     printf '  - 初次建立 VERSION：%s\n' "$current_version"
   elif [[ "$current_version" == "$base_version" ]]; then
     [[ "$semantic_change" -eq 0 ]] || fail '检测到对外规则或可复用内容变更，但 VERSION 未升级'
