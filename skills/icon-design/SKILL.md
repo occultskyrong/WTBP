@@ -5,7 +5,7 @@ description: Define, create, and validate a cohesive Icon asset family for an ap
 
 # Icon Design
 
-Treat Icon work as an asset contract, not page decoration. Read [`../../knowledge/design-workflow.md`](../../knowledge/design-workflow.md), [`../../knowledge/templates/icon-asset-inventory-template.md`](../../knowledge/templates/icon-asset-inventory-template.md), and the project Icon source before creating anything.
+Treat Icon work as an asset contract, not page decoration. Read [`../../knowledge/design-capability-selection.md`](../../knowledge/design-capability-selection.md), [`../../knowledge/design-workflow.md`](../../knowledge/design-workflow.md), [`../../knowledge/templates/icon-asset-inventory-template.md`](../../knowledge/templates/icon-asset-inventory-template.md), and the project Icon source before creating anything. When selected by a Figma flow, link the approved scope and external-reference boundary to its parent `DCS-YYYYMMDD-VNN`.
 
 ## Hard safety and routing gate
 

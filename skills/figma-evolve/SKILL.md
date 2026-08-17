@@ -7,7 +7,7 @@ description: Evolve an existing Figma design through a scoped patch or a version
 
 Modify current Figma design evidence without restarting from a PRD or silently destroying prior work. The Figma node is the current design source; a supplied PRD change remains the business source.
 
-Read [`../../knowledge/design-principles.md`](../../knowledge/design-principles.md) and then [`../../knowledge/design-workflow.md`](../../knowledge/design-workflow.md) before work. They define the layered design contract, evidence precedence, inventory approval, batch/frame organization, annotation, text classification, and rendered acceptance contract.
+Read [`../../knowledge/design-capability-selection.md`](../../knowledge/design-capability-selection.md), [`../../knowledge/design-principles.md`](../../knowledge/design-principles.md), and then [`../../knowledge/design-workflow.md`](../../knowledge/design-workflow.md) before work. They define capability selection, the layered design contract, evidence precedence, inventory approval, batch/frame organization, annotation, text classification, and rendered acceptance contract.
 
 ## Input Contract
 
@@ -29,6 +29,8 @@ If no scope node is given, inspect the file and ask for the smallest scope that 
 Use the shared boundary model in `design-workflow.md`. Record the terminal shell, product root Frame, declared system chrome, product TabBar, Sections, and right-side annotation as separate owners. `Canvas` and Figma selection styling are editor artifacts, never delivery evidence; a Section cannot substitute for the shell or root. Before styling, `BF-02S` must prove the shell/root hierarchy, dimensions, and containment. Before completion, `G-05V` must prove the target-authentic fill/stroke-or-reason/radius-or-reason/shadow-or-chrome/canvas-contrast recipe in an **unselected**, fixed viewport/scale full-shell capture with a canvas margin and visible top/right/bottom/left edges. A `G-05S` structural pass without `G-05V` leaves the design incomplete.
 
 ## Workflow
+
+Before this workflow, create or refresh `DCS-YYYYMMDD-VNN`: run `wtbp "<task>"`, select this Skill and any conditional visual-direction/Icon/motion/Code Connect track, and record adoption mode and consulted external-card IDs. Discover online only after no clear local or registered external fit; collect a URL only through the explicit `wtbp，收集 <public URL>` path. Neither path authorizes a third-party installation or execution.
 
 1. Preflight the callable official Figma integration with read-only identity/permission proof and record `EX-01`. Read the target node, parent context, components, variables, constraints, annotations, and current screenshot before mutation; do not install a third-party tool when the capability is unavailable.
 2. Restate the intended change and inspect the consuming project. Create or refresh `PDC-YYYYMMDD-VNN` and pass `PDC-01`–`PDC-06` for project identity, surfaces, foundations, behavior/constraints, reuse/change boundaries, and evidence. For Figma-only work, record the explicit implementation boundary and `Unverified` fields.

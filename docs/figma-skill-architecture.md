@@ -6,7 +6,8 @@ WTBP 的 Figma 能力不是单一“大设计 Skill”，而是按责任边界�
 ## 统一阶段顺序
 
 ```text
-PDC 项目契约
+DCS 能力选择：本地优先、外部参考边界与条件分支
+  → PDC 项目契约
   → ARC 整体架构
   → INV 范围清单并获得审批
   → PS 页级规格：页面说明、元素层级、公共组件复用与 L0～L3 计划
@@ -17,6 +18,8 @@ PDC 项目契约
   → 单一 target 实现
   → 运行证据验收
 ```
+
+`DCS` 不增加一个第五阶段 Skill；它是在选择四段责任边界前必须完成的记录。先运行 `wtbp "<设计任务>"`，选择本地责任方及必要的视觉方向、Icon、动效或 Code Connect 分支；已登记外部能力仅按其采用边界参考。本地和已收录外部能力均无明确适配时才在线发现；用户明确输入 `wtbp，收集 <公开 URL>` 时才收录为未安装参考卡。完整记录见 [`knowledge/design-capability-selection.zh-CN.md`](../knowledge/design-capability-selection.zh-CN.md)。
 
 `PDC-03` 可以提前发现项目已有的图标和其他资产，但只能在 `INV` 获批后，按批准页面/状态先建立正式
 `PS`，再建立 `AGC` 与 `ICON` 清单。每份 `PS-YYYYMMDD-VNN` 都必须包含：页面说明与范围（`PS-01`）、

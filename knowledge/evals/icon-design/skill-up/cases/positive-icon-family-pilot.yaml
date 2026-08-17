@@ -3,6 +3,7 @@ input:
 
 expect:
   must_contain:
+    - "DCS-YYYYMMDD-VNN"
     - "Icon"
     - "试作"
     - "IA-01"

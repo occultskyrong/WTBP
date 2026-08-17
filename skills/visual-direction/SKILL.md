@@ -5,7 +5,7 @@ description: Define an evidence-backed visual direction for a product or Figma d
 
 # Visual Direction
 
-Create a versioned visual direction that guides Figma and implementation without copying an external Skill into WTBP. Read [`../../knowledge/design-principles.md`](../../knowledge/design-principles.md) and [`../../knowledge/design-workflow.md`](../../knowledge/design-workflow.md) first.
+Create a versioned visual direction that guides Figma and implementation without copying an external Skill into WTBP. Read [`../../knowledge/design-capability-selection.md`](../../knowledge/design-capability-selection.md), [`../../knowledge/design-principles.md`](../../knowledge/design-principles.md), and [`../../knowledge/design-workflow.md`](../../knowledge/design-workflow.md) first. When this Skill is a conditional track, link its decision and external-reference boundary back to the parent `DCS-YYYYMMDD-VNN`.
 
 ## Hard safety and routing gate
 

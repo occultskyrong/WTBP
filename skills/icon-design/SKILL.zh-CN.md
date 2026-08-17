@@ -5,7 +5,7 @@ description: 为已批准的产品范围或 Figma 设计定义、创作并验证
 
 # Icon 设计
 
-把 Icon 当作资产契约，而不是页面装饰。开始前读取 [`../../knowledge/design-workflow.zh-CN.md`](../../knowledge/design-workflow.zh-CN.md)、[`../../knowledge/templates/icon-asset-inventory-template.zh-CN.md`](../../knowledge/templates/icon-asset-inventory-template.zh-CN.md) 和项目 Icon 来源。
+把 Icon 当作资产契约，而不是页面装饰。开始前读取 [`../../knowledge/design-capability-selection.zh-CN.md`](../../knowledge/design-capability-selection.zh-CN.md)、[`../../knowledge/design-workflow.zh-CN.md`](../../knowledge/design-workflow.zh-CN.md)、[`../../knowledge/templates/icon-asset-inventory-template.zh-CN.md`](../../knowledge/templates/icon-asset-inventory-template.zh-CN.md) 和项目 Icon 来源。由 Figma 流程选择时，必须把已批准范围和外部参考边界链接到上游 `DCS-YYYYMMDD-VNN`。
 
 ## 强制安全与路由门禁
 

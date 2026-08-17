@@ -3,6 +3,7 @@ input:
 
 expect:
   must_contain:
+    - "DCS-YYYYMMDD-VNN"
     - "MOTION"
     - "触发"
     - "缓动"

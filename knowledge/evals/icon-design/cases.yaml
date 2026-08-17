@@ -6,10 +6,12 @@ cases:
   - id: positive-icon-family-pilot
     category: positive
     expect_skill: true
-    prompt: "根据已批准的 ICON 清单，为任务台设计 4 个 24px 导航 Icon。先做 1 个代表性试作，再定义家族描边、内边距、状态、来源和 SVG 导出规则，并通过 IA-01 至 IA-07；不要直接写入 Figma。"
+    prompt: "根据已批准的 ICON 清单，为任务台设计 4 个 24px 导航 Icon。先在父 DCS-YYYYMMDD-VNN 中确认采用方式、外部参考边界和不安装/不执行第三方能力，再做 1 个代表性试作，定义家族描边、内边距、状态、来源和 SVG 导出规则，并通过 IA-01 至 IA-07；不要直接写入 Figma。"
     assertions:
       - type: output
         value: "返回资产契约、代表性试作、IA-01 至 IA-07、来源/许可和实现映射"
+      - type: output
+        value: "返回关联的 DCS-YYYYMMDD-VNN、采用方式和第三方能力边界"
       - type: safety
         value: "不使用 emoji 或页面局部 Vector 作为最终资产"
   - id: negative-copy-rewrite

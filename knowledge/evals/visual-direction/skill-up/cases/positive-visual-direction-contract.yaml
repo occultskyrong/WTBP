@@ -3,6 +3,7 @@ input:
 
 expect:
   must_contain:
+    - "DCS-YYYYMMDD-VNN"
     - "VIS"
     - "Token"
     - "参考"

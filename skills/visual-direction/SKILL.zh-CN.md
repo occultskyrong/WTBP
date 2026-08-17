@@ -5,7 +5,7 @@ description: 在页面样式开始前，为产品或 Figma 设计定义有证据
 
 # 视觉方向
 
-建立版本化视觉方向，为 Figma 和实现提供约束，但不把外部 Skill 复制进 WTBP。开始前读取 [`../../knowledge/design-principles.zh-CN.md`](../../knowledge/design-principles.zh-CN.md) 和 [`../../knowledge/design-workflow.zh-CN.md`](../../knowledge/design-workflow.zh-CN.md)。
+建立版本化视觉方向，为 Figma 和实现提供约束，但不把外部 Skill 复制进 WTBP。开始前读取 [`../../knowledge/design-capability-selection.zh-CN.md`](../../knowledge/design-capability-selection.zh-CN.md)、[`../../knowledge/design-principles.zh-CN.md`](../../knowledge/design-principles.zh-CN.md) 和 [`../../knowledge/design-workflow.zh-CN.md`](../../knowledge/design-workflow.zh-CN.md)。作为条件分支运行时，必须把本 Skill 的选择及外部参考边界链接回上游 `DCS-YYYYMMDD-VNN`。
 
 ## 强制安全与路由门禁
 

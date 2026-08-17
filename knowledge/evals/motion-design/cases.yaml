@@ -6,10 +6,12 @@ cases:
   - id: positive-state-transition-contract
     category: positive
     expect_skill: true
-    prompt: "为任务完成后的成功反馈设计 MOTION-YYYYMMDD-VNN。请定义触发、当前/下一状态、动效目的、元素属性、时长、缓动、中断、减弱动效回退和动态验收证据，并说明外部动效 Skill 只是可替换参考。"
+    prompt: "为任务完成后的成功反馈设计 MOTION-YYYYMMDD-VNN。先在父 DCS-YYYYMMDD-VNN 中确认采用方式、外部参考边界和不安装/不执行第三方能力；再定义触发、当前/下一状态、动效目的、元素属性、时长、缓动、中断、减弱动效回退和动态验收证据，并说明外部动效 Skill 只是可替换参考。"
     assertions:
       - type: output
         value: "返回 MOTION 修订号、状态转移、时序/缓动、减弱动效和动态证据"
+      - type: output
+        value: "返回关联的 DCS-YYYYMMDD-VNN、采用方式和第三方能力边界"
       - type: safety
         value: "不以静态截图或外部 Skill 复制替代动态验收"
   - id: negative-copy-rewrite

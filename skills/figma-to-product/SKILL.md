@@ -7,7 +7,7 @@ description: Implement selected Figma nodes in exactly one declared product targ
 
 Implement one target from current Figma design evidence. Do not restart from the PRD, infer missing business features, or treat a screenshot as the complete design contract.
 
-Read [`../../knowledge/design-principles.md`](../../knowledge/design-principles.md) and then [`../../knowledge/design-workflow.md`](../../knowledge/design-workflow.md) before implementation. They define the layered design contract, brief/inventory gate, evidence provenance, complete-page requirement, text classification, and real-fixture acceptance contract.
+Read [`../../knowledge/design-capability-selection.md`](../../knowledge/design-capability-selection.md), [`../../knowledge/design-principles.md`](../../knowledge/design-principles.md), and then [`../../knowledge/design-workflow.md`](../../knowledge/design-workflow.md) before implementation. They define capability selection, the layered design contract, brief/inventory gate, evidence provenance, complete-page requirement, text classification, and real-fixture acceptance contract.
 
 ## Input Contract
 
@@ -30,6 +30,8 @@ the project design contract, report the conflict and route it to `figma-evolve`;
 Use the shared boundary model in `design-workflow.md`. Record the terminal shell, product root Frame, declared system chrome, product TabBar, Sections, and right-side annotation as separate owners. `Canvas` and Figma selection styling are editor artifacts, never delivery evidence; a Section cannot substitute for the shell or root. Before styling, `BF-02S` must prove the shell/root hierarchy, dimensions, and containment. Before handoff, `G-05V` must prove the target-authentic fill/stroke-or-reason/radius-or-reason/shadow-or-chrome/canvas-contrast recipe in an **unselected**, fixed viewport/scale full-shell capture with a canvas margin and visible top/right/bottom/left edges. A `G-05S` structural pass without `G-05V` leaves the implementation handoff incomplete.
 
 ## Design Evidence Gate
+
+Before this gate, create or refresh `DCS-YYYYMMDD-VNN`: run `wtbp "<task>"`, select this Skill and any conditional visual-direction/Icon/motion/Code Connect track, and record adoption mode and consulted external-card IDs. Use online discovery only after no clear local or registered external fit; use URL collection only through explicit `wtbp，收集 <public URL>`. Neither action installs or executes a third-party capability.
 
 1. Record `EX-01`, then load the official `figma:figma-design-to-code` before `get_design_context`; load `figma:figma-use` for Figma inspection when needed. If an official capability is unavailable, mark the evidence `Unverified`; do not install a third-party substitute.
 2. For each scoped node, collect node and parent IDs, hierarchy, screenshot, Auto Layout, constraints, variables/tokens, components/variants, annotations/prototype behavior, and exact assets/fonts.

@@ -22,6 +22,8 @@ Skill 应引用 Practice，不复制 Practice 的完整内容。
 涉及 Figma 时，先阅读 [`docs/figma-skill-architecture.md`](docs/figma-skill-architecture.md)，按创建、演进、
 单终端实现和验收选择唯一阶段；不要把四段流程合并为一次操作。
 
+在选择阶段前，先运行 `wtbp "<设计任务>"` 并记录 `DCS-YYYYMMDD-VNN`：本地 Skill 优先，已收录外部能力仅按采用边界参考；没有明确适配才在线发现，`wtbp，收集 <公开 URL>` 只收录未安装的参考能力卡。DCS 不替代后续 PDC、架构、页面规格和验收门禁。
+
 ![WTBP Figma 设计与实现泳道图](docs/assets/figma-workflow-swimlane.svg)
 
 泳道图的门禁定义、终端外框选择和可维护 Mermaid 源码见
@@ -85,6 +87,7 @@ make return-to-default # 任务分支推送成功后，安全切回并同步默�
 
 - [`docs/commit-conventions.md`](docs/commit-conventions.md)
 - [`docs/github-governance.md`](docs/github-governance.md)
+- [`CHANGELOG.md`](CHANGELOG.md) 与 [`docs/versioning.md`](docs/versioning.md)
 
 首次使用时运行：
 

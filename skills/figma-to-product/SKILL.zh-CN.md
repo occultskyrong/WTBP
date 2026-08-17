@@ -7,7 +7,7 @@ description: 将指定 Figma 节点落实到恰好一个已声明的产品终端
 
 根据当前 Figma 设计证据实现一个 target。不得重新从 PRD 开始、补全缺失业务功能，或把截图视为完整设计契约。
 
-实现前先读取 [`../../knowledge/design-principles.zh-CN.md`](../../knowledge/design-principles.zh-CN.md)，再读取 [`../../knowledge/design-workflow.zh-CN.md`](../../knowledge/design-workflow.zh-CN.md)。两者共同定义分层设计契约、简报/清单门禁、证据来源、完整页面要求、文案分类和真实夹具验收契约。
+实现前先读取 [`../../knowledge/design-capability-selection.zh-CN.md`](../../knowledge/design-capability-selection.zh-CN.md)、[`../../knowledge/design-principles.zh-CN.md`](../../knowledge/design-principles.zh-CN.md)，再读取 [`../../knowledge/design-workflow.zh-CN.md`](../../knowledge/design-workflow.zh-CN.md)。它们共同定义能力选择、分层设计契约、简报/清单门禁、证据来源、完整页面要求、文案分类和真实夹具验收契约。
 
 ## 输入契约
 
@@ -28,6 +28,8 @@ target、仓库或项目契约证据缺失时询问。Figma 设计与提供的 P
 使用 `design-workflow.zh-CN.md` 中的共享边界模型。终端外框、产品根 Frame、声明的系统 Chrome、产品 TabBar、Section 与右侧说明块必须分别登记归属。`Canvas` 与 Figma 选中样式只是编辑器对象，不能作为交付证据；Section 不能替代外框或产品根。页面样式前，`BF-02S` 必须证明外框/根节点层级、尺寸和包含关系；交接前，`G-05V` 必须在**未选中**、固定视口/缩放的完整外框截图中证明符合目标的填充、描边或原因、圆角或原因、阴影或 Chrome、画布对比，并展示带画布留白的上/右/下/左四边。`G-05S` 结构通过但 `G-05V` 未通过时，实现交接仍未完成。
 
 ## 设计证据门禁
+
+进入本门禁前，创建或刷新 `DCS-YYYYMMDD-VNN`：运行 `wtbp "<任务>"`，选择本 Skill 及按需的视觉方向/Icon/动效/Code Connect 分支，记录采用方式和查阅的外部能力卡 ID。只有本地和已收录外部能力均无明确适配时才在线发现；只有用户明确说出 `wtbp，收集 <公开 URL>` 时才收录 URL。两者都不安装或执行第三方能力。
 
 1. 记录 `EX-01`，再在 `get_design_context` 前加载官方 `figma:figma-design-to-code`；需要检查 Figma 时加载 `figma:figma-use`。官方能力不可用时把证据标记为 `Unverified`；不得安装第三方替代物。
 2. 对每个范围节点收集节点和父级 ID、层级、截图、Auto Layout、约束、变量/Tokens、组件/Variants、标注/原型行为及精确资源/字体。
