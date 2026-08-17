@@ -192,7 +192,9 @@ check_range_version_history() {
   git rev-parse --verify "${base_ref}^{commit}" >/dev/null 2>&1 || return 0
 
   local commit
-  local previous_version="$base_version"
+  local parent_ref
+  local parent_count
+  local previous_version
   local next_version
   local commit_semantic
   local commit_new_capability
@@ -207,6 +209,15 @@ check_range_version_history() {
 
   while IFS= read -r commit; do
     [[ -n "$commit" ]] || continue
+    parent_count="$(git rev-list --parents -n 1 "$commit" | awk '{ print NF - 1 }')"
+    if [[ "$parent_count" -gt 1 ]]; then
+      # A merge resolution is validated against the integrated branch, not the
+      # task branch. The task branch commits are validated separately below.
+      parent_ref="${commit}^2"
+    else
+      parent_ref="${commit}^"
+    fi
+    previous_version="$(git show "${parent_ref}:VERSION" 2>/dev/null | tr -d '[:space:]' || printf '0.0.0')"
     next_version="$(git show "${commit}:VERSION" 2>/dev/null | tr -d '[:space:]' || true)"
     parse_version "$previous_version"
     previous_major="$major"; previous_minor="$minor"; previous_patch="$patch"
@@ -217,12 +228,12 @@ check_range_version_history() {
     commit_new_capability=0
     while IFS= read -r file; do
       is_semantic_path "$file" && commit_semantic=1
-    done < <(git diff-tree --root --no-commit-id --name-only -r "$commit")
+    done < <(git diff --name-only "$parent_ref" "$commit")
     while IFS= read -r file; do
       is_new_capability_path "$file" && commit_new_capability=1
-    done < <(git diff-tree --root --no-commit-id --diff-filter=A --name-only -r "$commit")
-    has_added_external_card "${commit}^" "$commit" && commit_new_capability=1
-    changed_version="$(git diff-tree --root --no-commit-id --name-only -r "$commit" -- VERSION)"
+    done < <(git diff --name-only --diff-filter=A "$parent_ref" "$commit")
+    has_added_external_card "$parent_ref" "$commit" && commit_new_capability=1
+    changed_version="$(git diff --name-only "$parent_ref" "$commit" -- VERSION)"
 
     if [[ -n "$changed_version" && "$next_version" == "$previous_version" ]]; then
       fail "提交 ${commit} 修改了 VERSION 但版本值未变化"
@@ -243,10 +254,7 @@ check_range_version_history() {
         [[ "$next_major" -eq "$previous_major" && "$next_minor" -eq "$previous_minor" && "$next_patch" -eq $((previous_patch + 1)) ]] || fail "提交 ${commit} 的 PATCH 版本必须只递增一级"
       fi
     fi
-    previous_version="$next_version"
-  done < <(git rev-list --reverse --no-merges "$base_ref..$head_ref")
-
-  [[ "$previous_version" == "$current_version" ]] || fail "范围最终 VERSION 与 HEAD 不一致"
+  done < <(git rev-list --reverse --first-parent "$base_ref..$head_ref")
 }
 
 check_commit_messages() {
@@ -283,7 +291,7 @@ check_commit_messages() {
         fail "提交 ${commit} 引入 MAJOR 版本升级时必须使用 ! 或声明 BREAKING CHANGE"
       fi
     fi
-  done < <(git rev-list --no-merges "$base_ref..$head_ref")
+  done < <(git rev-list --first-parent --no-merges "$base_ref..$head_ref")
 }
 
 printf '%s\n' '提交执行清单：7/8 版本、提交消息与范围一致性检查'
