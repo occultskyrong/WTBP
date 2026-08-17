@@ -44,5 +44,6 @@ For decisions, report the scenario, missing variables, Practice ID, alternatives
 remaining risk, and verification method. For changes, also report scope, commands run and results, unverified items, and
 the next authorization needed.
 
-Before committing, run `make commit-checklist`. Use Chinese commit and PR descriptions while retaining English tool
-identifiers, paths, IDs, and Conventional Commit types.
+Before committing, run `make commit-checklist`. After a successful task-branch push, run `make return-to-default`; a safe skip
+in a multi-worktree checkout is expected when another worktree owns the default branch. Use Chinese commit and PR descriptions
+while retaining English tool identifiers, paths, IDs, and Conventional Commit types.
