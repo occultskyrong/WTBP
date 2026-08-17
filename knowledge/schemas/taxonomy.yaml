@@ -6,6 +6,8 @@ domains:
     name: 后端
   - id: frontend
     name: 前端
+  - id: engineering
+    name: 工程实践
   - id: architecture
     name: 架构
   - id: security
