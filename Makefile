@@ -1,4 +1,4 @@
-.PHONY: validate validate-ai-companions validate-skill-evals validate-skill-routes validate-skill-index test-wtbp-router test-secret-scan verify-mergeability return-to-default skill-eval ske commit-checklist commit-checklist-range review-staged review-range review-issue install-hooks
+.PHONY: validate validate-ai-companions validate-skill-evals validate-skill-routes validate-skill-index validate-version-log test-wtbp-router test-secret-scan verify-mergeability return-to-default skill-eval ske commit-checklist commit-checklist-range review-staged review-range review-issue install-hooks
 
 validate:
 	./tooling/validate-repository.sh
@@ -14,6 +14,9 @@ validate-skill-routes:
 
 validate-skill-index:
 	./tooling/validate-skill-index.sh
+
+validate-version-log:
+	./tooling/validate-version-log.sh
 
 test-wtbp-router:
 	./tooling/test-wtbp-router.sh

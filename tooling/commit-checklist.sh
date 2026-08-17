@@ -139,6 +139,7 @@ parse_version() {
 }
 current_version="$(read_version VERSION)"
 [[ -n "$current_version" ]] || fail '提交范围缺少 VERSION；请先暂存它'
+source_exists CHANGELOG.md || fail '提交范围缺少 CHANGELOG.md；请先暂存它'
 merge_head=''
 merge_reuses_head_version=false
 if [[ "$mode" == staged ]]; then
@@ -162,9 +163,20 @@ fi
 parse_version "$current_version"; current_major="$major"; current_minor="$minor"; current_patch="$patch"
 parse_version "$base_version"; base_major="$major"; base_minor="$minor"; base_patch="$patch"
 
+changed_version_file=0
+changed_version_log=0
+for file in "${changed_files[@]}"; do
+  [[ "$file" == VERSION ]] && changed_version_file=1
+  [[ "$file" == CHANGELOG.md ]] && changed_version_log=1
+done
+if [[ "$changed_version_file" -eq 1 ]]; then
+  [[ "$changed_version_log" -eq 1 ]] || fail '修改 VERSION 时必须同步修改 CHANGELOG.md'
+  source_file CHANGELOG.md | rg -q "^### \[${current_version//./\\.}\] - " || fail "CHANGELOG.md 缺少当前版本 ${current_version} 的条目"
+fi
+
 is_semantic_path() {
   case "$1" in
-    knowledge/*|skills/*|tooling/*|.githooks/*|.github/*|docs/commit-conventions.md|docs/commit-checklist.md|docs/document-language-policy.md|docs/skill-evaluation.md|docs/skill-routing.md|docs/skill-catalog.md|docs/github-governance.md|docs/governance.md|Makefile|README.md|AGENTS.md|CLAUDE.md|CONTRIBUTING.md) return 0 ;;
+    knowledge/*|skills/*|tooling/*|.githooks/*|.github/*|docs/commit-conventions.md|docs/commit-checklist.md|docs/document-language-policy.md|docs/skill-evaluation.md|docs/skill-routing.md|docs/skill-catalog.md|docs/github-governance.md|docs/governance.md|docs/versioning.md|Makefile|README.md|CHANGELOG.md|AGENTS.md|CLAUDE.md|CONTRIBUTING.md) return 0 ;;
     *) return 1 ;;
   esac
 }
@@ -193,6 +205,18 @@ while IFS= read -r file; do
   is_new_capability_path "$file" && new_capability=1
 done < <(diff_names A)
 has_added_external_card "$base_ref" "$head_ref" && new_capability=1
+
+has_version_log_entry() {
+  local ref="$1"
+  local version="$2"
+  git cat-file -e "${ref}:CHANGELOG.md" 2>/dev/null && git show "${ref}:CHANGELOG.md" | rg -q "^### \[${version//./\\.}\] - "
+}
+
+version_log_changed() {
+  local from_ref="$1"
+  local to_ref="$2"
+  git diff --name-only "$from_ref" "$to_ref" -- CHANGELOG.md | rg -q '^CHANGELOG\.md$'
+}
 
 check_range_version_history() {
   [[ "$mode" == range ]] || return 0
@@ -241,6 +265,11 @@ check_range_version_history() {
     done < <(git diff --name-only --diff-filter=A "$parent_ref" "$commit")
     has_added_external_card "$parent_ref" "$commit" && commit_new_capability=1
     changed_version="$(git diff --name-only "$parent_ref" "$commit" -- VERSION)"
+
+    if [[ -n "$changed_version" ]] && { git cat-file -e "${parent_ref}:CHANGELOG.md" 2>/dev/null || git cat-file -e "${commit}:CHANGELOG.md" 2>/dev/null; }; then
+      version_log_changed "$parent_ref" "$commit" || fail "提交 ${commit} 修改 VERSION 但未同步修改 CHANGELOG.md"
+      has_version_log_entry "$commit" "$next_version" || fail "提交 ${commit} 的 CHANGELOG.md 缺少版本 ${next_version} 条目"
+    fi
 
     if [[ -n "$changed_version" && "$next_version" == "$previous_version" ]]; then
       fail "提交 ${commit} 修改了 VERSION 但版本值未变化"

@@ -5,7 +5,7 @@ description: Define purposeful, accessible, and verifiable product motion for Fi
 
 # Motion Design
 
-Design motion as a product behavior contract. Read [`../../knowledge/design-principles.md`](../../knowledge/design-principles.md) and [`../../knowledge/design-workflow.md`](../../knowledge/design-workflow.md) before defining transitions. Static screenshots cannot prove motion acceptance.
+Design motion as a product behavior contract. Read [`../../knowledge/design-capability-selection.md`](../../knowledge/design-capability-selection.md), [`../../knowledge/design-principles.md`](../../knowledge/design-principles.md), and [`../../knowledge/design-workflow.md`](../../knowledge/design-workflow.md) before defining transitions. When selected by a Figma flow, link the motion decision and external-reference boundary to the parent `DCS-YYYYMMDD-VNN`. Static screenshots cannot prove motion acceptance.
 
 ## Hard safety and routing gate
 

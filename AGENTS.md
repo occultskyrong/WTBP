@@ -70,7 +70,7 @@ the five layers, minimum Skill contract, registry graph, G0–G6 gates, lifecycl
 
 Before a commit, run `make commit-checklist`. It refreshes the default branch and verifies mergeability, then runs repository
 validation, staged-content review, sensitive-information scanning, `skill-up` contract review for changed Skills or registered
-Eval assets, quality gates, and the `VERSION` check. See
+Eval assets, quality gates, and the paired `VERSION`/`CHANGELOG.md` check. See
 [docs/commit-checklist.md](docs/commit-checklist.md).
 
 ## Commit delivery workflow

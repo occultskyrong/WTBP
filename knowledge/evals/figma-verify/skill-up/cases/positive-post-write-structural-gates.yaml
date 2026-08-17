@@ -3,6 +3,8 @@ input:
 
 expect:
   must_contain:
+    - "DCS-YYYYMMDD-VNN"
+    - "wtbp"
     - "BF-01"
     - "BF-02"
     - "BF-03"
@@ -52,4 +54,5 @@ expect:
     - "Section"
     - "固定内边距"
   must_not_contain:
+    - "自动安装第三方"
     - "只检查变更页面"

@@ -7,7 +7,7 @@ description: 通过受范围约束的局部修改或保留版本的重生成演�
 
 在不重新从 PRD 开始、也不悄悄破坏既有工作的前提下修改当前 Figma 设计证据。Figma 节点是当前设计来源；用户提供的 PRD 变更仍是业务来源。
 
-开始前先读取 [`../../knowledge/design-principles.zh-CN.md`](../../knowledge/design-principles.zh-CN.md)，再读取 [`../../knowledge/design-workflow.zh-CN.md`](../../knowledge/design-workflow.zh-CN.md)。两者共同定义分层设计契约、证据优先级、清单审批、批次/Frame 组织、注释、文案分类和渲染验收契约。
+开始前先读取 [`../../knowledge/design-capability-selection.zh-CN.md`](../../knowledge/design-capability-selection.zh-CN.md)、[`../../knowledge/design-principles.zh-CN.md`](../../knowledge/design-principles.zh-CN.md)，再读取 [`../../knowledge/design-workflow.zh-CN.md`](../../knowledge/design-workflow.zh-CN.md)。它们共同定义能力选择、分层设计契约、证据优先级、清单审批、批次/Frame 组织、注释、文案分类和渲染验收契约。
 
 ## 输入契约
 
@@ -28,6 +28,8 @@ description: 通过受范围约束的局部修改或保留版本的重生成演�
 使用 `design-workflow.zh-CN.md` 中的共享边界模型。终端外框、产品根 Frame、声明的系统 Chrome、产品 TabBar、Section 与右侧说明块必须分别登记归属。`Canvas` 与 Figma 选中样式只是编辑器对象，不能作为交付证据；Section 不能替代外框或产品根。页面样式前，`BF-02S` 必须证明外框/根节点层级、尺寸和包含关系；完成前，`G-05V` 必须在**未选中**、固定视口/缩放的完整外框截图中证明符合目标的填充、描边或原因、圆角或原因、阴影或 Chrome、画布对比，并展示带画布留白的上/右/下/左四边。`G-05S` 结构通过但 `G-05V` 未通过时，设计仍未完成。
 
 ## 工作流
+
+进入本工作流前，创建或刷新 `DCS-YYYYMMDD-VNN`：运行 `wtbp "<任务>"`，选择本 Skill 及按需的视觉方向/Icon/动效/Code Connect 分支，记录采用方式和查阅的外部能力卡 ID。只有本地和已收录外部能力均无明确适配时才在线发现；只有用户明确说出 `wtbp，收集 <公开 URL>` 时才收录 URL。两条路径都不授权安装或执行第三方能力。
 
 1. 用只读身份/权限证明预检可调用的官方 Figma 集成，并记录 `EX-01`；修改前读取目标节点、父级上下文、组件、变量、约束、标注和当前截图；能力不可用时不得安装第三方工具。
 2. 重述预期变更并检查消费项目，创建或刷新 `PDC-YYYYMMDD-VNN`，通过 `PDC-01`–`PDC-06`：项目身份、表面、设计基础、行为/约束、复用/变更边界及证据。Figma-only 工作要明确记录实现边界和 `Unverified` 字段。

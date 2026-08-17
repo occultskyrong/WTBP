@@ -7,7 +7,7 @@ description: Verify a Figma node against a running implementation for only the u
 
 Validate actual implementation evidence against current Figma design evidence. This Skill does not assume every delivery includes Web and Mini Program; verify only declared targets.
 
-Read `../../knowledge/design-principles.md` and then `../../knowledge/design-workflow.md` before verification. They are the shared contract for the layered scope, evidence precedence, inventory approval, complete-page coverage, annotation geometry, text classification, accessibility, and real-fixture acceptance.
+Read `../../knowledge/design-capability-selection.md`, `../../knowledge/design-principles.md`, and then `../../knowledge/design-workflow.md` before verification. They are the shared contract for capability selection, layered scope, evidence precedence, inventory approval, complete-page coverage, annotation geometry, text classification, accessibility, and real-fixture acceptance.
 
 ## Input Contract
 
@@ -32,11 +32,12 @@ Use the shared boundary model in `design-workflow.md`. Record the terminal shell
 
 ## Workflow
 
-1. Confirm the input contract, current project design contract (`PDC-YYYYMMDD-VNN`), page specifications (`PS-YYYYMMDD-VNN`), action-group contract (`AGC-YYYYMMDD-VNN`), current Icon inventory (`ICON-YYYYMMDD-VNN`), `EX-01` availability, and mode, then build the
+1. Create or refresh `DCS-YYYYMMDD-VNN` before acceptance evidence is compared. Run `wtbp "<task>"`, select this Skill and any conditional visual-direction/Icon/motion/Code Connect track, and record adoption mode and consulted external-card IDs. Discover online only after no clear local or registered external fit; collect a URL only through explicit `wtbp，收集 <public URL>`. Neither path authorizes third-party installation or execution.
+2. Confirm the input contract, current project design contract (`PDC-YYYYMMDD-VNN`), page specifications (`PS-YYYYMMDD-VNN`), action-group contract (`AGC-YYYYMMDD-VNN`), current Icon inventory (`ICON-YYYYMMDD-VNN`), `EX-01` availability, and mode, then build the
    target/viewport/state matrix before comparing anything.
-2. Capture stable Figma and runtime evidence, run the structural and layout gates, and classify each mismatch.
-3. In `fix` mode, change only the first proven cause, rerun the affected matrix, and preserve before/after evidence.
-4. Produce the acceptance record and list unverified or human-review items.
+3. Capture stable Figma and runtime evidence, run the structural and layout gates, and classify each mismatch.
+4. In `fix` mode, change only the first proven cause, rerun the affected matrix, and preserve before/after evidence.
+5. Produce the acceptance record and list unverified or human-review items.
 
 ## Evidence and Matrix Gate
 

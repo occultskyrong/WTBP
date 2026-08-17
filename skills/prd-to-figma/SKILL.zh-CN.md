@@ -7,7 +7,7 @@ description: 根据用户提供的 PRD 文本、文件或可访问链接创建�
 
 把 PRD 转为可编辑的 Figma 产物。PRD 是唯一业务事实来源；不得检索知识库、依赖 Lark CLI，或补充没有依据的产品规则。
 
-开始前先读取 [`../../knowledge/design-principles.zh-CN.md`](../../knowledge/design-principles.zh-CN.md)，再读取 [`../../knowledge/design-workflow.zh-CN.md`](../../knowledge/design-workflow.zh-CN.md)。前者定义分层设计契约，后者提供共享的最小简报、冲突、变更清单审批、Frame/注释、文案分类和产物验收门禁。
+开始前先读取 [`../../knowledge/design-capability-selection.zh-CN.md`](../../knowledge/design-capability-selection.zh-CN.md)、[`../../knowledge/design-principles.zh-CN.md`](../../knowledge/design-principles.zh-CN.md)，再读取 [`../../knowledge/design-workflow.zh-CN.md`](../../knowledge/design-workflow.zh-CN.md)。能力选择记录决定受控能力路径，后两者定义分层设计契约，以及共享的最小简报、冲突、变更清单审批、Frame/注释、文案分类和产物验收门禁。
 
 ## 输入契约
 
@@ -26,6 +26,8 @@ description: 根据用户提供的 PRD 文本、文件或可访问链接创建�
 使用 `design-workflow.zh-CN.md` 中的共享边界模型。终端外框、产品根 Frame、声明的系统 Chrome、产品 TabBar、Section 与右侧说明块必须分别登记归属。`Canvas` 与 Figma 选中样式只是编辑器对象，不能作为交付证据；Section 不能替代外框或产品根。页面样式前，`BF-02S` 必须证明外框/根节点层级、尺寸和包含关系；完成前，`G-05V` 必须在**未选中**、固定视口/缩放的完整外框截图中证明符合目标的填充、描边或原因、圆角或原因、阴影或 Chrome、画布对比，并展示带画布留白的上/右/下/左四边。`G-05S` 结构通过但 `G-05V` 未通过时，设计仍未完成。
 
 ## 工作流
+
+进入本工作流前，创建或刷新 `DCS-YYYYMMDD-VNN`：运行 `wtbp "<任务>"`，选择本 Skill 及按需的视觉方向/Icon/动效/Code Connect 分支，记录采用方式和查阅的外部能力卡 ID。只有本地和已收录外部能力均无明确适配时，才用 `external-capability-discovery`；只有用户明确说出 `wtbp，收集 <公开 URL>` 时才用 `external-capability-curation`。收录仅作参考，不代表安装或执行第三方能力。
 
 1. 用只读身份/权限证明预检可调用的官方 Figma 集成，并记录 `EX-01`。在声明的 Figma 范围内使用 `figma-use`；能力不可用时不得安装或替换为第三方工具。
 2. 阅读 PRD，返回认知记录和简洁设计契约：目标、角色、终端、入口和旅程、范围内页面、关键状态、targets、排除项和开放/冲突规则。实质冲突要提供不同解决方案并停止。

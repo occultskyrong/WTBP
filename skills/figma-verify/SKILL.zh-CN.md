@@ -7,7 +7,7 @@ description: 只针对用户声明的目标终端，验证 Figma 节点与运行
 
 以实际实现证据验证当前 Figma 设计证据。本 Skill 不假设每次交付都包含 Web 和小程序；只验证声明的 targets。
 
-验证前先读取 `../../knowledge/design-principles.zh-CN.md`，再读取 `../../knowledge/design-workflow.zh-CN.md`。两者共同定义分层范围、证据优先级、清单审批、完整页面覆盖、标注几何、文案分类、可访问性和真实夹具验收的共享契约。
+验证前先读取 `../../knowledge/design-capability-selection.zh-CN.md`、`../../knowledge/design-principles.zh-CN.md`，再读取 `../../knowledge/design-workflow.zh-CN.md`。它们共同定义能力选择、分层范围、证据优先级、清单审批、完整页面覆盖、标注几何、文案分类、可访问性和真实夹具验收的共享契约。
 
 ## 输入契约
 
@@ -29,10 +29,11 @@ description: 只针对用户声明的目标终端，验证 Figma 节点与运行
 
 ## 工作流
 
-1. 确认输入契约、当前项目设计契约（`PDC-YYYYMMDD-VNN`）、页面规格（`PS-YYYYMMDD-VNN`）、动作组契约（`AGC-YYYYMMDD-VNN`）、当前 Icon 清单（`ICON-YYYYMMDD-VNN`）、`EX-01` 可用性和模式，在比较前建立目标/视口/状态矩阵。
-2. 获取稳定的 Figma 和运行证据，执行结构与布局门禁，分类每项差异。
-3. `fix` 模式只修复首个已证明的原因，重新运行受影响矩阵并保留前后证据。
-4. 产出验收记录，列出未验证项和需要人工复核的内容。
+1. 在比对验收证据前创建或刷新 `DCS-YYYYMMDD-VNN`。运行 `wtbp "<任务>"`，选择本 Skill 及按需的视觉方向/Icon/动效/Code Connect 分支，记录采用方式和查阅的外部能力卡 ID。只有本地和已收录外部能力均无明确适配时才在线发现；只有用户明确说出 `wtbp，收集 <公开 URL>` 时才收录 URL。两条路径均不授权第三方安装或执行。
+2. 确认输入契约、当前项目设计契约（`PDC-YYYYMMDD-VNN`）、页面规格（`PS-YYYYMMDD-VNN`）、动作组契约（`AGC-YYYYMMDD-VNN`）、当前 Icon 清单（`ICON-YYYYMMDD-VNN`）、`EX-01` 可用性和模式，在比较前建立目标/视口/状态矩阵。
+3. 获取稳定的 Figma 和运行证据，执行结构与布局门禁，分类每项差异。
+4. `fix` 模式只修复首个已证明的原因，重新运行受影响矩阵并保留前后证据。
+5. 产出验收记录，列出未验证项和需要人工复核的内容。
 
 ## 证据与矩阵门禁
 

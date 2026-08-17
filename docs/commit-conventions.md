@@ -54,6 +54,8 @@ ci: 校验提交标题格式
 `VERSION`：版本发生变化才创建并推送不可变的注释 Tag `vX.Y.Z`；同名 Tag 已指向当前提交时幂等通过，指向其他提交时失败，
 绝不移动或重打 Tag。
 
+版本变更必须同一提交更新 [`CHANGELOG.md`](../CHANGELOG.md)。`master` 是已合并主线，只有 Tag 表示正式发布；未合并任务线的版本不能作为另一条独立任务分支的基线。详见 [`docs/versioning.md`](versioning.md)。
+
 创建 PR 时始终使用 `master...任务分支` 的三点比较，不能用版本 Tag 代替 PR 比较。发布或版本变更说明应显式使用
 `tags/v旧版...tags/v新版`，例如：
 

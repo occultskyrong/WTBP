@@ -7,7 +7,7 @@ description: Create or update an editable Figma design from a PRD supplied as te
 
 Turn a PRD into an editable Figma artifact. The PRD is the only business-fact source. Do not retrieve a knowledge base, require Lark CLI, or add unsupported product rules.
 
-Read [`../../knowledge/design-principles.md`](../../knowledge/design-principles.md) and then [`../../knowledge/design-workflow.md`](../../knowledge/design-workflow.md) before work. The former defines the layered design contract; the latter supplies the operational minimum-brief, conflict, inventory-approval, frame/annotation, text-classification, and artifact-acceptance gates.
+Read [`../../knowledge/design-capability-selection.md`](../../knowledge/design-capability-selection.md), [`../../knowledge/design-principles.md`](../../knowledge/design-principles.md), and then [`../../knowledge/design-workflow.md`](../../knowledge/design-workflow.md) before work. The selection record chooses the governed capability path; the latter two define the layered design contract and the operational minimum-brief, conflict, inventory-approval, frame/annotation, text-classification, and artifact-acceptance gates.
 
 ## Input Contract
 
@@ -27,6 +27,8 @@ Ask for the one missing item only when it would change the page structure, busin
 Use the shared boundary model in `design-workflow.md`. Record the terminal shell, product root Frame, declared system chrome, product TabBar, Sections, and right-side annotation as separate owners. `Canvas` and Figma selection styling are editor artifacts, never delivery evidence; a Section cannot substitute for the shell or root. Before styling, `BF-02S` must prove the shell/root hierarchy, dimensions, and containment. Before completion, `G-05V` must prove the target-authentic fill/stroke-or-reason/radius-or-reason/shadow-or-chrome/canvas-contrast recipe in an **unselected**, fixed viewport/scale full-shell capture with a canvas margin and visible top/right/bottom/left edges. A `G-05S` structural pass without `G-05V` leaves the design incomplete.
 
 ## Workflow
+
+Before this workflow, create or refresh `DCS-YYYYMMDD-VNN`: run `wtbp "<task>"`, select this Skill and any conditional visual-direction/Icon/motion/Code Connect track, and record the adoption mode and consulted external-card IDs. Use `external-capability-discovery` only after no clear local or registered external fit; use `external-capability-curation` only when the user explicitly says `wtbp，收集 <public URL>`. Collection is reference-only, and no third-party installation or execution is implied.
 
 1. Preflight the callable official Figma integration with read-only identity/permission proof and record `EX-01`. Use `figma-use` for the declared Figma scope; do not install or substitute a third-party tool when the capability is unavailable.
 2. Read the PRD and return a compact cognition record and design contract: outcome, actors, terminal, entry and journey, in-scope pages, material states, targets, exclusions, and open/conflicting rules. Offer distinct resolutions and stop on a material conflict.

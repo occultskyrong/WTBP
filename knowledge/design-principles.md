@@ -5,6 +5,8 @@ the layers below; a prompt, screenshot, generated page, or local visual preferen
 
 ## Non-negotiable principles
 
+**Capability selection before execution** — choose and record the local-first capability path in `DCS-YYYYMMDD-VNN` before invoking design tools. Registered or discovered external capabilities are governed references, not implicit installation or execution authority.
+
 1. **Evidence before invention** — requirements, current product evidence, contracts, and approved decisions outrank
    model preference. Unknowns remain `Unverified`.
 2. **Outcome before surface** — establish the user outcome, actor, product, target, entry, journey, scope, and
@@ -44,7 +46,7 @@ the layers below; a prompt, screenshot, generated page, or local visual preferen
 
 | Layer | Question | Required output | Blocking gate |
 |---|---|---|---|
-| L0 Evidence and intent | What problem, for whom, on which target, and why? | Cognition record, source authority, outcome, actor, target, product, entry, scope, exclusions, project design contract | Missing or conflicting material facts are `Unverified`/blocking |
+| L0 Evidence and intent | What problem, for whom, on which target, and why? | `DCS` capability decision, cognition record, source authority, outcome, actor, target, product, entry, scope, exclusions, project design contract | Missing or conflicting material facts or no governed capability selection are `Unverified`/blocking |
 | L1 Information architecture | How does the user move through the product? | Project-contract-backed modules, routes/entries, primary journey, page/state/transition matrix, recovery paths | `PDC-01`–`PDC-06` pass before architecture; no page or action is designed without its containing journey, state coverage, and transition outcome |
 | L2 Product contract | What is in scope and how will it be judged? | Versioned inventory, stable feature IDs, status, rules, permissions, acceptance conditions, decisions | Explicit user approval and no unresolved blocking decision |
 | L3 Foundations | Which reusable rules and building blocks express the contract? | Tokens, typography, versioned Icon asset inventory, coupled-asset readiness, components, variants, action-group contracts, layout conventions, source mappings | `IA-01`–`IA-07` and `AGC-01`–`AGC-06` pass before page-specific styling; reuse/extension decision and consumer impact recorded |
@@ -55,7 +57,7 @@ the layers below; a prompt, screenshot, generated page, or local visual preferen
 
 ## Ordering and change propagation
 
-- Work proceeds from L0 to L7. A later layer may not silently decide an earlier-layer question.
+- Work proceeds from L0 to L7. A later layer may not silently decide an earlier-layer question. Before official Figma preflight or mutation, create or refresh `DCS-YYYYMMDD-VNN` under `design-capability-selection.md`; it records local-first selection, external-reference boundary, conditional tracks, and the no-install/no-execute default.
 - Before information architecture, inspect the consuming project and produce the project design contract. Run
   `PDC-01`–`PDC-06`; do not design a new route, page family, component system, or visual foundation while the contract
   is missing, stale, or materially conflicting.

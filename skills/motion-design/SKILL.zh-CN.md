@@ -5,7 +5,7 @@ description: 为 Figma 或产品实现定义有目的、可访问且可验证的
 
 # 动效设计
 
-把动效设计成产品行为契约。开始前读取 [`../../knowledge/design-principles.zh-CN.md`](../../knowledge/design-principles.zh-CN.md) 和 [`../../knowledge/design-workflow.zh-CN.md`](../../knowledge/design-workflow.zh-CN.md)。静态截图不能证明动效验收。
+把动效设计成产品行为契约。开始前读取 [`../../knowledge/design-capability-selection.zh-CN.md`](../../knowledge/design-capability-selection.zh-CN.md)、[`../../knowledge/design-principles.zh-CN.md`](../../knowledge/design-principles.zh-CN.md) 和 [`../../knowledge/design-workflow.zh-CN.md`](../../knowledge/design-workflow.zh-CN.md)。由 Figma 流程选择时，必须把动效决策和外部参考边界链接到上游 `DCS-YYYYMMDD-VNN`。静态截图不能证明动效验收。
 
 ## 强制安全与路由门禁
 

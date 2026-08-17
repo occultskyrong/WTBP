@@ -5,6 +5,7 @@ repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 required_paths=(
   "README.md"
   "VERSION"
+  "CHANGELOG.md"
   "AGENTS.md"
   "AGENTS.zh-CN.md"
   "CLAUDE.md"
@@ -30,6 +31,7 @@ required_paths=(
   "docs/skill-catalog.md"
   "docs/github-governance.md"
   "docs/governance.md"
+  "docs/versioning.md"
   "knowledge/schemas/taxonomy.yaml"
   "knowledge/schemas/context-schema.yaml"
   "knowledge/schemas/practice-schema.yaml"
@@ -88,6 +90,7 @@ required_paths=(
   "tooling/commit-checklist.sh"
   "tooling/publish-version-tag.sh"
   "tooling/new-task-branch.sh"
+  "tooling/validate-version-log.sh"
 )
 
 for path in "${required_paths[@]}"; do
@@ -122,11 +125,14 @@ bash -n "$repo_root/tooling/run-skill-eval.sh"
 bash -n "$repo_root/tooling/commit-checklist.sh"
 bash -n "$repo_root/tooling/publish-version-tag.sh"
 bash -n "$repo_root/tooling/new-task-branch.sh"
+bash -n "$repo_root/tooling/validate-version-log.sh"
 
 if ! rg -q '^[0-9]+\.[0-9]+\.[0-9]+$' "$repo_root/VERSION"; then
   printf 'VERSION 必须符合 MAJOR.MINOR.PATCH 三段式格式。\n' >&2
   exit 1
 fi
+
+"$repo_root/tooling/validate-version-log.sh"
 
 for issue_form in "$repo_root"/.github/ISSUE_TEMPLATE/*.yml; do
   [[ "${issue_form##*/}" == "config.yml" ]] && continue
