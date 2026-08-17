@@ -169,6 +169,62 @@ sources:
     revision: main；当前会话未固定 commit
     skill_path: skills/emil-design-eng/SKILL.md
     quality_evidence: 2026-08-16 当前 GitHub 页面可见为公开仓库，约 29.7k stars、1.7k forks、47 commits；README 明确列出主 Skill 与动画审查/机会发现等辅助 Skill，但当前会话未做运行时或生成质量验收
+  - id: source.firecrawl-anydoc
+    title: AnyDoc 多格式文档转 Markdown
+    kind: github-reference-skill
+    url: https://github.com/firecrawl/anydoc
+    publisher: firecrawl
+    trust: third-party
+    accessed_on: 2026-08-17
+    adoption: reference-only
+    scope: 将 Word、PowerPoint、Excel、OpenDocument、RTF、EPUB、CSV 和 PDF 转为统一 GitHub-Flavored Markdown，并提供 Agent Skill、Node.js、Python、Rust 与 WASM 入口
+    credential_boundary: 不安装或执行；未来 npx/包管理器使用可能下载二进制或依赖，CLI 可读取本地文件并按参数写出 Markdown，均需消费项目单独授权
+    license: MIT
+    revision: main；当前会话未固定 commit
+    skill_path: skills/convert-documents-to-markdown/SKILL.md
+    quality_evidence: 2026-08-17 当前 GitHub 页面可见为公开仓库，约 16.4k stars、927 forks、109 commits；README 提供格式覆盖、基准表和测试说明，但当前会话未运行转换或复核其基准
+  - id: source.xushanpei-open-file-viewer
+    title: Open File Viewer 文件预览 SDK
+    kind: github-reference-implementation
+    url: https://github.com/xushanpei/open-file-viewer
+    publisher: xushanpei
+    trust: third-party
+    accessed_on: 2026-08-17
+    adoption: reference-only
+    scope: 面向现代 Web 应用的容器化文件预览 SDK，支持 Vanilla JS、React、Vue、Svelte 及 PDF、Office、媒体、压缩包、邮件、绘图、3D、GIS 和工程文件
+    credential_boundary: 不安装或执行；未来 npm/pnpm 安装会引入前端依赖并在浏览器中读取本地或远程文件，复杂格式可能加载 WASM、Worker、WebGL 或服务端渲染器，需消费项目单独授权
+    license: MIT
+    revision: main；当前会话未固定 commit
+    skill_path: unverified（仓库未见独立 Agent Skill）
+    quality_evidence: 2026-08-17 当前 GitHub 页面可见为公开仓库，139 commits、127 forks、0 issues；README 提供多框架示例、插件协议和格式覆盖，但当前会话未安装依赖或运行预览验收
+  - id: source.greensock-gsap-skills
+    title: GSAP 官方 AI Skills
+    kind: github-reference-skill
+    url: https://github.com/greensock/gsap-skills
+    publisher: greensock
+    trust: first-party
+    accessed_on: 2026-08-17
+    adoption: reference-only
+    scope: GSAP 官方 Agent Skills，覆盖核心 Tween、Timeline、ScrollTrigger、插件、React、Vue、Svelte、性能和响应式/reduced-motion 实现
+    credential_boundary: 不安装或执行；未来 npx skills 或复制 skills 目录可能写入 Agent Skill 目录，应用时还可能修改项目动画代码并引入 gsap/@gsap/react，需消费项目单独授权
+    license: MIT
+    revision: main；当前会话未固定 commit
+    skill_path: skills/gsap-core/SKILL.md（同仓库另有 gsap-timeline、gsap-scrolltrigger、gsap-plugins、gsap-react 等）
+    quality_evidence: 2026-08-17 当前 GitHub 页面可见为公开仓库，约 13.7k stars、803 forks、24 commits；仓库自称 GSAP 官方 Skills，包含多 Agent 安装入口和 8 个专项 Skill，但当前会话未运行或验证实现质量
+  - id: source.eladrich-pixel2style2pixel
+    title: pixel2style2pixel StyleGAN 图像翻译参考实现
+    kind: github-reference-implementation
+    url: https://github.com/eladrich/pixel2style2pixel
+    publisher: eladrich
+    trust: third-party
+    accessed_on: 2026-08-17
+    adoption: reference-only
+    scope: CVPR 2021 pSp 框架及官方实现，用编码器将输入图像编码到StyleGAN扩展W+潜空间，支持图像反演、正面化、条件图像合成、超分辨率和风格混合
+    credential_boundary: 不克隆、安装或执行；未来运行需要下载代码依赖、预训练权重和数据，通常使用NVIDIA GPU/CUDA，也可能接入Weights & Biases并要求外部账号或API key，需单独授权和审查
+    license: MIT（仓库页面）；预训练权重、数据集和依赖的许可需分别核验
+    revision: master；当前会话未固定 commit；文档更新记录主要至 2021-07
+    skill_path: unverified（仓库未见 Agent Skill）
+    quality_evidence: 2026-08-17 当前 GitHub 页面可见为公开研究实现，58 commits、577 forks、11 issues；README标注CVPR 2021官方实现并提供训练/推理/指标脚本，但当前会话未下载权重或复现实验，近期维护状态未确认
   - id: source.leonxlnx-taste-skill
     title: Taste Skill 反模板化前端设计能力
     kind: github-reference-skill
