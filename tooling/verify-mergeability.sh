@@ -31,6 +31,17 @@ repo_git fetch --quiet "$remote_name" "$base_branch" || fail "无法刷新 ${rem
 base_ref="${remote_name}/${base_branch}"
 repo_git rev-parse --verify "${base_ref}^{commit}" >/dev/null 2>&1 || fail "无法解析默认分支基线：$base_ref"
 
+merge_head="$(repo_git rev-parse --verify MERGE_HEAD 2>/dev/null || true)"
+if [[ -n "$merge_head" ]]; then
+  if repo_git diff --name-only --diff-filter=U | rg -q '.'; then
+    fail '合并进行中仍有未解决冲突；请先解决所有 U 状态文件'
+  fi
+  base_head="$(repo_git rev-parse "${base_ref}^{commit}")"
+  [[ "$merge_head" == "$base_head" ]] || fail "合并进行中的基线不是最新 ${base_ref}；请中止并重新合并最新默认分支"
+  printf '可合并性预检：通过（已解决与最新 %s 的合并，等待创建合并提交）\n' "$base_ref"
+  exit 0
+fi
+
 set +e
 merge_output="$(repo_git merge-tree --write-tree "$base_ref" HEAD 2>&1)"
 merge_status=$?

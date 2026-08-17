@@ -1,4 +1,4 @@
-.PHONY: validate validate-ai-companions validate-skill-evals validate-skill-routes validate-skill-index test-wtbp-router test-secret-scan verify-mergeability skill-eval ske commit-checklist commit-checklist-range review-staged review-range review-issue install-hooks
+.PHONY: validate validate-ai-companions validate-skill-evals validate-skill-routes validate-skill-index test-wtbp-router test-secret-scan verify-mergeability return-to-default skill-eval ske commit-checklist commit-checklist-range review-staged review-range review-issue install-hooks
 
 validate:
 	./tooling/validate-repository.sh
@@ -23,6 +23,9 @@ test-secret-scan:
 
 verify-mergeability:
 	./tooling/verify-mergeability.sh
+
+return-to-default:
+	./tooling/return-to-default-branch.sh
 
 skill-eval:
 	@test -n "$(SKILL_ID)" || (echo "必须提供 SKILL_ID，例如 make skill-eval SKILL_ID=practice-search" >&2; exit 2)
