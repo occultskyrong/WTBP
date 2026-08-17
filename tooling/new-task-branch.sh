@@ -37,6 +37,8 @@ case "$current_branch" in
   *) fail "当前分支为 $current_branch；请先切换到默认分支 $base_branch，再创建新任务分支" ;;
 esac
 
+WTBP_BASE_BRANCH="$base_branch" "$repo_root/tooling/sync-default-branch.sh" origin || fail "无法同步默认分支 $base_branch"
+
 base_ref="origin/$base_branch"
 git rev-parse --verify "refs/remotes/$base_ref" >/dev/null 2>&1 || fail "找不到远端基线：$base_ref；请先同步远端分支"
 

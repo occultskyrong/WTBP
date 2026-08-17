@@ -68,7 +68,7 @@ the five layers, minimum Skill contract, registry graph, G0–G6 gates, lifecycl
 
 ## Commit gate
 
-Before a commit, run `make commit-checklist`. It refreshes the default branch and verifies mergeability, then runs repository
+Before staging and committing, run `make sync-default-branch`; it refreshes `origin/<default>` and fast-forwards the local default-branch ref when no other worktree owns it. Before a commit, run `make commit-checklist`. It reuses that synchronized base and verifies mergeability, then runs repository
 validation, staged-content review, sensitive-information scanning, `skill-up` contract review for changed Skills or registered
 Eval assets, quality gates, and the paired `VERSION`/`CHANGELOG.md` check. See
 [docs/commit-checklist.md](docs/commit-checklist.md).
@@ -79,16 +79,14 @@ When the user says “commit” (or an equivalent Chinese instruction such as �
 
 1. Inspect the worktree, staged scope, current branch, task scope, remote divergence, and the intended Conventional Commit message.
 2. If the current branch is the default branch or its task scope is unclear, stop before staging/committing and create a clean task branch with `tooling/new-task-branch.sh`. Never auto-stash or migrate existing changes.
-3. Run `make commit-checklist`. It refreshes the default branch and checks mergeability without modifying the worktree. If any
+3. Run `make sync-default-branch` before staging and committing. It refreshes the remote default branch and fast-forwards the local default-branch ref without switching away from a task branch. If another worktree owns the default branch, it reports the owner and does not mutate that worktree; the refreshed remote ref remains the mergeability baseline.
+4. Run `make commit-checklist`. It reuses the refreshed default branch and checks mergeability without modifying the worktree. If any
    check fails, stop; do not create a commit or push.
-4. Create the commit with the validated scope and a Chinese Conventional Commit summary.
-5. Push the current task branch to its configured remote without force-push or history rewriting. The `pre-push` hook repeats
+5. Create the commit with the validated scope and a Chinese Conventional Commit summary.
+6. Push the current task branch to its configured remote without force-push or history rewriting. The `pre-push` hook repeats
    the mergeability preflight after refreshing the default branch.
-6. After a successful push, run `make return-to-default`. It returns a clean, fully pushed task worktree to the latest default
-   branch only when that branch is not checked out by another worktree; otherwise it reports a safe skip. This is branch hygiene,
-   not a substitute for the mergeability preflight. The next independent task must start from a clean, current default-branch
-   worktree.
-7. Verify the remote branch and branch-return result, then report the commit and push results separately. Creating a PR is not
+7. After a successful push, run `make return-to-default`. It first refreshes the default branch, then switches this clean, fully pushed worktree to it and fast-forwards it (`pull --ff-only` equivalent). If another worktree owns the default branch, it must report the owner as a safe skip; never force a switch or mutate that other worktree. This is branch hygiene, not a substitute for the mergeability preflight.
+8. Verify the remote branch and branch-return result, then report the commit and push results separately. Creating a PR is not
    part of this workflow and occurs only on a separate explicit instruction. After a version-changing update is merged to
    `master`, the successful repository-check workflow creates and pushes the immutable `vX.Y.Z` tag; do not create a release
    tag from a task branch.

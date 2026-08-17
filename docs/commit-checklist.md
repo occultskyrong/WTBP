@@ -14,24 +14,25 @@ Git Hook 会自动调用该入口；CI 在检查提交范围时也使用同一�
 
 执行顺序如下：
 
-1. `make verify-mergeability`：刷新默认分支，以 `git merge-tree` 无落盘检查当前任务分支能否与最新默认分支合并；
+1. `make sync-default-branch`：暂存和提交前刷新 `origin/<默认分支>`；若默认分支不被其他工作树占用，则安全快进本地默认分支引用。任务分支不会因此被切换或自动合并；若另一工作树占用默认分支，必须报告路径且不得跨工作树 `pull`。
+2. `make verify-mergeability`：复用已刷新默认分支，以 `git merge-tree` 无落盘检查当前任务分支能否与最新默认分支合并；
    网络、凭据、基线解析或合并性检查失败都必须停止。该检查也会在 `pre-push` Hook 中重复执行。
    如果正在创建合并提交，则必须没有任何 `U` 状态文件，且 `MERGE_HEAD` 必须就是最新默认分支；此时检查以已解决的合并结果为准。
-2. `make validate`：检查仓库结构、目录登记、模式、模板和 Skill Eval 契约。
-3. `make review-staged`：只审查本次暂存内容，检查对象字段、章节、目录关系、补充 Eval 和安全边界。
-4. `tooling/scan-secrets.sh`：扫描新增内容中的私钥、云访问密钥、GitHub/Slack/Google Token、JWT、带凭据连接串、
+3. `make validate`：检查仓库结构、目录登记、模式、模板和 Skill Eval 契约。
+4. `make review-staged`：只审查本次暂存内容，检查对象字段、章节、目录关系、补充 Eval 和安全边界。
+5. `tooling/scan-secrets.sh`：扫描新增内容中的私钥、云访问密钥、GitHub/Slack/Google Token、JWT、带凭据连接串、
    疑似密码/密钥赋值和高风险凭据文件名。扫描器只输出文件和命中类型，不输出敏感值；示例凭据必须使用明确的
    `example`、`sample`、`placeholder` 等占位词。二进制变更默认不能通过文本扫描，需改为可审查的文本或单独评估。
-5. Skill/Eval 变更检查：发现新增或修改 `skills/*/SKILL.md`，或修改 `knowledge/evals/<skill-id>/` 下已登记的
+6. Skill/Eval 变更检查：发现新增或修改 `skills/*/SKILL.md`，或修改 `knowledge/evals/<skill-id>/` 下已登记的
    Eval、通用用例或 Skill-up 原生用例/配置时，必须对受影响 Skill 执行 `make ske SKILL_ID=<skill-id>`。Skill 变更
    仍必须同步修改对应 Eval；Eval 的 `runner` 必须为 `skill-up`，行为门槛不得低于 `0.90`。默认 dry-run 也必须由
    skill-up 加载 Runner 配置、Skill、用例和断言。
-6. 质量门禁检查：Skill Eval 的契约覆盖率必须为 100%；用例至少 3 次运行，并包含正向、反向和边界，
+7. 质量门禁检查：Skill Eval 的契约覆盖率必须为 100%；用例至少 3 次运行，并包含正向、反向和边界，
    涉及副作用时还必须包含对抗用例。真实行为评测的默认通过率门槛为 90%。
-7. 版本、版本日志、提交消息和范围一致性检查：核对根目录 `VERSION` 是否符合三段式版本和本次变更级别。修改
+8. 版本、版本日志、提交消息和范围一致性检查：核对根目录 `VERSION` 是否符合三段式版本和本次变更级别。修改
    `VERSION` 时必须同步修改根目录 [`CHANGELOG.md`](../CHANGELOG.md)，并新增当前 `### [X.Y.Z]` 条目；范围模式还会
    检查提交标题、长度和 MAJOR 变更说明。
-8. 版本 Tag 发布计划：版本未变则不发布；版本变更时，清单记录预期 `vX.Y.Z`。Tag 不在本地 Hook 或任务分支
+9. 版本 Tag 发布计划：版本未变则不发布；版本变更时，清单记录预期 `vX.Y.Z`。Tag 不在本地 Hook 或任务分支
    阶段创建；版本变更合并到 `master` 且仓库验证通过后，由 GitHub Action 创建并推送不可变注释 Tag。
 
 执行清单检查的是“命令确实执行并通过”，不依赖人工勾选。评测结果、凭据、缓存和报告仍保留在本机，
@@ -39,9 +40,9 @@ Git Hook 会自动调用该入口；CI 在检查提交范围时也使用同一�
 
 ## 推送后的分支归位
 
-`make return-to-default` 不属于提交前清单，也不应放进 Git Hook；它只能在任务分支已成功推送后执行。该命令会核验工作区
-干净、当前 HEAD 与远端任务分支一致，并将默认分支 fast-forward 到最新远端状态后再切换。默认分支已被另一工作树使用时，
-命令以“安全跳过”结束；不得为了切换而关闭工作树、stash 改动或改写历史。
+`make return-to-default` 不属于提交前清单，也不应放进 Git Hook；它只能在任务分支已成功推送后执行。该命令会先刷新默认分支，核验工作区
+干净、当前 HEAD 与远端任务分支一致，再切换到默认分支并以 fast-forward 同步（等价于 `git pull --ff-only origin <默认分支>`）。默认分支已被另一工作树使用时，
+命令必须输出占用路径并以“安全跳过”结束；不得为了切换而关闭工作树、stash 改动或改写历史。
 
 归位减少“后续改动误提交到旧任务分支”的风险；PR 是否冲突仍由提交前和 `pre-push` 的
 `make verify-mergeability` 决定。

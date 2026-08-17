@@ -42,16 +42,18 @@ done < <(diff_names ACMRD)
 [[ ${#changed_files[@]} -gt 0 ]] || { printf '提交执行清单：跳过（没有变更）\n'; exit 0; }
 
 if [[ "$mode" == staged ]]; then
-  printf '%s\n' '提交执行清单：1/8 与最新默认分支的可合并性预检'
+  printf '%s\n' '提交执行清单：1/9 同步默认分支'
+  make sync-default-branch
+  printf '%s\n' '提交执行清单：2/9 与最新默认分支的可合并性预检'
   make verify-mergeability
 fi
 
-printf '%s\n' '提交执行清单：2/8 仓库结构校验（make validate）'
+printf '%s\n' '提交执行清单：3/9 仓库结构校验（make validate）'
 make validate
-printf '%s\n' '提交执行清单：3/8 内容审查'
+printf '%s\n' '提交执行清单：4/9 内容审查'
 if [[ "$mode" == staged ]]; then make review-staged; else make review-range BASE_SHA="$base_ref" HEAD_SHA="$head_ref"; fi
 
-printf '%s\n' '提交执行清单：4/8 敏感信息与高风险文件扫描'
+printf '%s\n' '提交执行清单：5/9 敏感信息与高风险文件扫描'
 if [[ "$mode" == staged ]]; then
   "$repo_root/tooling/scan-secrets.sh"
 else
@@ -75,7 +77,7 @@ for file in "${changed_files[@]}"; do
   esac
 done
 
-printf '%s\n' '提交执行清单：5/8 Skill-Up 质量审查（默认 dry-run）'
+printf '%s\n' '提交执行清单：6/9 Skill-Up 质量审查（默认 dry-run）'
 skill_eval_runs="${SKILL_EVAL_RUNS:-3}"
 [[ "$skill_eval_runs" =~ ^[3-9][0-9]*$ ]] || fail 'Skill 评测重复运行次数不得少于 3 次'
 if [[ ${#skill_ids[@]} -eq 0 ]]; then
@@ -94,7 +96,7 @@ else
   done < <(printf '%s\n' "${skill_ids[@]}" | sort -u)
 fi
 
-printf '%s\n' '提交执行清单：6/8 质量门禁'
+printf '%s\n' '提交执行清单：7/9 质量门禁'
 if [[ ${#skill_ids[@]} -gt 0 ]]; then
   printf '  - 契约覆盖率：100%%；最少重复运行：%s 次\n' "$skill_eval_runs"
   if [[ "${WTBP_REQUIRE_BEHAVIOR_EVAL:-false}" == true || "${SKILL_EVAL_DRY_RUN:-true}" == false ]]; then
@@ -330,7 +332,7 @@ check_commit_messages() {
   done < <(git rev-list --first-parent --no-merges "$base_ref..$head_ref")
 }
 
-printf '%s\n' '提交执行清单：7/8 版本、提交消息与范围一致性检查'
+printf '%s\n' '提交执行清单：8/9 版本、提交消息与范围一致性检查'
 if [[ "$mode" == range ]] && git rev-parse --verify "${base_ref}^{commit}" >/dev/null 2>&1; then
   check_range_version_history
   printf '  - 范围版本历史：通过（%s -> %s）\n' "$base_version" "$current_version"
@@ -360,7 +362,7 @@ fi
 
 check_commit_messages
 
-printf '%s\n' '提交执行清单：8/8 版本 Tag 发布计划'
+printf '%s\n' '提交执行清单：9/9 版本 Tag 发布计划'
 if [[ "$current_version" == "$base_version" ]]; then
   printf '  - VERSION 未变化，不计划发布 Tag\n'
 else

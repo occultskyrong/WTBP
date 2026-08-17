@@ -72,15 +72,16 @@ wtbp list --domain design # 按领域浏览能力
 wtbp external --domain design # 浏览外部能力及采用边界
 wtbp show skill-router   # 查看本地 Skill 或外部能力卡
 make commit-checklist  # 执行完整提交清单
+make sync-default-branch # 提交前刷新主线并安全同步本地默认分支引用
 make install-hooks     # 启用提交门禁（每个克隆仓库一次）
 make review-staged     # 审查暂存内容
 make verify-mergeability # 刷新默认分支并检查任务分支可合并性
 make return-to-default # 任务分支推送成功后，安全切回并同步默认分支
 ```
 
-提交前必须通过 `make commit-checklist`；它会先刷新默认分支并检查可合并性，再执行 `make validate`、内容审查、变更 Skill
+暂存和提交前先运行 `make sync-default-branch`，再通过 `make commit-checklist`；前者刷新主线并在安全时同步本地默认分支引用，后者检查可合并性并执行 `make validate`、内容审查、变更 Skill
 或已登记 Eval 资产对应的 `ske` 契约评测、质量门禁和 `VERSION` 检查。详细规则见 [`docs/commit-checklist.md`](docs/commit-checklist.md)。
-任务分支推送成功后执行 `make return-to-default`，可避免后续工作继续落在旧分支；多工作树中默认分支已被另一工作树使用时会安全跳过。
+任务分支推送成功后必须执行 `make return-to-default`：它会切换到 `master` 并 fast-forward 同步；多工作树中默认分支已被另一工作树使用时会报告路径并安全跳过。
 版本变更进入 `master` 且仓库验证通过后，工作流会自动发布不可变 `vX.Y.Z` Tag；可选 PR 的比较规则与版本规则见
 [`docs/commit-conventions.md`](docs/commit-conventions.md)。
 提交、推送、可选 PR 和 GitHub 治理细节见：

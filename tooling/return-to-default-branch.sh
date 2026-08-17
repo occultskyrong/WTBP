@@ -27,7 +27,7 @@ if [[ -n "$(repo_git status --porcelain)" ]]; then
   fail '工作区或暂存区存在未提交内容；不得自动切换分支'
 fi
 
-repo_git fetch --quiet "$remote_name" "$base_branch" || fail "无法刷新 ${remote_name}/${base_branch}；请检查网络和凭据后重试"
+"$repo_root/tooling/sync-default-branch.sh" "$remote_name" || fail '无法刷新并同步默认分支'
 base_ref="${remote_name}/${base_branch}"
 repo_git rev-parse --verify "${base_ref}^{commit}" >/dev/null 2>&1 || fail "无法解析默认分支基线：$base_ref"
 
