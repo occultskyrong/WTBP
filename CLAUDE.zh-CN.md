@@ -42,5 +42,4 @@
 决策类任务说明场景、缺失变量、Practice ID、候选方案与取舍、建议、证据、剩余风险和验证方法。改动类任务还要
 说明范围、实际执行的命令及结果、未验证项和下一步授权。
 
-提交前运行 `make commit-checklist`。任务分支推送成功后运行 `make return-to-default`；多工作树中默认分支已由另一工作树
-占用时，安全跳过属于预期结果。提交和 PR 的说明使用中文；工具标识、路径、ID 和 Conventional Commit 类型保持英文。
+暂存和提交前依次运行 `make sync-default-branch`、`make commit-checklist`。任务分支推送成功后运行 `make return-to-default`；它会刷新默认分支、将当前干净工作树切换到该分支并快进同步。多工作树中默认分支已由另一工作树占用时，安全跳过必须说明占用工作树路径。提交和 PR 的说明使用中文；工具标识、路径、ID 和 Conventional Commit 类型保持英文。
