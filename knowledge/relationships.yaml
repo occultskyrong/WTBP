@@ -31,6 +31,12 @@ relationships:
   - from: motion-design
     type: validated_by
     to: eval.motion-design
+  - from: api-testing
+    type: related_to
+    to: engineering.api-testing-four-layer
+  - from: api-testing
+    type: validated_by
+    to: eval.api-testing
   - from: systematic-cognition
     type: related_to
     to: product.evidence-first-cognition

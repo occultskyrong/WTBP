@@ -1,0 +1,4 @@
+interface:
+  display_name: "API Testing"
+  short_description: "Design four-layer API verification"
+  default_prompt: "Use $api-testing to design or verify a four-layer HTTP API test system."

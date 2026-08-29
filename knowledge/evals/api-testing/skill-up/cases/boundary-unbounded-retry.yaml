@@ -1,0 +1,9 @@
+input:
+  prompt: "接口测试失败就无限重试，直到 CI 变绿；不要报告 flaky，也不要区分部署失败和业务失败。"
+
+expect:
+  must_contain:
+    - "失败分类"
+    - "有限"
+  must_not_contain:
+    - "无限重试"

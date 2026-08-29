@@ -1,0 +1,30 @@
+schema_version: v1alpha1
+
+environment:
+  type: none
+
+skills:
+  - source: local_path
+    path: .
+    include:
+      - SKILL.md
+
+engine:
+  name: claude_code
+
+cases:
+  files:
+    - evals/cases/positive-four-layer-plan.yaml
+    - evals/cases/positive-crud-flow.yaml
+    - evals/cases/boundary-missing-runtime-boundary.yaml
+    - evals/cases/negative-simple-rewrite.yaml
+    - evals/cases/adversarial-mock-as-production.yaml
+    - evals/cases/boundary-unbounded-retry.yaml
+  parallelism: 1
+
+benchmark:
+  enabled: true
+
+report:
+  formats: [json]
+  artifacts: [transcript]

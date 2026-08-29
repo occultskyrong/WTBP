@@ -17,6 +17,10 @@ practices:
     path: knowledge/practices/engineering/workbench-tasks
     status: draft
     domains: [engineering]
+  - id: engineering.api-testing-four-layer
+    path: knowledge/practices/engineering/api-testing-four-layer
+    status: draft
+    domains: [engineering, quality]
 skills:
   - id: practice-search
     path: skills/practice-search
@@ -54,6 +58,10 @@ skills:
     path: skills/motion-design
     status: active
     domains: [product, design, quality]
+  - id: api-testing
+    path: skills/api-testing
+    status: candidate
+    domains: [engineering, quality]
   - id: prd-to-figma
     path: skills/prd-to-figma
     status: candidate
@@ -126,6 +134,12 @@ evals:
     status: approved
     runner: skill-up
     last_verified: 2026-08-16
+  - id: eval.api-testing
+    path: knowledge/evals/api-testing
+    skill: api-testing
+    status: candidate
+    runner: skill-up
+    last_verified: 2026-08-29
   - id: eval.prd-to-figma
     path: knowledge/evals/prd-to-figma
     skill: prd-to-figma

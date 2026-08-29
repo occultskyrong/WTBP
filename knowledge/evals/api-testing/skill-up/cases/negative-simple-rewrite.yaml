@@ -1,0 +1,9 @@
+input:
+  prompt: "把这句接口错误提示改得更简短：参数不能为空。"
+
+expect:
+  must_contain:
+    - "不能为空"
+  must_not_contain:
+    - "L1"
+    - "L2"

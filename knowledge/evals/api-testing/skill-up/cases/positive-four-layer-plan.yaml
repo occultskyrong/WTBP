@@ -1,0 +1,12 @@
+input:
+  prompt: "为一个后端 HTTP API 设计四层测试体系，分别证明部署可达、真实主流程、Mock 逻辑完整和 CRUD 业务链闭环，并给出数据隔离、报告和 CI 门禁。"
+
+expect:
+  must_contain:
+    - "L1"
+    - "L2"
+    - "L3"
+    - "L4"
+    - "Mock"
+    - "真实"
+    - "CI"
