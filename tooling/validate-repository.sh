@@ -27,6 +27,7 @@ required_paths=(
   "docs/document-language-policy.md"
   "docs/skill-routing.md"
   "docs/network-first-capability-governance.md"
+  "docs/security-validation.md"
   "docs/figma-skill-architecture.md"
   "docs/skill-catalog.md"
   "docs/github-governance.md"
@@ -84,6 +85,10 @@ required_paths=(
   "tooling/test-wtbp-router.sh"
   "tooling/scan-secrets.sh"
   "tooling/test-secret-scan.sh"
+  "tooling/security-check.py"
+  "tooling/security-check.sh"
+  "tooling/test-security-check.sh"
+  "tooling/test-install-security-gate.sh"
   "tooling/sync-default-branch.sh"
   "tooling/verify-mergeability.sh"
   "tooling/return-to-default-branch.sh"
@@ -117,6 +122,9 @@ bash -n "$repo_root/tooling/generate-skill-catalog.sh"
 bash -n "$repo_root/tooling/test-wtbp-router.sh"
 bash -n "$repo_root/tooling/scan-secrets.sh"
 bash -n "$repo_root/tooling/test-secret-scan.sh"
+bash -n "$repo_root/tooling/security-check.sh"
+bash -n "$repo_root/tooling/test-security-check.sh"
+bash -n "$repo_root/tooling/test-install-security-gate.sh"
 bash -n "$repo_root/tooling/sync-default-branch.sh"
 bash -n "$repo_root/tooling/verify-mergeability.sh"
 bash -n "$repo_root/tooling/return-to-default-branch.sh"
@@ -240,6 +248,9 @@ done
 "$repo_root/tooling/generate-skill-catalog.sh" --check
 "$repo_root/tooling/test-wtbp-router.sh"
 "$repo_root/tooling/test-secret-scan.sh"
+python3 -B -c "from pathlib import Path; p=Path('$repo_root/tooling/security-check.py'); compile(p.read_text(), str(p), 'exec')"
+"$repo_root/tooling/test-security-check.sh"
+"$repo_root/tooling/test-install-security-gate.sh"
 
 if [[ -d "$repo_root/knowledge/practices" ]]; then
   while IFS= read -r practice_file; do

@@ -28,7 +28,7 @@ Route first; do not merge every Skill into this Skill or load every `SKILL.md`.
 
 ## Boundaries
 
-- The router never executes a selected Skill. Candidate discovery never installs. Installation requires an explicit `wtbp install <skill-id>` after the current session confirms a single separately registered external GitHub HTTPS route that is active, pinned to a 40-character commit, and explicitly marked `auto_install: true`.
+- The router never executes a selected Skill. Candidate discovery never installs. Installation requires an explicit `wtbp install <skill-id>` after the current session confirms a single separately registered external GitHub HTTPS route that is active, pinned to a 40-character commit, explicitly marked `auto_install: true`, and passed `wtbp security-check <local-candidate-directory>` with no blocking or review findings. Project solutions outside this installer have the same mandatory security-check gate before import, dependency installation, or execution.
 - Never install arbitrary URLs, unpinned revisions, `candidate`, `stale`, or `deprecated` routes automatically. Do not overwrite non-WTBP Skill links.
 - Do not route simple translation, rewriting, or one-off editing tasks merely because they contain a generic keyword.
 - Do not select `stale` or `deprecated` routes by default.

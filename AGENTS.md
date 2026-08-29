@@ -55,6 +55,10 @@ Skill index is the only source for local Skill tags and cards; the external capa
 external capability cards; routes only match tasks and separately managed installations. Do not load all templates,
 evidence, or Skill references merely because their directories exist.
 
+Before installing, importing, copying, adding dependencies for, or executing any external Skill or project solution,
+run `wtbp security-check <fixed-local-source-directory>`. A missing report, non-zero result, or review finding is a
+fail-closed stop; only a clean result permits the separately authorized installation or adoption step.
+
 Apply [knowledge/skill-framework.md](knowledge/skill-framework.md) to every Skill change or execution. It defines
 the five layers, minimum Skill contract, registry graph, G0–G6 gates, lifecycle statuses, and fail-closed rules.
 

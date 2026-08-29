@@ -47,6 +47,17 @@ store_root="${WTBP_SKILL_STORE:-$HOME/.local/share/wtbp/skills}"
 install_root="$store_root/$skill_id/$commit"
 skill_root="$install_root/$skill_path"
 
+run_security_gate() {
+  local candidate_root="$1"
+  local security_report
+
+  if ! security_report="$(bash "$repo_root/tooling/security-check.sh" "$candidate_root" --format json)"; then
+    printf '安全校验报告（已脱敏）：\n%s\n' "$security_report" >&2
+    fail '安全校验未通过，拒绝安装；阻断或人工复核项必须先处理'
+  fi
+  printf '安全校验通过：%s\n' "$candidate_root"
+}
+
 if [[ ! -d "$install_root" ]]; then
   mkdir -p "$(dirname "$install_root")"
   temporary_root="$(mktemp -d "$(dirname "$install_root")/.${skill_id}.${commit}.XXXXXX")"
@@ -56,8 +67,12 @@ if [[ ! -d "$install_root" ]]; then
   git -C "$temporary_root/repository" checkout --detach "$commit"
   [[ "$(git -C "$temporary_root/repository" rev-parse HEAD)" == "$commit" ]] || fail '下载内容与登记提交不一致'
   [[ -f "$temporary_root/repository/$skill_path/SKILL.md" ]] || fail '登记的 skill_path 不包含 SKILL.md'
+  run_security_gate "$temporary_root/repository"
   mv "$temporary_root/repository" "$install_root"
   trap - EXIT
+else
+  [[ "$(git -C "$install_root" rev-parse HEAD 2>/dev/null)" == "$commit" ]] || fail '已安装内容与登记提交不一致'
+  run_security_gate "$install_root"
 fi
 
 [[ -f "$skill_root/SKILL.md" ]] || fail '已安装内容不包含 SKILL.md'

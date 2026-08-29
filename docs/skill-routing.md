@@ -56,7 +56,8 @@ wtbp external --domain design
 `direct-use`、`adapt`、`compose`、`reference-only` 还是 `build-local`，再加载唯一明确的本地候选英文 `SKILL.md`。
 `local-adapter` 外部能力必须保留本地 Skill 的项目契约与门禁；`manual-optional` 外部能力不会安装。只有唯一命中的外部
 安装路由同时满足已登记、`active`、GitHub HTTPS 来源、固定 40 位提交、声明权限和 `auto_install: true` 时，当前会话确认后
-才允许运行 `wtbp install <skill-id>`；查询命令本身不会自动安装。
+才允许运行 `wtbp install <skill-id>`；查询命令本身不会自动安装。安装器还会在新下载内容落盘前、以及复用已有缓存前，强制运行
+[`security-validation.md`](security-validation.md)；安全校验失败、需人工复核或没有固定提交时一律拒绝安装。
 
 ## 当前会话完成语义路由
 
@@ -101,8 +102,9 @@ wtbp install <skill-id>
 1. 先描述问题目标、范围、约束和所需证据。
 2. 先检索 `knowledge/external-capabilities.yaml` 与可追溯来源，判断是否可以直接使用、适配、组合或仅作参考。
 3. 再读取 `knowledge/skill-routes.yaml`，按触发条件筛选已有本地 Skill；命中时读取对应 `SKILL.md`，不要复制一份新的 Skill。
-4. 只有受控外部安装路由才可在来源、版本、安装范围、权限、许可证和验证通过且明确授权后运行 `wtbp install <skill-id>`；外部能力卡不能触发安装。
-5. 只有既有能力明确不适用、任务具备稳定重复流程且可编写 Eval 时，才提出新建 Skill。
+4. 只有受控外部安装路由才可在来源、版本、安装范围、权限、许可证和验证通过且明确授权后运行 `wtbp install <skill-id>`；安装前必须对固定到本地的候选源码运行 `wtbp security-check <目录>`，外部能力卡不能触发安装。
+5. 项目解决方案若不走 WTBP 安装器，也必须在导入、复制、依赖安装或执行前对固定版本的本地来源运行 `wtbp security-check <目录>`；没有安全报告不得采用。
+6. 只有既有能力明确不适用、任务具备稳定重复流程且可编写 Eval 时，才提出新建 Skill。
 
 ## 外部 Skill 登记要求
 
