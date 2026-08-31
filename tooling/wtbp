@@ -31,6 +31,7 @@ usage() {
   wtbp show <skill-id>               # 查看 Skill 能力卡
   wtbp external                      # 列出已登记的外部能力及采用边界
   wtbp "<问题或任务>"                # 输出本地 Skill 与外部能力候选及可解释匹配依据
+  wtbp security-check <path>          # 对候选 Skill/项目目录执行只读静态安全校验
   wtbp install <skill-id>            # 安装已登记的外部 Skill
 
 当前会话负责基于候选能力卡进行语义判断；本命令不会启动第二个 LLM 会话。
@@ -343,6 +344,7 @@ resolve_external_capabilities() {
     printf '  命中检索字段：%s\n' "$matched"
     printf '  下一步：'
     external_next_step "$adoption" "$capability_id"
+    printf '  安全门禁：先运行 wtbp security-check <本地来源目录>；阻断或待复核时不得安装、执行或注入凭据。\n'
   done <<< "$matches"
 }
 
@@ -413,6 +415,7 @@ resolve_routes() {
   fi
 
   resolve_external_capabilities "$query"
+  printf '外部候选安全门禁：候选落地到本地后，先运行 wtbp security-check <本地来源目录>；查询本身不会下载或执行候选。\n'
 }
 
 case "${1:-}" in
@@ -447,6 +450,11 @@ case "${1:-}" in
   resolve)
     [[ $# -eq 2 && -n "$2" ]] || { usage >&2; exit 2; }
     resolve_routes "$2"
+    ;;
+  security-check)
+    [[ $# -ge 2 && -n "$2" ]] || { usage >&2; exit 2; }
+    shift
+    bash "$repo_root/tooling/security-check.sh" "$@"
     ;;
   install)
     [[ $# -eq 2 && -n "$2" ]] || { usage >&2; exit 2; }

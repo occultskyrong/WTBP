@@ -28,6 +28,7 @@ resolve_source="$(sed -n '/^resolve_routes()/,/^case /p' "$router")"
 [[ "$resolve_source" != *'install-skill.sh'* ]] || fail '候选查询不应直接安装外部 Skill'
 help_output="$($router --help)"
 assert_contains "$help_output" '候选查询不会自动安装、执行 Skill 或访问外部服务'
+assert_contains "$help_output" 'security-check <path>'
 
 fallback_output="$($router "$query")"
 assert_contains "$fallback_output" 'figma-evolve'
@@ -74,5 +75,6 @@ curation_output="$($router 'wtbp，收集这个 GitHub 项目，后续搜索时�
 assert_contains "$curation_output" 'external-capability-curation'
 assert_contains "$curation_output" '命中关键词：收集, GitHub 项目'
 assert_contains "$curation_output" '该命令不会替你执行 Skill'
+assert_contains "$curation_output" '外部候选安全门禁'
 
 printf 'WTBP 路由测试：通过（前缀归一化、本地与外部能力候选、在线发现候选与当前会话语义边界）\n'

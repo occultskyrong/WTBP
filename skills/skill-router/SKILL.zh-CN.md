@@ -28,7 +28,7 @@ description: 为用户请求发现并路由到最小适用的 WTBP Skill。当�
 
 ## 边界
 
-- 路由器绝不执行选中的 Skill。候选发现绝不安装；只有当前会话确认唯一命中的、另行登记的、活跃的、GitHub HTTPS 来源、固定 40 位提交且明确标记 `auto_install: true` 的外部路由后，才可显式运行 `wtbp install <skill-id>`。
+- 路由器绝不执行选中的 Skill。候选发现绝不安装；只有当前会话确认唯一命中的、另行登记的、活跃的、GitHub HTTPS 来源、固定 40 位提交、明确标记 `auto_install: true` 且通过 `wtbp security-check <本地候选目录>`、没有阻断或待复核发现的外部路由后，才可显式运行 `wtbp install <skill-id>`。不走该安装器的项目解决方案，在导入、安装依赖或执行前也必须经过同一安全校验门禁。
 - 不自动安装任意 URL、未固定版本、`candidate`、`stale` 或 `deprecated` 路由，也不覆盖非 WTBP 管理的 Skill 链接。
 - 不要因为请求含有泛化关键词，就把简单翻译、改写或一次性编辑路由为 Skill。
 - 不默认选择 `stale` 或 `deprecated` 路由。
