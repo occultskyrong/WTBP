@@ -22,6 +22,7 @@ cases:
     - evals/cases/negative-simple-rewrite.yaml
     - evals/cases/boundary-ambiguous-request.yaml
     - evals/cases/boundary-controlled-external-install.yaml
+    - evals/cases/boundary-security-check-required.yaml
     - evals/cases/boundary-manual-optional-external-capability.yaml
     - evals/cases/boundary-no-match-search-before-build.yaml
     - evals/cases/positive-online-discovery-after-local-miss.yaml

@@ -25,6 +25,9 @@ G0–G6、Eval 和版本管理；外部能力只是可追溯的候选，必须�
 检索官方来源、外部 Skill 与参考实现
           │
           ▼
+固定版本并执行本地安全校验
+          │
+          ▼
 核验来源、许可、版本、权限、输入输出和证据边界
           │
           ├─ 已能满足且无项目专属流程 ─────► 直接使用（direct-use）
@@ -68,6 +71,7 @@ G0–G6、Eval 和版本管理；外部能力只是可追溯的候选，必须�
 wtbp "为 Figma 组件建立 Code Connect 映射"
 wtbp external --domain design
 wtbp show figma-code-connect
+wtbp security-check /path/to/unpacked-candidate
 ```
 
 查询会分别列出“候选本地 Skill”和“可复用的外部能力候选”。当前 Agent/Claude 会话结合完整任务上下文做语义判断，输出
@@ -79,6 +83,7 @@ wtbp show figma-code-connect
 
 当已登记本地 Skill 和外部能力卡都不能明确覆盖任务时，选择 `external-capability-discovery`，而不是直接新建 Skill。
 它以 `find-skills`/skills.sh、GitHub 和第一方公开来源发现临时候选，按场景契合、来源维护、社区采用、接入安全与证据完整度计算 100 分总分，并单独报告证据置信度。结果只用于本次决策；经用户确认、来源固定、许可证和权限审查后，才可进入外部能力登记或受控安装流程。
+候选源码进入登记或安装前，还必须通过 [`security-validation.md`](security-validation.md) 的本地安全校验；阻断或未完成复核的候选不得安装、执行或注入凭据。
 
 ## 设计任务示例
 
@@ -93,6 +98,7 @@ Figma 官方 MCP 和 Code Connect 是典型的 `local-adapter`：它们可提供
 
 1. 先登记和核验来源；来源必须具有 HTTPS URL、发布方、访问日期、许可证、修订、Skill 路径和质量证据。不清楚时标记 `unverified` 并说明原因，保持 `candidate` 或只登记为 `reference-only`。
 2. 为每张外部最佳实践卡登记实际解决问题、反例、适用场景和至少两个典型 Case；不允许只用仓库名或 Star 推断能力。
-3. 更新 `knowledge/external-sources.yaml`、`knowledge/external-capabilities.yaml` 及其 schema，运行 `make validate`。
-4. 若它改变路由判断，更新 `skill-router` 的中英文说明和正向/边界/对抗 Eval。
-5. 若决定把能力固化为本地 Skill，再完整走 [`knowledge/skill-framework.zh-CN.md`](../knowledge/skill-framework.zh-CN.md) 的 G0–G6；外部能力卡不能替代这些登记。
+3. 将固定版本的候选源码放入隔离目录，运行 `wtbp security-check <目录>`；保存 JSON 报告，并对阻断、未验证和人工复核项给出结论。
+4. 更新 `knowledge/external-sources.yaml`、`knowledge/external-capabilities.yaml` 及其 schema，运行 `make validate`。
+5. 若它改变路由判断，更新 `skill-router` 的中英文说明和正向/边界/对抗 Eval。
+6. 若决定把能力固化为本地 Skill，再完整走 [`knowledge/skill-framework.zh-CN.md`](../knowledge/skill-framework.zh-CN.md) 的 G0–G6；外部能力卡不能替代这些登记。

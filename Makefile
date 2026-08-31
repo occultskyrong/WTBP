@@ -1,4 +1,4 @@
-.PHONY: validate validate-ai-companions validate-skill-evals validate-skill-routes validate-skill-index validate-version-log test-wtbp-router test-secret-scan sync-default-branch verify-mergeability return-to-default skill-eval ske commit-checklist commit-checklist-range review-staged review-range review-issue install-hooks
+.PHONY: validate validate-ai-companions validate-skill-evals validate-skill-routes validate-skill-index validate-version-log test-wtbp-router test-secret-scan test-security-check test-install-security-gate security-check sync-default-branch verify-mergeability return-to-default skill-eval ske commit-checklist commit-checklist-range review-staged review-range review-issue install-hooks
 
 validate:
 	./tooling/validate-repository.sh
@@ -23,6 +23,16 @@ test-wtbp-router:
 
 test-secret-scan:
 	./tooling/test-secret-scan.sh
+
+test-security-check:
+	./tooling/test-security-check.sh
+
+test-install-security-gate:
+	./tooling/test-install-security-gate.sh
+
+security-check:
+	@test -n "$(TARGET)" || (echo "必须提供 TARGET，例如 make security-check TARGET=/tmp/candidate" >&2; exit 2)
+	./tooling/security-check.sh "$(TARGET)"
 
 sync-default-branch:
 	./tooling/sync-default-branch.sh
