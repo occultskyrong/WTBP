@@ -155,6 +155,23 @@ routes:
       - 只需静态 Figma 页面或普通截图验收
       - 未声明触发、状态转移、目标终端或可访问性边界的装饰动画
 
+  - id: route.api-testing
+    title: 接口四层测试体系设计与验证
+    skill_id: api-testing
+    source: local
+    path: skills/api-testing
+    install: none
+    status: candidate
+    last_verified: 2026-08-29
+    keywords: [接口测试, API测试, 接口可用性, 冒烟测试, Mock测试, 契约测试, 逻辑链, CRUD测试, api testing, contract testing, integration testing]
+    triggers:
+      - 需要同时验证接口可达、真实主流程、Mock 逻辑和业务逻辑链
+      - 需要设计接口测试矩阵、测试数据隔离、清理策略或 CI 门禁
+      - 需要区分部署失败、契约漂移、业务失败和测试基础设施失败
+    not_for:
+      - 只需改写接口错误提示或解释单个 HTTP 状态码
+      - 只需执行已有明确测试命令且不需要设计或验证测试体系
+
   - id: route.prd-to-figma
     title: PRD 到可编辑 Figma 设计
     skill_id: prd-to-figma

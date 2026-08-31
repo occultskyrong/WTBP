@@ -2,7 +2,7 @@ version: 1
 description: 本地 Skill 能力规范索引。它是本地 Skill 标签、输入输出、影响范围与路由关联的唯一来源；外部能力另见 external-capabilities.yaml，catalog 仅负责对象发现，routes 仅负责任务匹配与受控安装。
 taxonomy:
   domains: [research, product, governance, design, engineering, quality]
-  capabilities: [practice-search, option-comparison, evidence-synthesis, web-research, source-verification, skill-evaluation, regression-evaluation, task-routing, managed-install, figma-create, figma-evolve, figma-inspection, figma-to-code, visual-verification, layout-diagnosis, visual-direction, icon-design, motion-design]
+  capabilities: [practice-search, option-comparison, evidence-synthesis, web-research, source-verification, skill-evaluation, regression-evaluation, task-routing, managed-install, api-testing, contract-testing, integration-testing, figma-create, figma-evolve, figma-inspection, figma-to-code, visual-verification, layout-diagnosis, visual-direction, icon-design, motion-design]
   stages: [discover, analyze, design, evolve, implement, verify, evaluate]
   side_effects: [none, filesystem-read, filesystem-write, network-read, network-write, figma-read, figma-write, command-execution]
 skills:
@@ -123,6 +123,19 @@ skills:
     install: builtin
     aliases: [product-motion-design]
     route_ids: [route.motion-design]
+  - id: api-testing
+    title: 接口四层测试体系
+    summary: 设计和验证可用性探针、真实主流程、Mock 逻辑契约和隔离业务链，分开记录运行时证据与静态测试证据。
+    domains: [engineering, quality]
+    capabilities: [api-testing, contract-testing, integration-testing]
+    stages: [design, implement, verify, evaluate]
+    inputs: [服务与接口范围, 测试环境, 认证边界, 接口契约, 标准参数, 测试数据与清理策略]
+    outputs: [四层测试矩阵, 接口契约基线, 执行证据, 失败分类, CI门禁, 未验证项]
+    side_effects: [filesystem-read, filesystem-write, command-execution, network-read]
+    status: candidate
+    install: builtin
+    aliases: [api-test, interface-testing, 接口测试]
+    route_ids: [route.api-testing]
   - id: prd-to-figma
     title: PRD 到可编辑 Figma 设计
     summary: 从 PRD 创建首版可编辑 Figma 设计、页面、状态、组件和基础设计资产。

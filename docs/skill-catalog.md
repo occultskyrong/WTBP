@@ -13,6 +13,7 @@
 | `visual-direction` | active | product、design、research | analyze、design、evaluate | visual-direction、evidence-synthesis、source-verification | 在页面样式前形成可观察、可评审、可替换外部依赖的视觉方向契约。 |
 | `icon-design` | active | product、design、quality | design、verify、evaluate | icon-design、visual-direction、visual-verification | 基于批准范围和 Icon 门禁，创作、验证并交接可复用的 Icon 资产家族。 |
 | `motion-design` | active | product、design、quality | design、implement、verify、evaluate | motion-design、visual-verification | 定义动效目的、状态转移、时序、缓动、减弱动效和动态验收，同时把外部动效能力保持为可替换适配器。 |
+| `api-testing` | candidate | engineering、quality | design、implement、verify、evaluate | api-testing、contract-testing、integration-testing | 设计和验证可用性探针、真实主流程、Mock 逻辑契约和隔离业务链，分开记录运行时证据与静态测试证据。 |
 | `prd-to-figma` | candidate | product、design | design | figma-create、figma-inspection | 从 PRD 创建首版可编辑 Figma 设计、页面、状态、组件和基础设计资产。 |
 | `figma-evolve` | candidate | product、design | evolve | figma-evolve、figma-inspection | 在保留历史设计证据的前提下，对已有 Figma 节点进行补丁或版本化重做。 |
 | `figma-to-product` | candidate | product、design、engineering | implement | figma-to-code、figma-inspection、layout-diagnosis | 将明确 Figma 节点以可维护布局还原到唯一指定的 Web、小程序或 App 终端。 |

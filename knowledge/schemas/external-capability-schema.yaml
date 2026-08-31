@@ -3,7 +3,7 @@ artifact: external-capabilities.yaml
 required_fields: [id, title, summary, source_id, kind, domains, capabilities, stages, solves, not_for, scenarios, cases, inputs, outputs, technologies, targets, adoption, availability, installation_status, permissions, verify, status, keywords]
 kinds: [official-integration, external-skill, reference-implementation]
 domains: [research, product, governance, design, engineering, quality]
-capabilities: [practice-search, option-comparison, evidence-synthesis, web-research, source-verification, skill-evaluation, regression-evaluation, task-routing, managed-install, figma-create, figma-evolve, figma-inspection, figma-to-code, visual-verification, layout-diagnosis, visual-direction, icon-design, motion-design]
+capabilities: [practice-search, option-comparison, evidence-synthesis, web-research, source-verification, skill-evaluation, regression-evaluation, task-routing, managed-install, api-testing, contract-testing, integration-testing, figma-create, figma-evolve, figma-inspection, figma-to-code, visual-verification, layout-diagnosis, visual-direction, icon-design, motion-design]
 stages: [discover, analyze, design, evolve, implement, verify, evaluate]
 adoption_values: [direct-use, local-adapter, manual-optional, reference-only]
 availability_values: [client-provided, manual-install, reference]
